@@ -71,6 +71,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/translation-contracts" />
       <path value="$PROJECT_DIR$/vendor/twig/extra-bundle" />
       <path value="$PROJECT_DIR$/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/vendor/symfony/ux-react" />
+      <path value="$PROJECT_DIR$/vendor/symfony/stimulus-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

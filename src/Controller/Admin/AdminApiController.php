@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: "api_")]
-class ApiController extends AbstractController
+#[Route(path: '/admin-api', name: "admin_api_")]
+class AdminApiController extends AbstractController
 {
     #[Route("/", name: "index", methods: ["GET", "HEAD"])]
     public function index(Request $request): JsonResponse
