@@ -24,7 +24,7 @@ class Photos
 
     #[ORM\ManyToOne(inversedBy: 'photos')]
     #[ORM\JoinColumn(nullable: true)]
-    private ?Admins $addedBY = null;
+    private ?Admin $addedBY = null;
 
     public function getId(): ?int
     {
@@ -67,12 +67,12 @@ class Photos
         return $this;
     }
 
-    public function getAddedBY(): ?Admins
+    public function getAddedBY(): ?Admin
     {
         return $this->addedBY;
     }
 
-    public function setAddedBY(?Admins $addedBY): static
+    public function setAddedBY(?Admin $addedBY): static
     {
         $this->addedBY = $addedBY;
 
