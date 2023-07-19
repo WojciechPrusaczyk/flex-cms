@@ -22,8 +22,12 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('dashboard_login', './assets/react/containers/dashboard/login.jsx')
+    .addEntry('dashboard_index', './assets/react/containers/dashboard/index.jsx')
+    .addEntry('dashboard_main', './assets/react/containers/dashboard/main.jsx')
 
     .addStyleEntry('dashboard_login_style', './assets/styles/dashboard/login.scss')
+    .addStyleEntry('dashboard_index_style', './assets/styles/dashboard/index.scss')
+    .addStyleEntry('dashboard_main_style', './assets/styles/dashboard/main.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
