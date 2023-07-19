@@ -20,7 +20,10 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    .addEntry('test_file', './assets/app.js')
+    .addEntry('app', './assets/app.js')
+    .addEntry('dashboard_login', './assets/react/containers/dashboard/login.jsx')
+
+    .addStyleEntry('dashboard_login_style', './assets/styles/dashboard/login.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

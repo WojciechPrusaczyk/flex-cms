@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[Route('/dashboard', name: 'dashboard_')]
 class DashboardLoginController extends AbstractController
 {
     #[Route('/login', name: 'login')]

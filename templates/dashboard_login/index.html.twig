@@ -1,16 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DashboardLoginController!{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('dashboard_login_style') }}
+{% endblock %}
+
+{% block title %}
+    Panel logowania
+{% endblock %}
 
 {% block body %}
+    <main id="form-root">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    </main>
+{% endblock %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Wojtek/Desktop/Coding/PortfolioCMS/src/Controller/DashboardLoginController.php'|file_link(0) }}">src/Controller/DashboardLoginController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Wojtek/Desktop/Coding/PortfolioCMS/templates/dashboard_login/index.html.twig'|file_link(0) }}">templates/dashboard_login/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% block javascripts %}
+    {{ encore_entry_script_tags('dashboard_login') }}
 {% endblock %}

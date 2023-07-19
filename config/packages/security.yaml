@@ -14,9 +14,15 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            access_denied_url: login
             lazy: true
             provider: app_user_provider
-
+            login_throttling:
+                max_attempts: 3
+                interval: '30 minutes'
+            logout:
+                path: admin_api_logout
+                target: login
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -25,12 +31,14 @@ security:
 
             json_login:
                 check_path: admin_api_login
+                login_path: dashboard
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/dashboard, roles: ROLE_USER }
+        - { path: ^/admin-api, roles: ROLE_USER }
 
 when@test:
     security:
