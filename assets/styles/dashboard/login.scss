@@ -11,6 +11,7 @@ body {
 }
 
 #form-root{
+  color: #26156A;
   font-family: Roboto, serif;
   .login-form{
     display: flex;
@@ -22,11 +23,10 @@ body {
     padding-bottom: 30px;
     justify-content: center;
     align-items: center;
-    box-shadow: 1px 1px 5px 1px #b7b7b7;
+    box-shadow: 1px 1px 5px 1px #8c8c8c;
     margin-top: 100px;
 
     label{
-      color: #23211D;
       text-align: left;
       font-size: 1.3rem;
       font-style: normal;
@@ -42,17 +42,18 @@ body {
       width: 70%;
       height: 40px;
       border: none;
-      box-shadow: 1px 1px 5px 1px #b7b7b7;
+      box-shadow: 1px 1px 5px 1px #cecece;
       padding: 5px;
       font-size: 1.1rem;
       font-style: normal;
       text-align: center;
+      background-color: #e7e5ff;
     }
     &-submit{
       margin-top: 30px;
       width: 50%;
       border-radius: 0;
-      background-color: #6494f1;
+      background-color: #70a1ff;
       border: none;
       font-size: 1.2rem;
       font-style: normal;
@@ -62,7 +63,7 @@ body {
       padding: 15px;
       box-shadow: 2px 2px 7px 1px #b7b7b7;
       transition: background-color .5s, box-shadow .5s;
-      color: black;
+      color: #26156A;
       &:hover{
         background-color: #5280d0;
         box-shadow: none;

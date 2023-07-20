@@ -1,19 +1,20 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
-import userLogo from '../../../icons/user.svg'
+import tile from "../../components/tile";
+import Tile from "../../components/tile";
 
-class Dashboard extends Component
+class Settings extends Component
 {
     constructor(props) {
         super(props);
         this.state = {
-            username: "Loading",
+            settings: []
         }
-        this.updateUsername();
+        this.getSettings();
     }
-    async updateUsername()
+    async getSettings()
     {
-        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/get-user`;
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/get-settings`;
 
         try {
             const response = await fetch(fetchAddress);
@@ -21,9 +22,7 @@ class Dashboard extends Component
 
             if ( jsonResponse['status'] === "success")
             {
-                const username = jsonResponse['response']['user']['username'];
-
-                this.setState({username: username.charAt(0).toUpperCase() + username.slice(1)});
+                this.setState({settings: jsonResponse["response"]})
             }
         } catch (error) {
         }
@@ -32,21 +31,21 @@ class Dashboard extends Component
 
 
     render() {
+
+        let settings = this.state.settings.map(tile => {
+            return <Tile key={tile.name} name={tile.name} icon={tile.icon} href={tile.href}></Tile>
+        });
+
         return (
-            <div className="header">
-                <h1 className="header-title" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } }>Dashboard</h1>
-                <div className="header-user">
-                    <img className="header-user-logo" src={userLogo} alt="*" />
-                    <span className="header-user-name">{this.state.username}</span>
-                </div>
-                <div className="header-logout">
-                    <button className="header-logout-button" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/admin-api/logout`; } }>Wyloguj</button>
+            <div className="settings">
+                <div className="settings-column">
+                    {settings}
                 </div>
             </div>
         );
     }
 }
 
-const root = ReactDOM.createRoot(document.getElementById("header-root"));
+const root = ReactDOM.createRoot(document.getElementById("main-root"));
 
-root.render(<Dashboard />);
+root.render(<Settings />);

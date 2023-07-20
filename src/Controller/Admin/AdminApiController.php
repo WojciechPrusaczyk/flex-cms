@@ -39,6 +39,7 @@ class AdminApiController extends AbstractController
                 'register' => $requestUri."register?password={password}&username={username}",
                 'get-user' => $requestUri."get-user",
                 'logout' => $requestUri."logout",
+                'dashboard-get-settings' => $requestUri."dashboard/get-settings",
             ]);
         }
         return $this->json([
@@ -172,6 +173,21 @@ class AdminApiController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/dashboard/get-settings', name: 'dashboard_get_settings', methods: ["GET"])]
+    public function getSettings(Security $security): JsonResponse
+    {
+        return $this->json([
+            'status' => 'success',
+            'response' => [
+                ["name" => "Kolory", "href" => "https://127.0.0.1:8000/dashboard/colors", "icon" => "colors.svg"],
+                ["name" => "Galeria", "href" => "https://127.0.0.1:8000/dashboard/gallery", "icon" => "gallery.svg"],
+                ["name" => "Ustawienia", "href" => "https://127.0.0.1:8000/dashboard/settings", "icon" => "settings.svg"],
+                ["name" => "Treści", "href" => "https://127.0.0.1:8000/dashboard/data", "icon" => "settings.svg"]
+            ]
+        ]);
+    }
+
 
     // function used to validate usernames
     private function validateUsername(string $providedUsername): array

@@ -2,62 +2,40 @@
   font-family: 'Roboto';
   src: url(../../fonts/Roboto-Regular.ttf) format("truetype");
 }
-
-body {
+#main-root{
   background-color: #E5E4FF;
-  margin: 0;
-  .header {
-    background-color: #86A1FF;
-    color: #E5E4FF;
+  margin: 0 150px;
+  .settings {
+    padding: 50px 0;
     display: flex;
-    flex-direction: row;
-    height: 80px;
-    width: 100%;
-    font-family: Roboto, serif;
-    &-title{
-      color: #E5E4FF;
-      font-size: 3rem;
-      font-style: normal;
-      line-height: normal;
-      text-align: center;
-      margin: 0;
-      padding: 10px;
-      width: 20%;
-      cursor: pointer;
-    }
-    &-user {
-      width: 70%;
+    justify-content: center;
+    &-column{
       display: flex;
-      justify-content: end;
-      align-items: center;
-      font-weight: 600;
-      &-logo {
-        height: 1.3rem;
-        width: 1.3rem;
-        margin: 10px;
-      }
-      &-name{
-        font-size: 1.3rem;
-      }
-
-    }
-    &-logout {
-      width: 10%;
-      display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
-      &-button {
-        color: #26156A;
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: 600;
-        padding: 5px 25px;
-        border-radius: 0.36rem;
-        border: 4px solid #26156A;
-        background: #E5E4FF;
-        cursor: pointer;
+      width: 60%;
+    }
+    .tile{
+      background-color: #EAEAFF;
+      width: 200px;
+      display: block;
+      text-decoration: none;
+      font-family: Roboto, serif;
+      color: #26156A;
+      box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.19);
+      text-align: center;
+      margin: 25px 55px;
+
+      &-image{
+        width: 100px;
+        height: 100px;
+        margin: 30px;
+      }
+      &-title{
+        background-color: #FFFFFF;
+        padding: 16px 15px;
+        margin: 30px 0 0;
       }
     }
-
   }
 }
