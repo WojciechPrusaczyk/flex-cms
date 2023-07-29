@@ -175,15 +175,17 @@ class AdminApiController extends AbstractController
     }
 
     #[Route('/dashboard/get-settings', name: 'dashboard_get_settings', methods: ["GET"])]
-    public function getSettings(Security $security): JsonResponse
+    public function getSettings(Security $security, Request $request): JsonResponse
     {
+        $requestUri = $request->getBaseUrl();
+
         return $this->json([
             'status' => 'success',
             'response' => [
-                ["name" => "Kolory", "href" => "https://127.0.0.1:8000/dashboard/colors", "icon" => "colors.svg"],
-                ["name" => "Galeria", "href" => "https://127.0.0.1:8000/dashboard/gallery", "icon" => "gallery.svg"],
-                ["name" => "Ustawienia", "href" => "https://127.0.0.1:8000/dashboard/settings", "icon" => "settings.svg"],
-                ["name" => "Treści", "href" => "https://127.0.0.1:8000/dashboard/data", "icon" => "settings.svg"]
+                ["name" => "Kolory", "href" => $requestUri."colors", "icon" => "colors.svg"],
+                ["name" => "Galeria", "href" => $requestUri."gallery", "icon" => "gallery.svg"],
+                ["name" => "Ustawienia", "href" => $requestUri."settings", "icon" => "settings.svg"],
+                ["name" => "Sekcje", "href" => $requestUri."sections", "icon" => "sections.svg"]
             ]
         ]);
     }

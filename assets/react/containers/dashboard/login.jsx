@@ -86,3 +86,5 @@ class LoginForm extends Component{
 const root = ReactDOM.createRoot(document.getElementById("form-root"));
 
 root.render(<LoginForm />);
+
+export default LoginForm;

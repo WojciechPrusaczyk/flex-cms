@@ -25,6 +25,7 @@
       box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.19);
       text-align: center;
       margin: 25px 55px;
+      transition: transform .5s, box-shadow .5s;
 
       &-image{
         width: 100px;
@@ -35,6 +36,12 @@
         background-color: #FFFFFF;
         padding: 16px 15px;
         margin: 30px 0 0;
+      }
+
+      &:hover{
+        box-shadow: 4px 6px 9px 4px rgba(0, 0, 0, 0.19);
+        transform: scale(1.02);
+        transition: transform .1s, box-shadow .1s;
       }
     }
   }
