@@ -17,7 +17,6 @@ class GalleryMain extends Component
     render() {
         return (
             <div>
-                TEST
                 <ImageAddForm />
                 <GalleryListItem />
             </div>

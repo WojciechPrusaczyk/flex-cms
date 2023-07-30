@@ -1,0 +1,96 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url(../../../fonts/Roboto-Regular.ttf) format("truetype");
+}
+#main-root {
+  background-color: #E5E4FF;
+  margin: 0 150px;
+  font-family: Roboto, serif;
+
+  // form style
+  .gallery{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-form {
+      border-radius: 0.36rem;
+      border: 4px solid #26156A;
+      width: 500px;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 30px 0;
+      cursor: pointer;
+      box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.19);
+      &:hover{
+        box-shadow: 4px 6px 9px 4px rgba(0, 0, 0, 0.19);
+        transition: box-shadow .1s;
+      }
+      &-add-icon{
+        width: 80px;
+        height: 80px;
+      }
+      &-add-note{
+        margin-top: 20px;
+        color: #26156A;
+      }
+      &-add-error-tooLarge{
+        margin-top: 20px;
+        color: #8f1b1b;
+        font-size: 1.3rem;
+        font-weight: bold;
+        display: none;
+      }
+    }
+    &-added-photos {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      &-file {
+        display: flex;
+        flex-direction: row;
+        border-radius: 0.36rem;
+        border: 4px solid #26156A;
+        justify-content: space-between;
+        margin: 15px;
+        &-image {
+          height: 100px;
+          max-width: 200px;
+        }
+        &-delete{
+          width: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          &-icon {
+            width: 20px;
+            height: 20px;
+          }
+        }
+        &-title {
+          padding: 15px;
+        }
+      }
+
+      &-button {
+        color: #26156A;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 5px 25px;
+        border-radius: 0.36rem;
+        border: 4px solid #26156A;
+        background: #E5E4FF;
+        cursor: pointer;
+        &:hover{
+          box-shadow: 4px 6px 9px 2px rgba(58, 58, 58, 0.19);
+        }
+      }
+    }
+  }
+}
