@@ -213,22 +213,22 @@ class AdminApiController extends AbstractController
             // Przykładowo, możesz go zapisać na serwerze:
             try {
                 $extension = $uploadedFile->guessExtension();
-                $fileName = md5(uniqid()) . '.' . $extension;
+                $safeFileName = md5(uniqid()) . '.' . $extension;
                 $validFileTypes = [
-                    "gif", "jpg", "jpeg", "svg"
+                    "gif", "jpg", "png", "svg"
                 ];
 
                 $uploadedFile->move(
                     $this->getParameter('photos_upload_directory'), // Ścieżka do katalogu, gdzie będą przechowywane przesłane pliki
-                    $fileName
+                    $safeFileName
                 );
 
                 // dodatkowe warunki sprawdzan przy dodawaniu plików
-                if( file_exists($this->getParameter('photos_upload_directory')."/".$fileName) && null != $security->getUser() && $security->getUser()->getUsername() == $requestUsername && in_array($extension, $validFileTypes) )
+                if( file_exists($this->getParameter('photos_upload_directory')."/".$safeFileName) && null != $security->getUser() && $security->getUser()->getUsername() == $requestUsername && in_array($extension, $validFileTypes) )
                 {
                     try {
                         $photoEntity = new Photos();
-                        $photoEntity->setSafeFilename($fileName);
+                        $photoEntity->setSafeFilename($safeFileName);
                         $photoEntity->setFilename($filename);
                         $photoEntity->setFileType($extension);
                         $photoEntity->setName($filename);
@@ -240,6 +240,8 @@ class AdminApiController extends AbstractController
                     return new JsonResponse([
                         'status' => 'success',
                         'response' => 'Plik został pomyślnie dodany na serwer.',
+                        'filename' => $filename,
+                        'id' => $photoEntity->getId(),
                     ], 200);
                 } else {
                     return new JsonResponse([

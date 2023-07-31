@@ -13,6 +13,7 @@ class ImageAddForm extends Component{
 			note: "Przeciągnij i upuść zdjęcia do dodania. (max 5MB)",
 			error: "",
 			formImage: "/build/icons/dashboard/add.svg",
+			successfulUploads: [],
 		}
 	}
 
@@ -86,6 +87,8 @@ class ImageAddForm extends Component{
 	{
 		const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/gallery/upload-photo`;
 		const uploaderUsername = await this.getUsername()
+		this.setState({photos: []});
+		this.setState({successfulUploads: []});
 
 		this.state.photos.map((photo, index) => {
 
@@ -100,7 +103,11 @@ class ImageAddForm extends Component{
 			})
 				.then(res => res.json())
 				.then(data => {
-						console.log(data);
+
+						let currentSuccessfulUploads = this.state.successfulUploads;
+						currentSuccessfulUploads.push({ id: data["id"], name: data["filename"]});
+						this.setState({successfulUploads: currentSuccessfulUploads});
+						console.log(this.state.successfulUploads);
 					}
 				);
 		});
@@ -124,11 +131,25 @@ class ImageAddForm extends Component{
 
 	render() {
 
+		// przycisk potwierdzenia przekazania na serwer
+		let button = (this.state.photos.length > 0 )?<button className="gallery-added-photos-button" onClick={ () => this.uploadPhotosHandler()}>Dodaj</button>:null;
+
+
+		// dodane zdjęcia do przekazania
 		let addedPhotos = this.state.photos.map((photo, index) => {
 			return <AddedFile key={index} src={photo.src} name={photo.file.name} deleteHandler={ () => this.deleteHandler(index)}></AddedFile>
 		});
+		let addedPhotosDiv = <div className="gallery-added-photos"> {addedPhotos} </div>;
 
-		let button = (this.state.photos.length > 0 )?<button className="gallery-added-photos-button" onClick={ () => this.uploadPhotosHandler()}>Dodaj</button>:null;
+
+		// wiadomości zrotne po przekazaniu
+		let successfulUploads = this.state.successfulUploads.map((uploadedFile, index) => {
+
+			const shortName = (uploadedFile.name.length > 22)?uploadedFile.name.substring(0,22)+"...":uploadedFile.name;
+
+			return <div className="gallery-added-photos-messages-message" key={uploadedFile.id}>Plik "{shortName}" został pomyślnie przekazany.</div>
+		});
+		let successfulUploadsDiv = <div className="gallery-added-photos-messages"> {successfulUploads} </div>;
 
 		return (
 			<div className="gallery">
@@ -137,10 +158,10 @@ class ImageAddForm extends Component{
 					<span className="gallery-form-note">{this.state.note}</span>
 					<span id="gallery-form-errors" className="gallery-form-errors">{this.state.error}</span>
 				</div>
-				<div className="gallery-added-photos">
-					{addedPhotos}
-				</div>
-				{button}
+				{ ( addedPhotos.length > 0 )? addedPhotosDiv:null}
+				{ ( addedPhotos.length > 0 )? button:null}
+				{ ( successfulUploads.length > 0 )? successfulUploadsDiv:null}
+
 			</div>
 		)
 	}
