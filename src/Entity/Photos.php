@@ -19,8 +19,11 @@ class Photos
     #[ORM\Column(length: 255)]
     private ?string $filename = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $safefilename = null;
+
     #[ORM\Column(length: 15)]
-    private ?string $extension = null;
+    private ?string $fileType = null;
 
     #[ORM\ManyToOne(inversedBy: 'photos')]
     #[ORM\JoinColumn(nullable: true)]
@@ -55,14 +58,26 @@ class Photos
         return $this;
     }
 
-    public function getExtension(): ?string
+    public function getFileType(): ?string
     {
-        return $this->extension;
+        return $this->fileType;
     }
 
-    public function setExtension(string $extension): static
+    public function setFileType(string $fileType): static
     {
-        $this->extension = $extension;
+        $this->fileType = $fileType;
+
+        return $this;
+    }
+
+    public function getSafeFilename(): ?string
+    {
+        return $this->safefilename;
+    }
+
+    public function setSafeFilename(string $safefilename): static
+    {
+        $this->safefilename = $safefilename;
 
         return $this;
     }

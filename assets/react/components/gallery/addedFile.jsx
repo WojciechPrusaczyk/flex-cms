@@ -8,7 +8,7 @@ const addedFile = (props) => {
         <img className="gallery-added-photos-file-image" src={props.src} alt={props.name}/>
         <h2 className="gallery-added-photos-file-title">{shortName}</h2>
         <a className="gallery-added-photos-file-delete" onClick={props.deleteHandler}>
-            <img className="gallery-added-photos-file-delete-icon" src="/build/icons/trashCan.svg" alt="usuń zdjęcie"/>
+            <img className="gallery-added-photos-file-delete-icon" src="/build/icons/dashboard/trashCan.svg" alt="usuń zdjęcie"/>
         </a>
     </div>
 }

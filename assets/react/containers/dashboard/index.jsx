@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
-import userLogo from '../../../icons/user.svg'
+import userLogo from '../../../icons/dashboard/user.svg'
 
 class Dashboard extends Component
 {

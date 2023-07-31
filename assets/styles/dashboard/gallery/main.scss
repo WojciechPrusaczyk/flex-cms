@@ -24,24 +24,26 @@
       margin: 30px 0;
       cursor: pointer;
       box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.19);
+      padding-top: 15px;
       &:hover{
         box-shadow: 4px 6px 9px 4px rgba(0, 0, 0, 0.19);
         transition: box-shadow .1s;
       }
-      &-add-icon{
+      &-icon{
         width: 80px;
         height: 80px;
       }
-      &-add-note{
+      &-note{
         margin-top: 20px;
         color: #26156A;
       }
-      &-add-error-tooLarge{
+      &-errors{
         margin-top: 20px;
         color: #8f1b1b;
         font-size: 1.3rem;
         font-weight: bold;
-        display: none;
+        padding: 15px;
+        text-align: center;
       }
     }
     &-added-photos {
@@ -67,9 +69,21 @@
           align-items: center;
           justify-content: center;
           cursor: pointer;
+          background-color: #E5E4FF;
+          transition: background-color .1s;
           &-icon {
             width: 20px;
             height: 20px;
+            filter: none;
+            transition: filter .1s;
+          }
+          &:hover{
+            background-color: #26156A;
+            transition: background-color .1s;
+            & > .gallery-added-photos-file-delete-icon {
+              transition: filter .1s;
+              filter: brightness(0) invert(1);
+            }
           }
         }
         &-title {

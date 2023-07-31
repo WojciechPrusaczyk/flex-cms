@@ -4,7 +4,7 @@ import {render} from "react-dom";
 
 const tile = (props) => {
   return <a className="tile" href={props.href}>
-      <img className="tile-image" src={`/build/icons/${props.icon}`} alt={`${props.name} icon`}/>
+      <img className="tile-image" src={`/build/icons/dashboard/index/${props.icon}`} alt={`${props.name} icon`}/>
       <h2 className="tile-title">{props.name}</h2>
   </a>
 }

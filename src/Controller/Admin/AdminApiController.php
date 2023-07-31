@@ -3,11 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Admin;
+use App\Entity\Photos;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,6 +42,7 @@ class AdminApiController extends AbstractController
                 'get-user' => $requestUri."get-user",
                 'logout' => $requestUri."logout",
                 'dashboard-get-settings' => $requestUri."dashboard/get-settings",
+                'dashboard-gallery-upload-photo' => $requestUri."dashboard/gallery/upload-photo",
             ]);
         }
         return $this->json([
@@ -188,6 +191,74 @@ class AdminApiController extends AbstractController
                 ["name" => "Sekcje", "href" => $requestUri."sections", "icon" => "sections.svg"]
             ]
         ]);
+    }
+
+    #[Route('/dashboard/gallery/upload-photo', name: 'dashboard_gallery_upload_photo', methods: ["POST", "GET"])]
+    public function uploadPhoto(Security $security, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        if ($request->files->has('file')) {
+            $uploadedFile = $request->files->get('file');
+            $filename = $request->get('filename');
+            $requestUsername = $request->get('username');
+            if (filesize($uploadedFile) > 5000000 )
+            {
+                return new JsonResponse([
+                    'status' => 'error',
+                    'response' => 'Przesłany plik jest za duży!',
+                ], 500);
+            }
+
+            // Możesz teraz wykorzystać $uploadedFile do obsługi przesłanego pliku
+
+            // Przykładowo, możesz go zapisać na serwerze:
+            try {
+                $extension = $uploadedFile->guessExtension();
+                $fileName = md5(uniqid()) . '.' . $extension;
+                $validFileTypes = [
+                    "gif", "jpg", "jpeg", "svg"
+                ];
+
+                $uploadedFile->move(
+                    $this->getParameter('photos_upload_directory'), // Ścieżka do katalogu, gdzie będą przechowywane przesłane pliki
+                    $fileName
+                );
+
+                // dodatkowe warunki sprawdzan przy dodawaniu plików
+                if( file_exists($this->getParameter('photos_upload_directory')."/".$fileName) && null != $security->getUser() && $security->getUser()->getUsername() == $requestUsername && in_array($extension, $validFileTypes) )
+                {
+                    try {
+                        $photoEntity = new Photos();
+                        $photoEntity->setSafeFilename($fileName);
+                        $photoEntity->setFilename($filename);
+                        $photoEntity->setFileType($extension);
+                        $photoEntity->setName($filename);
+                        $photoEntity->setAddedBY($security->getUser());
+                        $em->persist($photoEntity);
+                        $em->flush();
+                    } catch (\Exception) {  }
+
+                    return new JsonResponse([
+                        'status' => 'success',
+                        'response' => 'Plik został pomyślnie dodany na serwer.',
+                    ], 200);
+                } else {
+                    return new JsonResponse([
+                        'status' => 'error',
+                        'response' => 'Wystąpił błąd podczas zapisu pliku.',
+                    ], 500);
+                }
+            } catch (FileException $e) {
+                return new JsonResponse([
+                    'status' => 'error',
+                    'response' => 'Wystąpił błąd podczas zapisu pliku.',
+                ], 500);
+            }
+        } else {
+            return new JsonResponse([
+                'status' => 'error',
+                'response' => 'Brak załączonego pliku.',
+            ], 400);
+        }
     }
 
 
