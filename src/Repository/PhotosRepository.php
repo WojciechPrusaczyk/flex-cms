@@ -23,7 +23,7 @@ class PhotosRepository extends ServiceEntityRepository
     public function getPhotosQuery()
     {
         return $this->createQueryBuilder('p')
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.id', 'DESC')
             ->getQuery()
         ;
     }
