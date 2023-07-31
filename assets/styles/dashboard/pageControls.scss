@@ -1,0 +1,16 @@
+.page-controls {
+  background-color: #86A1FF;
+  color: #E5E4FF;
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  #page-number {
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}

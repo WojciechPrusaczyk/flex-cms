@@ -43,6 +43,8 @@ class AdminApiController extends AbstractController
                 'logout' => $requestUri."logout",
                 'dashboard-get-settings' => $requestUri."dashboard/get-settings",
                 'dashboard-gallery-upload-photo' => $requestUri."dashboard/gallery/upload-photo",
+                'dashboard-gallery-get-photos' => $requestUri."dashboard/gallery/get-photos?page={page}&quantity={quantity}",
+                'dashboard-gallery-delete-photo' => $requestUri."dashboard/gallery/delete-photo?id={id}",
             ]);
         }
         return $this->json([
@@ -191,76 +193,6 @@ class AdminApiController extends AbstractController
                 ["name" => "Sekcje", "href" => $requestUri."sections", "icon" => "sections.svg"]
             ]
         ]);
-    }
-
-    #[Route('/dashboard/gallery/upload-photo', name: 'dashboard_gallery_upload_photo', methods: ["POST", "GET"])]
-    public function uploadPhoto(Security $security, Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        if ($request->files->has('file')) {
-            $uploadedFile = $request->files->get('file');
-            $filename = $request->get('filename');
-            $requestUsername = $request->get('username');
-            if (filesize($uploadedFile) > 5000000 )
-            {
-                return new JsonResponse([
-                    'status' => 'error',
-                    'response' => 'Przesłany plik jest za duży!',
-                ], 500);
-            }
-
-            // Możesz teraz wykorzystać $uploadedFile do obsługi przesłanego pliku
-
-            // Przykładowo, możesz go zapisać na serwerze:
-            try {
-                $extension = $uploadedFile->guessExtension();
-                $safeFileName = md5(uniqid()) . '.' . $extension;
-                $validFileTypes = [
-                    "gif", "jpg", "png", "svg"
-                ];
-
-                $uploadedFile->move(
-                    $this->getParameter('photos_upload_directory'), // Ścieżka do katalogu, gdzie będą przechowywane przesłane pliki
-                    $safeFileName
-                );
-
-                // dodatkowe warunki sprawdzan przy dodawaniu plików
-                if( file_exists($this->getParameter('photos_upload_directory')."/".$safeFileName) && null != $security->getUser() && $security->getUser()->getUsername() == $requestUsername && in_array($extension, $validFileTypes) )
-                {
-                    try {
-                        $photoEntity = new Photos();
-                        $photoEntity->setSafeFilename($safeFileName);
-                        $photoEntity->setFilename($filename);
-                        $photoEntity->setFileType($extension);
-                        $photoEntity->setName($filename);
-                        $photoEntity->setAddedBY($security->getUser());
-                        $em->persist($photoEntity);
-                        $em->flush();
-                    } catch (\Exception) {  }
-
-                    return new JsonResponse([
-                        'status' => 'success',
-                        'response' => 'Plik został pomyślnie dodany na serwer.',
-                        'filename' => $filename,
-                        'id' => $photoEntity->getId(),
-                    ], 200);
-                } else {
-                    return new JsonResponse([
-                        'status' => 'error',
-                        'response' => 'Wystąpił błąd podczas zapisu pliku.',
-                    ], 500);
-                }
-            } catch (FileException $e) {
-                return new JsonResponse([
-                    'status' => 'error',
-                    'response' => 'Wystąpił błąd podczas zapisu pliku.',
-                ], 500);
-            }
-        } else {
-            return new JsonResponse([
-                'status' => 'error',
-                'response' => 'Brak załączonego pliku.',
-            ], 400);
-        }
     }
 
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PhotosRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PhotosRepository::class)]
@@ -17,10 +18,10 @@ class Photos
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $filename = null;
+    private ?string $fileName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $safefilename = null;
+    private ?string $safeFileName = null;
 
     #[ORM\Column(length: 15)]
     private ?string $fileType = null;
@@ -28,6 +29,9 @@ class Photos
     #[ORM\ManyToOne(inversedBy: 'photos')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Admin $addedBY = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $addedDatetime = null;
 
     public function getId(): ?int
     {
@@ -46,14 +50,14 @@ class Photos
         return $this;
     }
 
-    public function getFilename(): ?string
+    public function getFileName(): ?string
     {
-        return $this->filename;
+        return $this->fileName;
     }
 
-    public function setFilename(string $filename): static
+    public function setFileName(string $fileName): static
     {
-        $this->filename = $filename;
+        $this->fileName = $fileName;
 
         return $this;
     }
@@ -70,14 +74,14 @@ class Photos
         return $this;
     }
 
-    public function getSafeFilename(): ?string
+    public function getSafeFileName(): ?string
     {
-        return $this->safefilename;
+        return $this->safeFileName;
     }
 
-    public function setSafeFilename(string $safefilename): static
+    public function setSafeFileName(string $safeFileName): static
     {
-        $this->safefilename = $safefilename;
+        $this->safeFileName = $safeFileName;
 
         return $this;
     }
@@ -90,6 +94,18 @@ class Photos
     public function setAddedBY(?Admin $addedBY): static
     {
         $this->addedBY = $addedBY;
+
+        return $this;
+    }
+
+    public function getAddedDatetime(): ?\DateTimeInterface
+    {
+        return $this->addedDatetime;
+    }
+
+    public function setAddedDatetime(\DateTimeInterface $addedDatetime): static
+    {
+        $this->addedDatetime = $addedDatetime;
 
         return $this;
     }

@@ -107,7 +107,6 @@ class ImageAddForm extends Component{
 						let currentSuccessfulUploads = this.state.successfulUploads;
 						currentSuccessfulUploads.push({ id: data["id"], name: data["filename"]});
 						this.setState({successfulUploads: currentSuccessfulUploads});
-						console.log(this.state.successfulUploads);
 					}
 				);
 		});
@@ -127,6 +126,12 @@ class ImageAddForm extends Component{
 			}
 		} catch (error) {
 		}
+	}
+
+	clearSuccessfulUploads()
+	{
+		this.setState({successfulUploads: []});
+		location.reload();
 	}
 
 	render() {
@@ -149,7 +154,10 @@ class ImageAddForm extends Component{
 
 			return <div className="gallery-added-photos-messages-message" key={uploadedFile.id}>Plik "{shortName}" został pomyślnie przekazany.</div>
 		});
-		let successfulUploadsDiv = <div className="gallery-added-photos-messages"> {successfulUploads} </div>;
+		let successfulUploadsDiv = <div className="gallery-added-photos-messages">
+			<div className="gallery-added-photos-messages-close"><button className="gallery-added-photos-messages-close-button" onClick={ () => this.clearSuccessfulUploads() }>X</button></div>
+			{successfulUploads}
+		</div>;
 
 		return (
 			<div className="gallery">
