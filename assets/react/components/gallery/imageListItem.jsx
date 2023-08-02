@@ -16,6 +16,7 @@ const ImageListItem = (props) => {
         <td className="image-list-table-tbody-item-image"><img src={"/uploads/photos/"+props.safeFileName} alt={props.name}/></td>
         <td className="image-list-table-tbody-item-addedBy"><span>{props.addedBy}</span></td>
         <td className="image-list-table-tbody-item-fileType"><span>{props.fileType}</span></td>
+        <td className="image-list-table-tbody-item-fileType"><span>{props.dateAdded}</span></td>
         <td className="image-list-table-tbody-item-delete" onClick={ () => {props.deleteItem(props.id, props.index) } }>
             <a>
                 <img className="image-list-table-tbody-item-delete-icon" src="/build/icons/dashboard/trashCan.svg" alt="usuń zdjęcie"/>

@@ -80,7 +80,6 @@ class GalleryListItem extends Component {
 
     async getPhotos(requestedPage, requestedQuantity)
     {
-        console.log("Pobieranie zdjęć!");
         const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/gallery/get-photos?` + new URLSearchParams({
             page: requestedPage,
             quantity: requestedQuantity,
@@ -111,27 +110,21 @@ class GalleryListItem extends Component {
 
     async deleteItem(id, index)
     {
-        let currentPhotos = this.state.photos;
-
-        currentPhotos.splice(index, 1);
-        this.setState({photos: currentPhotos});
+        let currentPage = this.state.currentPage;
+        let currentPhotosPerPage = this.state.quantity;
+        console.log(currentPage, currentPhotosPerPage);
 
         const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/gallery/delete-photo?` + new URLSearchParams({
             id: id
         });
-        // try {
+        try {
             const response = await fetch(fetchAddress)
                 .then((response) => response.json())
                 .then((responseJson) => {
-
-                    if ( responseJson['status'] === "success" )
-                    {
-                    } else {
-                        console.log(responseJson["response"]);
-                    }
+                    this.getPhotos(currentPage, currentPhotosPerPage);
                 })
-        // } catch (error) {
-        // }
+        } catch (error) {
+        }
     }
 
     render(){
@@ -140,7 +133,9 @@ class GalleryListItem extends Component {
         let photos = this.state.photos.map((photo, index) => {
             let photoId = Object.keys(photo);
             let photoObject = Object.values(photo)[0];
-            return <ImageListItem key={photoId} index={index} deleteItem={this.deleteItem} id={photoId} name={photoObject["name"]} fileType={photoObject["fileType"]} addedBy={photoObject["addedBy"]} safeFileName={photoObject["safeFileName"]} />
+            const dateObject = new Date(photoObject["addedDatetime"]["date"]);
+
+            return <ImageListItem key={photoId} index={index} dateAdded={ dateObject.toLocaleString() } deleteItem={this.deleteItem} id={photoId} name={photoObject["name"]} fileType={photoObject["fileType"]} addedBy={photoObject["addedBy"]} safeFileName={photoObject["safeFileName"]} />
         });
 
         let photosTable = null;
@@ -155,6 +150,7 @@ class GalleryListItem extends Component {
                     <th>Zdjęcie</th>
                     <th>Dodane przez</th>
                     <th>Typ pliku</th>
+                    <th>Data dodania</th>
                     <th>Usuń</th>
                 </tr></thead>
                 <tbody className="image-list-table-tbody">

@@ -23,7 +23,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 30px 0;
+      margin: 60px 0;
       cursor: pointer;
       box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.19);
       padding-top: 15px;
@@ -136,6 +136,7 @@
   .image-list {
     &-table {
       width: 100%;
+      border-collapse: collapse;
       &-thead {
         tr {
           th {
@@ -152,13 +153,14 @@
             border-top: 2px solid #26156A;
             border-collapse: collapse;
             text-align: center;
-            &:nth-of-type(2n)
+            &:nth-of-type(2n+1)
             {
               background-color: #E5E4FF;
             }
           }
           &-image > img{
             height: 250px;
+            max-width: 90%;
           }
           &-delete {
             cursor: pointer;

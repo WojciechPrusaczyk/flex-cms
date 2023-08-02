@@ -63,4 +63,23 @@ body {
     }
 
   }
+  .breadcrumbs {
+    background-color: #E8E8FF;
+    margin: 0 150px;
+    font-family: Roboto, serif;
+    padding: 10px 30px;
+    &-path {
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-thickness: .1rem;
+      text-underline-offset: 3px;
+    }
+    &-path, .breadcrumbs-separator {
+      font-size: 1.25rem;
+      text-transform: capitalize;
+    }
+    &-separator {
+      padding: 0 10px;
+    }
+  }
 }
