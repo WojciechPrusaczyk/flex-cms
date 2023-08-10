@@ -180,7 +180,7 @@ class AdminApiController extends AbstractController
     }
 
     #[Route('/dashboard/get-settings', name: 'dashboard_get_settings', methods: ["GET"])]
-    public function getSettings(Security $security, Request $request): JsonResponse
+    public function getDashboardSettings(Security $security, Request $request): JsonResponse
     {
         $requestUri = $request->getBaseUrl();
 

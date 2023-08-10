@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Settings;
+use App\Entity\DashboardSettings;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Settings>
+ * @extends ServiceEntityRepository<DashboardSettings>
  *
- * @method Settings|null find($id, $lockMode = null, $lockVersion = null)
- * @method Settings|null findOneBy(array $criteria, array $orderBy = null)
- * @method Settings[]    findAll()
- * @method Settings[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method DashboardSettings|null find($id, $lockMode = null, $lockVersion = null)
+ * @method DashboardSettings|null findOneBy(array $criteria, array $orderBy = null)
+ * @method DashboardSettings[]    findAll()
+ * @method DashboardSettings[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SettingsRepository extends ServiceEntityRepository
+class DashboardSettingsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Settings::class);
+        parent::__construct($registry, DashboardSettings::class);
     }
 
 //    /**
-//     * @return Settings[] Returns an array of Settings objects
+//     * @return DashboardSettings[] Returns an array of DashboardSettings objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class SettingsRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Settings
+//    public function findOneBySomeField($value): ?DashboardSettings
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')

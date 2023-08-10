@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\SettingsRepository;
+use App\Repository\DashboardSettingsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SettingsRepository::class)]
-class Settings
+#[ORM\Entity(repositoryClass: DashboardSettingsRepository::class)]
+class DashboardSettings
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
