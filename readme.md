@@ -11,7 +11,7 @@ Dashboard focused to allow administrator to dynamically manage website contents.
 - managing gallery photos
 - changing colors
 - changing landing page contents like descriptions, or photos
-- managing contact data  
+- managing contact data
 
 **Pros of my CMS:**
 - easy to use even for people not familiar with technology

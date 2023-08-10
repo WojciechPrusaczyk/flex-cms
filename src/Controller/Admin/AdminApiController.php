@@ -187,10 +187,12 @@ class AdminApiController extends AbstractController
         return $this->json([
             'status' => 'success',
             'response' => [
-                ["name" => "Kolory", "href" => $requestUri."colors", "icon" => "colors.svg"],
+                ["name" => "Sekcje", "href" => $requestUri."sections", "icon" => "sections.svg"],
                 ["name" => "Galeria", "href" => $requestUri."gallery", "icon" => "gallery.svg"],
+                ["name" => "Kolory", "href" => $requestUri."colors", "icon" => "colors.svg"],
+                ["name" => "Style", "href" => $requestUri."stylesheets", "icon" => "stylesheets.svg"],
                 ["name" => "Ustawienia", "href" => $requestUri."settings", "icon" => "settings.svg"],
-                ["name" => "Sekcje", "href" => $requestUri."sections", "icon" => "sections.svg"]
+                ["name" => "Skrypty", "href" => $requestUri."scripts", "icon" => "scripts.svg"],
             ]
         ]);
     }
