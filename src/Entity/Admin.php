@@ -42,9 +42,17 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'addedBY', targetEntity: Photos::class)]
     private Collection $photos;
 
+    #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: StyleSheets::class)]
+    private Collection $styleSheets;
+
+    #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: Scripts::class)]
+    private Collection $scripts;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
+        $this->styleSheets = new ArrayCollection();
+        $this->scripts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,6 +185,66 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($photo->getAddedBY() === $this) {
                 $photo->setAddedBY(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StyleSheets>
+     */
+    public function getStyleSheets(): Collection
+    {
+        return $this->styleSheets;
+    }
+
+    public function addStyleSheet(StyleSheets $styleSheet): static
+    {
+        if (!$this->styleSheets->contains($styleSheet)) {
+            $this->styleSheets->add($styleSheet);
+            $styleSheet->setAddedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStyleSheet(StyleSheets $styleSheet): static
+    {
+        if ($this->styleSheets->removeElement($styleSheet)) {
+            // set the owning side to null (unless already changed)
+            if ($styleSheet->getAddedBy() === $this) {
+                $styleSheet->setAddedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Scripts>
+     */
+    public function getScript(): Collection
+    {
+        return $this->scripts;
+    }
+
+    public function addScript(Scripts $script): static
+    {
+        if (!$this->scripts->contains($script)) {
+            $this->scripts->add($script);
+            $script->setAddedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScript(Scripts $script): static
+    {
+        if ($this->scripts->removeElement($script)) {
+            // set the owning side to null (unless already changed)
+            if ($script->getAddedBy() === $this) {
+                $script->setAddedBy(null);
             }
         }
 

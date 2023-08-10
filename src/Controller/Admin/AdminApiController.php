@@ -37,7 +37,7 @@ class AdminApiController extends AbstractController
             $requestUri = $request->getUri();
             return $this->json([
                 'status' => 'success',
-                'check_db_connection' => $requestUri."db-connection-test",
+                'check_db_connection' => $requestUri."db-connection-scripts",
                 'register' => $requestUri."register?password={password}&username={username}",
                 'get-user' => $requestUri."get-user",
                 'logout' => $requestUri."logout",
@@ -53,7 +53,7 @@ class AdminApiController extends AbstractController
         ]);
     }
 
-    #[Route('/db-connection-test', name: '_check_db_connection', methods: ["GET", "HEAD"])]
+    #[Route('/db-connection-scripts', name: '_check_db_connection', methods: ["GET", "HEAD"])]
     public function checkDbConnection(EntityManagerInterface $em, Security $security): JsonResponse
     {
         if (null != $security->getUser())
