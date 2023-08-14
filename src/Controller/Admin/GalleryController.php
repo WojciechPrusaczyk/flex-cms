@@ -40,13 +40,6 @@ class GalleryController extends AbstractController
                     'response' => 'Przesłany plik jest za duży!',
                 ], 500);
             }
-            if (filesize($uploadedFile) > 5000000 )
-            {
-                return new JsonResponse([
-                    'status' => 'error',
-                    'response' => 'Przesłany plik jest za duży!',
-                ], 500);
-            }
 
             // Możesz teraz wykorzystać $uploadedFile do obsługi przesłanego pliku
 

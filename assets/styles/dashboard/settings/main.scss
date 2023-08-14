@@ -40,9 +40,25 @@
           }
           &-value {
             input[type="text"] {
-              width: 200px;
-              padding: 5px 3px;
+              width: 400px;
+              height: 42px;
               text-align: center;
+              font-size: 1.1rem;
+              background-color: #F8F8FF;
+            }
+            &-fileInput {
+              display: none;
+
+              &Label{
+                width: 500px;
+                height: 200px;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+              }
             }
           }
         }

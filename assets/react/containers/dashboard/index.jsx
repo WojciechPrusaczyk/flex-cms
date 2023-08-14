@@ -82,7 +82,7 @@ class Dashboard extends Component
         }
 
         return (
-            <div onClick={ () => { console.log(this.state.settingsPaths) }}>
+            <div>
                 <div className="header">
                     <h1 className="header-title" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } }>Dashboard</h1>
                     <div className="header-user">

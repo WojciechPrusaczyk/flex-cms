@@ -12,20 +12,17 @@ const SettingsListItem = (props) => {
 
     switch (props.type)
     {
-        case "image":
-            return <tr className="settings-list-table-tbody-item">
+        case "file":
+            return <tr id={ id } className="settings-list-table-tbody-item">
                 <td className="settings-list-table-tbody-item-name"><h2>{props.name}</h2></td>
                 <td className="settings-list-table-tbody-item-description"><span>{props.description}</span></td>
                 <td className="settings-list-table-tbody-item-value">
-                    <input id="elements-per-page" className="page-controls-elementsPerPage" type="text" value={props.value} />
-                </td>
-            </tr>
-        case "email":
-            return <tr className="settings-list-table-tbody-item">
-                <td className="settings-list-table-tbody-item-name"><h2>{props.name}</h2></td>
-                <td className="settings-list-table-tbody-item-description"><span>{props.description}</span></td>
-                <td className="settings-list-table-tbody-item-value">
-                    <input id="elements-per-page" className="page-controls-elementsPerPage" type="text" value={props.value} />
+                    <label htmlFor={ id+"-image" } className="settings-list-table-tbody-item-value-fileInputLabel" style={ {backgroundImage: `url(/uploads/settings/${props.value})`} }></label>
+                    <input id={id + "-image"} className="settings-list-table-tbody-item-value-fileInput" type="file" accept="image/*"
+                           onChange={ (e) => {
+                               props.changeValue(props.id, e);
+                           } }
+                    />
                 </td>
             </tr>
         case"text":
@@ -34,7 +31,7 @@ const SettingsListItem = (props) => {
                 <td className="settings-list-table-tbody-item-name"><h2>{props.name}</h2></td>
                 <td className="settings-list-table-tbody-item-description"><span>{props.description}</span></td>
                 <td className="settings-list-table-tbody-item-value">
-                    <input id="elements-per-page" className="page-controls-elementsPerPage" type="text" defaultValue={props.value} onChange={ () => { props.changeValue(document.getElementById(id)) } } />
+                    <input id="elements-per-page" className="page-controls-elementsPerPage" type="text" defaultValue={props.value} onBlur={ (e) => { props.changeValue(props.id, e) } } />
                 </td>
             </tr>
     }
