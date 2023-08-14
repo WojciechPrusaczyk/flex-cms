@@ -45,6 +45,8 @@ class AdminApiController extends AbstractController
                 'dashboard-gallery-upload-photo' => $requestUri."dashboard/gallery/upload-photo",
                 'dashboard-gallery-get-photos' => $requestUri."dashboard/gallery/get-photos?page={page}&quantity={quantity}",
                 'dashboard-gallery-delete-photo' => $requestUri."dashboard/gallery/delete-photo?id={id}",
+                'dashboard-settings-get-dashboard-settings' => $requestUri."dashboard/get-dashboard-settings",
+                'dashboard-settings-get-settings' => $requestUri."dashboard/settings/get-settings",
             ]);
         }
         return $this->json([
@@ -179,7 +181,7 @@ class AdminApiController extends AbstractController
         }
     }
 
-    #[Route('/dashboard/get-settings', name: 'dashboard_get_settings', methods: ["GET"])]
+    #[Route('/dashboard/get-dashboard-settings', name: 'dashboard_get_dashboard_settings', methods: ["GET"])]
     public function getDashboardSettings(Security $security, Request $request): JsonResponse
     {
         $requestUri = $request->getBaseUrl();

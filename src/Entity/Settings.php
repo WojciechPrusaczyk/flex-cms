@@ -26,7 +26,10 @@ class Settings
     private ?string $type = null;
 
     #[ORM\Column]
-    private ?bool $editable = null;
+    private ?bool $isEditable = null;
+
+    #[ORM\Column]
+    private ?bool $isPublic = null;
 
     public function getId(): ?int
     {
@@ -83,12 +86,24 @@ class Settings
 
     public function isEditable(): ?bool
     {
-        return $this->editable;
+        return $this->isEditable;
     }
 
-    public function setEditable(bool $editable): static
+    public function setEditable(bool $isEditable): static
     {
-        $this->editable = $editable;
+        $this->isEditable = $isEditable;
+
+        return $this;
+    }
+
+    public function isPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setPublic(bool $isPublic): static
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }

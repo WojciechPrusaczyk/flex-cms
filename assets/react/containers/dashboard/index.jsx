@@ -34,7 +34,7 @@ class Dashboard extends Component
 
     async getSettingsPaths()
     {
-        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/get-settings`;
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/get-dashboard-settings`;
 
         try {
             const response = await fetch(fetchAddress)
@@ -54,7 +54,6 @@ class Dashboard extends Component
 
     findCurrentPath(jsonResponse)
     {
-        console.log(jsonResponse);
         let currentAbsolutePath = window.location.href;
 
         jsonResponse.forEach( (setting) => {
