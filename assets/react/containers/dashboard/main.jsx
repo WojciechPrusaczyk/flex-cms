@@ -14,7 +14,7 @@ class Settings extends Component
     }
     async getSettings()
     {
-        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/get-settings`;
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/get-dashboard-settings`;
 
         try {
             const response = await fetch(fetchAddress);
