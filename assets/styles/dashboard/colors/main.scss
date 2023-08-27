@@ -1,0 +1,68 @@
+@import "../pageControls";
+
+@font-face {
+  font-family: 'Roboto';
+  src: url(../../../fonts/Roboto-Regular.ttf) format("truetype");
+}
+#main-root {
+  background-color: #E5E4FF;
+  margin: 0 150px;
+  font-family: Roboto, serif;
+
+  .settings-list {
+    &-table {
+      width: 100%;
+      border-collapse: collapse;
+      &-thead {
+        tr {
+          th {
+            text-align: start;
+            padding: 8px;
+          }
+        }
+      }
+      &-tbody {
+        &-item {
+          background-color: #DFDEFF;
+          & > td {
+            padding: 9px 6px;
+            border-top: 2px solid #26156A;
+            border-collapse: collapse;
+            text-align: center;
+            &:nth-of-type(2n+1)
+            {
+              background-color: #E5E4FF;
+            }
+          }
+          &-image > img{
+            height: 250px;
+            max-width: 90%;
+          }
+          &-value {
+            input[type="text"] {
+              width: 400px;
+              height: 42px;
+              text-align: center;
+              font-size: 1.1rem;
+              background-color: #F8F8FF;
+            }
+            &-fileInput {
+              display: none;
+
+              &Label{
+                width: 500px;
+                height: 200px;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
