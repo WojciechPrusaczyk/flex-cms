@@ -11,7 +11,7 @@ const SettingsListItem = (props) => {
      */
     const id = "setting-" + props.id;
 
-    const [isChecked] = useState(props.value === 1);
+    const [isChecked] = useState(props.value == 1);
 
     switch (props.type)
     {

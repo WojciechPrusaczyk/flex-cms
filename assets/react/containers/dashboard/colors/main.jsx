@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
-import SettingsListItem from "../../../components/settings/settingsListItem";
+import ColorsListItem from "../../../components/colors/colorsListItem";
 
 class SettingsMain extends Component
 {
@@ -15,7 +15,7 @@ class SettingsMain extends Component
 
     async getSettings()
     {
-        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/settings/get-settings?`;
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/settings/get-colors?`;
         try {
             const response = await fetch(fetchAddress)
                 .then((response) => response.json())
@@ -33,86 +33,28 @@ class SettingsMain extends Component
 
     async changeValue(id, event)
     {
-
         const matchingSettings = this.state.settings.filter(setting => {
             return Object.keys(setting)[0] === id[0];
         });
 
         if (matchingSettings.length === 1)
         {
-            const settingObject = Object.values(matchingSettings[0])[0];
-            const settingId = Object.keys(matchingSettings[0])[0];
-            const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/settings/set-value?`;
-            let fetchTextUrl = "";
+            const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/colors/set-value?`;
+            const requestedValue = event.target.value;
 
-                switch (settingObject.type)
-                {
-                    case "file":
+            let fetchTextUrl = fetchAddress + new URLSearchParams({
+                id: id,
+                value: requestedValue,
+            });
 
-                        if (null != event.target.files[0]) {
-                            let requestedFile = event.target.files[0];
-                            let reader = new FileReader();
-                            reader.readAsDataURL(requestedFile);
-
-                            reader.onload = () => {
-
-                                const formData = new FormData();
-
-                                formData.append('id', settingId);
-                                formData.append('file', requestedFile);
-
-                                fetch(fetchAddress, {
-                                    method: "POST",
-                                    body: formData
-                                })
-                                    .then(res => res.json())
-                                    .then(data => {
-                                            if (data.status === "success")
-                                            {
-                                                this.updatePhoto(id, data.response.filename);
-                                            }
-                                        }
-                                    );
-                            };
-                        }
-                        break;
-                    case "boolean":
-                        const isChecked = (event.target.checked)?true:false;
-
-
-                        fetchTextUrl = fetchAddress + new URLSearchParams({
-                            id: id,
-                            value: isChecked,
-                        });
-
-                        try {
-                            const response = await fetch(fetchTextUrl)
-                                .then((response) => response.json())
-                                .then((responseJson) => {
-                                    console.log(responseJson);
-                                })
-                        } catch (error) {
-                        }
-                        break;
-                    case "text":
-                    default:
-                        const requestedValue = event.target.value;
-
-                        fetchTextUrl = fetchAddress + new URLSearchParams({
-                            id: id,
-                            value: requestedValue,
-                        });
-
-                        try {
-                            const response = await fetch(fetchTextUrl)
-                                .then((response) => response.json())
-                                .then((responseJson) => {
-                                    // console.log(responseJson);
-                                })
-                        } catch (error) {
-                        }
-                        break;
-                }
+            try {
+                const response = await fetch(fetchTextUrl)
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                        // console.log(responseJson);
+                    })
+            } catch (error) {
+            }
             }
         //console.log(id, requestedElement, event);
     }
@@ -135,18 +77,18 @@ class SettingsMain extends Component
             let settingId = Object.keys(setting);
             let settingObject = Object.values(setting)[0];
 
-            return <SettingsListItem key={settingId} id={settingId} name={settingObject.name} description={settingObject.description} value={settingObject.value} changeValue={ this.changeValue } type={settingObject.type} />
+            return <ColorsListItem key={settingId} id={settingId} name={settingObject.name} description={settingObject.description} value={settingObject.value} changeValue={ this.changeValue } type={settingObject.type} />
         });
 
         return (
             <div>
-                <table className="settings-list-table">
-                    <thead className="settings-list-table-thead"><tr>
+                <table className="colors-list-table">
+                    <thead className="colors-list-table-thead"><tr>
                         <th>Nazwa techniczna</th>
                         <th>Opis</th>
                         <th>Wartość</th>
                     </tr></thead>
-                    <tbody className="settings-list-table-tbody">
+                    <tbody className="colors-list-table-tbody">
                         {settingsList}
                     </tbody>
                 </table>

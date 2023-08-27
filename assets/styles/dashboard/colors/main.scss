@@ -9,7 +9,7 @@
   margin: 0 150px;
   font-family: Roboto, serif;
 
-  .settings-list {
+  .colors-list {
     &-table {
       width: 100%;
       border-collapse: collapse;
@@ -39,12 +39,23 @@
             max-width: 90%;
           }
           &-value {
-            input[type="text"] {
-              width: 400px;
-              height: 42px;
-              text-align: center;
-              font-size: 1.1rem;
-              background-color: #F8F8FF;
+            input[type="color"] {
+              -webkit-appearance: none;
+              -moz-appearance: none;
+              appearance: none;
+              background-color: transparent;
+              width: 60px;
+              height: 60px;
+              border: none;
+              cursor: pointer;
+              &::-webkit-color-swatch{
+                border-radius: 50%;
+                border: 2px solid #000000;
+              }
+              &::-moz-color-swatch{
+                border-radius: 50%;
+                border: 2px solid #000000;
+              }
             }
             &-fileInput {
               display: none;
