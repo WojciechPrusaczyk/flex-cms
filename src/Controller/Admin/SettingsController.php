@@ -147,6 +147,30 @@ class SettingsController extends AbstractController
                     'response' => 'Ustawienie zostało pomyślnie zmienione.',
                 ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
             }
+            else if ( $requestedEntity->getType() == "boolean" )
+            {
+                // ustawienie jest typu tekstowego
+                $requestedValue = $request->get('value');
+
+                try{
+                    // ustawienie odpowiednich wartości, przy upewnieniu się czy zmienna jest typu bool
+                    $requestedEntity->setValue(filter_var($requestedValue, FILTER_VALIDATE_BOOLEAN)?1:0);
+
+                    // upload do bazy
+                    //dd($requestedEntity);
+                    $em->persist($requestedEntity);
+                    $em->flush();
+                } catch (\Exception $e) {}
+
+                return new JsonResponse([
+                    'status' => 'success',
+                    'response' => 'Ustawienie zostało pomyślnie zmienione.',
+                ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+            }
+            return new JsonResponse([
+                'status' => 'error',
+                'response' => 'Wystąpił błąd krytyczny przy zmianie wartości ustawienia.',
+            ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
         }
 
         return new JsonResponse([

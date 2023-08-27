@@ -43,6 +43,13 @@
         transform: scale(1.02);
         transition: transform .1s, box-shadow .1s;
       }
+      & + .isDisabled {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+      }
     }
+
   }
 }

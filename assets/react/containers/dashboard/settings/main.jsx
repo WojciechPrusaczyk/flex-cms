@@ -43,6 +43,7 @@ class SettingsMain extends Component
             const settingObject = Object.values(matchingSettings[0])[0];
             const settingId = Object.keys(matchingSettings[0])[0];
             const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/settings/set-value?`;
+            let fetchTextUrl = "";
 
                 switch (settingObject.type)
                 {
@@ -75,11 +76,29 @@ class SettingsMain extends Component
                             };
                         }
                         break;
+                    case "boolean":
+                        const isChecked = (event.target.checked)?true:false;
+
+
+                        fetchTextUrl = fetchAddress + new URLSearchParams({
+                            id: id,
+                            value: isChecked,
+                        });
+
+                        try {
+                            const response = await fetch(fetchTextUrl)
+                                .then((response) => response.json())
+                                .then((responseJson) => {
+                                    console.log(responseJson);
+                                })
+                        } catch (error) {
+                        }
+                        break;
                     case "text":
                     default:
                         const requestedValue = event.target.value;
 
-                        let fetchTextUrl = fetchAddress + new URLSearchParams({
+                        fetchTextUrl = fetchAddress + new URLSearchParams({
                             id: id,
                             value: requestedValue,
                         });
