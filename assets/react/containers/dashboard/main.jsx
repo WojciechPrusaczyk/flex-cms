@@ -1,6 +1,5 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
-import tile from "../../components/tile";
 import Tile from "../../components/tile";
 
 class Settings extends Component
@@ -22,7 +21,7 @@ class Settings extends Component
 
             if ( jsonResponse['status'] === "success")
             {
-                this.setState({settings: jsonResponse["response"]})
+                this.setState({settings: jsonResponse["response"][0]})
             }
         } catch (error) {
         }
@@ -33,7 +32,7 @@ class Settings extends Component
     render() {
 
         let settings = this.state.settings.map(tile => {
-            return <Tile key={tile.name} name={tile.name} icon={tile.icon} href={tile.href}></Tile>
+            return <Tile key={tile.name} name={tile.name} icon={tile.icon} href={tile.href} isActive={tile.isActive}></Tile>
         });
 
         return (

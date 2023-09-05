@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Admin;
+use App\Entity\DashboardSettings;
 use App\Entity\Photos;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
@@ -182,20 +183,26 @@ class AdminApiController extends AbstractController
     }
 
     #[Route('/dashboard/get-dashboard-settings', name: 'dashboard_get_dashboard_settings', methods: ["GET"])]
-    public function getDashboardSettings(Security $security, Request $request): JsonResponse
+    public function getDashboardSettings(Security $security, Request $request, EntityManagerInterface $em): JsonResponse
     {
         $requestUri = $request->getBaseUrl();
+        $dashboardSettingsRepo = $em->getRepository(DashboardSettings::class);
+        if ($this->getParameter('app.are_settings_visible') == 1) {
+            $settingsArray = $dashboardSettingsRepo->findAll();
+        }
+        else if ($this->getParameter('app.are_settings_visible') == 0) {
+            $settingsArray = $dashboardSettingsRepo->findBy([ "isActive" => 1]);
+        }
 
-        return $this->json([
+        $settings = [];
+        foreach ($settingsArray as $setting)
+        {
+            $settings[] = [ "name" => $setting->getName(), "href" => $requestUri.$setting->getEnglishName(), "icon" => $setting->getIconFileName(), "isActive" => $setting->isActive()];
+        }
+
+            return $this->json([
             'status' => 'success',
-            'response' => [
-                ["name" => "Sekcje", "href" => $requestUri."sections", "icon" => "sections.svg"],
-                ["name" => "Galeria", "href" => $requestUri."gallery", "icon" => "gallery.svg"],
-                ["name" => "Kolory", "href" => $requestUri."colors", "icon" => "colors.svg"],
-                ["name" => "Style", "href" => $requestUri."stylesheets", "icon" => "stylesheets.svg"],
-                ["name" => "Ustawienia", "href" => $requestUri."settings", "icon" => "settings.svg"],
-                ["name" => "Skrypty", "href" => $requestUri."scripts", "icon" => "scripts.svg"],
-            ]
+            'response' => [$settings],
         ]);
     }
 

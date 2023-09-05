@@ -16,6 +16,14 @@
       width: 60%;
     }
     .tile{
+      &.disabled {
+        color: currentColor;
+        opacity: 0.5;
+        text-decoration: none;
+        pointer-events: none;
+        cursor: not-allowed;
+      }
+
       background-color: #EAEAFF;
       width: 200px;
       display: block;
@@ -38,16 +46,10 @@
         margin: 30px 0 0;
       }
 
-      &:hover{
+      &:hover:not(.disabled){
         box-shadow: 4px 6px 9px 4px rgba(0, 0, 0, 0.19);
         transform: scale(1.02);
         transition: transform .1s, box-shadow .1s;
-      }
-      & + .isDisabled {
-        color: currentColor;
-        cursor: not-allowed;
-        opacity: 0.5;
-        text-decoration: none;
       }
     }
 

@@ -16,11 +16,14 @@ class DashboardSettings
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $type = null;
+    #[ORM\Column(length: 255)]
+    private ?string $englishName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $value = null;
+    #[ORM\Column(length: 255)]
+    private ?string $iconFileName = null;
+
+    #[ORM\Column]
+    private ?bool $isActive = null;
 
     public function getId(): ?int
     {
@@ -39,26 +42,38 @@ class DashboardSettings
         return $this;
     }
 
-    public function getType(): ?string
+    public function getEnglishName(): ?string
     {
-        return $this->type;
+        return $this->englishName;
     }
 
-    public function setType(?string $type): static
+    public function setEnglishName(string $englishName): static
     {
-        $this->type = $type;
+        $this->englishName = $englishName;
 
         return $this;
     }
 
-    public function getValue(): ?string
+    public function getIconFileName(): ?string
     {
-        return $this->value;
+        return $this->iconFileName;
     }
 
-    public function setValue(?string $value): static
+    public function setIconFileName(string $iconFileName): static
     {
-        $this->value = $value;
+        $this->iconFileName = $iconFileName;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }
