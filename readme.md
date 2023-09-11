@@ -17,4 +17,7 @@ Dashboard focused to allow administrator to dynamically manage website contents.
 - easy to use even for people not familiar with technology
 - highly configurable
 - easy access to write own scripts and stylesheets
+
+**Used libraries**
+- https://editorjs.io/
 ### 

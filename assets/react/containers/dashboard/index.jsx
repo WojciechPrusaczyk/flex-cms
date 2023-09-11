@@ -43,9 +43,9 @@ class Dashboard extends Component
 
                     if ( jsonResponse['status'] === "success")
                     {
-                        this.setState({settingsPaths: jsonResponse["response"]});
+                        this.setState({settingsPaths: jsonResponse["response"][0]});
 
-                        this.findCurrentPath(jsonResponse["response"]);
+                        this.findCurrentPath(jsonResponse["response"][0]);
                     }
                 })
         } catch (error) {

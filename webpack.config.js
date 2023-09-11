@@ -32,6 +32,7 @@ Encore
     .addEntry('dashboard_gallery', './assets/react/containers/dashboard/gallery/main.jsx')
     .addEntry('dashboard_settings', './assets/react/containers/dashboard/settings/main.jsx')
     .addEntry('dashboard_colors', './assets/react/containers/dashboard/colors/main.jsx')
+    .addEntry('dashboard_stylesheets', './assets/react/containers/dashboard/stylesheets/main.jsx')
 
     .addStyleEntry('dashboard_login_style', './assets/styles/dashboard/login.scss')
     .addStyleEntry('dashboard_index_style', './assets/styles/dashboard/index.scss')
@@ -39,6 +40,7 @@ Encore
     .addStyleEntry('dashboard_gallery_style', './assets/styles/dashboard/gallery/main.scss')
     .addStyleEntry('dashboard_settings_style', './assets/styles/dashboard/settings/main.scss')
     .addStyleEntry('dashboard_colors_style', './assets/styles/dashboard/colors/main.scss')
+    .addStyleEntry('dashboard_stylesheets_style', './assets/styles/dashboard/stylesheets/main.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

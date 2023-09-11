@@ -21,16 +21,18 @@ class StyleSheetsRepository extends ServiceEntityRepository
         parent::__construct($registry, StyleSheets::class);
     }
 
-//    /**
-//     * @return StyleSheets[] Returns an array of StyleSheets objects
-//     */
-//    public function findByExampleField($value): array
+    /**
+     * @return StyleSheets[] Returns an array of StyleSheets objects
+     */
+//    public function findAllAvilableStylesheets(): array
 //    {
+//        $now = new \DateTime();
+//
 //        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
+//            ->andWhere('s.active = TRUE')
+//            ->andWhere('s.start_being_active > '.$now->format())
+//            ->andWhere('s.stop_being_active = :val')
 //            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
 //        ;
