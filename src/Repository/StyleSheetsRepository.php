@@ -38,13 +38,21 @@ class StyleSheetsRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?StyleSheets
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+// function checking, if stylesheet provided by id is actually active
+    public function isStylesheetActive(int $id): ?bool
+    {
+        $now = new \DateTime();
+        $nowString = $now->format('Y-m-d G:i:s');
+
+        return null != $this->createQueryBuilder('s')
+            ->andWhere('s.id = :id')
+            ->andWhere('s.active = TRUE')
+            ->andWhere('s.startBeingActive <= :now')
+            ->andWhere('s.stopBeingActive > :now')
+            ->setParameter('id', $id)
+            ->setParameter('now', $nowString)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+    }
 }

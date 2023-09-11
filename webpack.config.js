@@ -33,6 +33,7 @@ Encore
     .addEntry('dashboard_settings', './assets/react/containers/dashboard/settings/main.jsx')
     .addEntry('dashboard_colors', './assets/react/containers/dashboard/colors/main.jsx')
     .addEntry('dashboard_stylesheets', './assets/react/containers/dashboard/stylesheets/main.jsx')
+    .addEntry('dashboard_stylesheets_new', './assets/react/containers/dashboard/stylesheets/new.jsx')
 
     .addStyleEntry('dashboard_login_style', './assets/styles/dashboard/login.scss')
     .addStyleEntry('dashboard_index_style', './assets/styles/dashboard/index.scss')

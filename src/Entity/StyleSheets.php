@@ -23,9 +23,6 @@ class StyleSheets
     #[ORM\ManyToOne(inversedBy: 'styleSheets')]
     private ?admin $addedBy = null;
 
-    #[ORM\ManyToOne(inversedBy: 'styleSheets')]
-    private ?admin $editedBy = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
 
@@ -34,6 +31,9 @@ class StyleSheets
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $stopBeingActive = null;
+
+    #[ORM\ManyToOne]
+    private ?Admin $EditedBy = null;
 
     public function getId(): ?int
     {
@@ -76,18 +76,6 @@ class StyleSheets
         return $this;
     }
 
-    public function getEditedBy(): ?admin
-    {
-        return $this->editedBy;
-    }
-
-    public function setEditedBy(?admin $editedBy): static
-    {
-        $this->editedBy = $editedBy;
-
-        return $this;
-    }
-
     public function getValue(): ?string
     {
         return $this->value;
@@ -120,6 +108,18 @@ class StyleSheets
     public function setStopBeingActive(?\DateTimeInterface $stopBeingActive): static
     {
         $this->stopBeingActive = $stopBeingActive;
+
+        return $this;
+    }
+
+    public function getEditedBy(): ?Admin
+    {
+        return $this->EditedBy;
+    }
+
+    public function setEditedBy(?Admin $EditedBy): static
+    {
+        $this->EditedBy = $EditedBy;
 
         return $this;
     }

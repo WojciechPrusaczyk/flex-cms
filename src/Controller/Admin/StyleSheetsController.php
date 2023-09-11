@@ -23,31 +23,41 @@ class StyleSheetsController extends AbstractController
         ]);
     }
 
-//    #[Route('/admin-api/dashboard/settings/get-stylesheets', name: 'admin_api_dashboard_settings_get_settings', methods: ["GET"])]
-//    public function getSettings(EntityManagerInterface $entityManager ): JsonResponse
-//    {
-//        $settingsRepo = $entityManager->getRepository(StyleSheets::class);
-//        $allSettings = $settingsRepo->findBy(["active" => true ]);
-//
-//        $items = [];
-//
-//        foreach ($allSettings as $item)
-//        {
-//            $items[] = [ $item->getId() => [
-//                "name" => $item->getName(),
-//                "type" => $item->getType(),
-//                "value" => $item->getValue(),
-//                "description" => $item->getDescription(),
-//            ]];
-//        }
-//
-//        return new JsonResponse([
-//            'status' => 'success',
-//            'response' => [
-//                "items" => $items,
-//            ],
-//        ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-//    }
+    #[Route('/admin-api/dashboard/stylesheets/get-stylesheets', name: 'admin_api_dashboard_stylesheets_get_stylesheets', methods: ["GET"])]
+    public function getStylesheets(EntityManagerInterface $entityManager ): JsonResponse
+    {
+        $stylesheetsRepo = $entityManager->getRepository(StyleSheets::class);
+        $allStylesheets = $stylesheetsRepo->findAll();
+
+        $items = [];
+
+        foreach ($allStylesheets as $item)
+        {
+            $isItemActive = $stylesheetsRepo->isStylesheetActive($item->getId());
+            $lastEditedBy = ($item->getEditedBy())?$item->getEditedBy()->getUsername():$item->getAddedBy()->getUsername();
+
+            $items[] = [ $item->getId() => [
+                "name" => $item->getName(),
+                "lastEditedBy" => $lastEditedBy,
+                "active" => $isItemActive,
+            ]];
+        }
+
+        return new JsonResponse([
+            'status' => 'success',
+            'response' => [
+                "items" => $items,
+            ],
+        ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+    }
+
+    #[Route('/dashboard/stylesheets/new', name: 'dashboard_stylesheets_new')]
+    public function new(): Response
+    {
+        return $this->render('stylesheets/new.html.twig', [
+            'controller_name' => 'StylesheetsController',
+        ]);
+    }
 
 
 //    #[Route('/admin-api/dashboard/settings/set-value', name: 'admin_api_dashboard_settings_set_value', methods: ["POST", "GET"])]

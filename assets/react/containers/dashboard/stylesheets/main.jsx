@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
-import SettingsListItem from "../../../components/settings/settingsListItem";
+import StylesheetsListItem from "../../../components/stylesheets/stylesheetsListItem";
 
 class StylesheetsMain extends Component
 {
@@ -10,12 +10,11 @@ class StylesheetsMain extends Component
             settings: [],
         }
         this.getSettings();
-        this.changeValue = this.changeValue.bind(this);
     }
 
     async getSettings()
     {
-        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/settings/get-settings?`;
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/stylesheets/get-stylesheets`;
         try {
             const response = await fetch(fetchAddress)
                 .then((response) => response.json())
@@ -26,107 +25,9 @@ class StylesheetsMain extends Component
         }
     }
 
-    async uploadFile(id, file)
+    addNewStylesheet()
     {
-
-    }
-
-    async changeValue(id, event)
-    {
-
-        const matchingSettings = this.state.settings.filter(setting => {
-            return Object.keys(setting)[0] === id[0];
-        });
-
-        if (matchingSettings.length === 1)
-        {
-            const settingObject = Object.values(matchingSettings[0])[0];
-            const settingId = Object.keys(matchingSettings[0])[0];
-            const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/settings/set-value?`;
-            let fetchTextUrl = "";
-
-                switch (settingObject.type)
-                {
-                    case "file":
-
-                        if (null != event.target.files[0]) {
-                            let requestedFile = event.target.files[0];
-                            let reader = new FileReader();
-                            reader.readAsDataURL(requestedFile);
-
-                            reader.onload = () => {
-
-                                const formData = new FormData();
-
-                                formData.append('id', settingId);
-                                formData.append('file', requestedFile);
-
-                                fetch(fetchAddress, {
-                                    method: "POST",
-                                    body: formData
-                                })
-                                    .then(res => res.json())
-                                    .then(data => {
-                                            if (data.status === "success")
-                                            {
-                                                this.updatePhoto(id, data.response.filename);
-                                            }
-                                        }
-                                    );
-                            };
-                        }
-                        break;
-                    case "boolean":
-                        const isChecked = (event.target.checked)?true:false;
-
-
-                        fetchTextUrl = fetchAddress + new URLSearchParams({
-                            id: id,
-                            value: isChecked,
-                        });
-
-                        try {
-                            const response = await fetch(fetchTextUrl)
-                                .then((response) => response.json())
-                                .then((responseJson) => {
-                                    // console.log(responseJson);
-                                })
-                        } catch (error) {
-                        }
-                        break;
-                    case "text":
-                    default:
-                        const requestedValue = event.target.value;
-
-                        fetchTextUrl = fetchAddress + new URLSearchParams({
-                            id: id,
-                            value: requestedValue,
-                        });
-
-                        try {
-                            const response = await fetch(fetchTextUrl)
-                                .then((response) => response.json())
-                                .then((responseJson) => {
-                                    // console.log(responseJson);
-                                })
-                        } catch (error) {
-                        }
-                        break;
-                }
-            }
-        //console.log(id, requestedElement, event);
-    }
-
-    async updatePhoto(id, newValue)
-    {
-        let currentSettings = this.state.settings;
-
-        let requestedSetting = currentSettings.filter(setting => {
-            return Object.keys(setting)[0] === id[0];
-        })[0];
-        Object.values(requestedSetting)[0].value = newValue;
-
-        this.setState({photos: currentSettings});
+        window.location.href = `${location.protocol}//${window.location.host}/dashboard/stylesheets/new`
     }
 
     render() {
@@ -135,18 +36,21 @@ class StylesheetsMain extends Component
             let settingId = Object.keys(setting);
             let settingObject = Object.values(setting)[0];
 
-            return <SettingsListItem key={settingId} id={settingId} name={settingObject.name} description={settingObject.description} value={settingObject.value} changeValue={ this.changeValue } type={settingObject.type} />
+            return <StylesheetsListItem key={settingId} id={settingId} name={settingObject.name} lastEditedBy={settingObject.lastEditedBy} active={settingObject.active} />
         });
 
         return (
             <div>
-                <table className="settings-list-table">
-                    <thead className="settings-list-table-thead"><tr>
-                        <th>Nazwa techniczna</th>
-                        <th>Opis</th>
-                        <th>Wartość</th>
+                <div className="stylesheets-head"><input type="button" value="Dodaj" className="stylesheets-head-button" onClick={ this.addNewStylesheet }/></div>
+                <table className="stylesheets-list-table">
+                    <thead className="stylesheets-list-table-thead"><tr>
+                        <th>Nazwa</th>
+                        <th>Ostatnio zmienione przez</th>
+                        <th>Aktywny</th>
+                        <th>Edytuj</th>
+                        <th>Usuń</th>
                     </tr></thead>
-                    <tbody className="settings-list-table-tbody">
+                    <tbody className="stylesheets-list-table-tbody">
                         {settingsList}
                     </tbody>
                 </table>
@@ -157,4 +61,4 @@ class StylesheetsMain extends Component
 
 const root = ReactDOM.createRoot(document.getElementById("main-root"));
 
-root.render(<SettingsMain />);
+root.render(<StylesheetsMain />);
