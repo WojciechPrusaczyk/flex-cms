@@ -83,7 +83,7 @@ class Dashboard extends Component
             currentPath = <p>
                 <a className="breadcrumbs-path" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } } alt="przejdź do dashboard">dashboard</a>
                 <span className="breadcrumbs-separator">/</span>
-                <a className="breadcrumbs-path" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard/${this.state.currentPath.href}` } } alt={`znajdujesz się właśnie w ${this.state.currentPath.name}`}>{this.state.currentPath.name}</a>
+                <a className="breadcrumbs-path" alt={`znajdujesz się właśnie w ${this.state.currentPath.name}`}>{this.state.currentPath.name}</a>
             </p>;
         }
         else {
