@@ -68,7 +68,7 @@ class StylesheetsMain extends Component
                     <thead className="stylesheets-list-table-thead"><tr>
                         <th>Nazwa</th>
                         <th>Ostatnio zmienione przez</th>
-                        <th>Aktywny</th>
+                        <th>Status</th>
                         <th>Edytuj</th>
                         <th>Usuń</th>
                     </tr></thead>

@@ -48,6 +48,7 @@ class AdminApiController extends AbstractController
                 'dashboard-gallery-delete-photo' => $requestUri."dashboard/gallery/delete-photo?id={id}",
                 'dashboard-settings-get-dashboard-settings' => $requestUri."dashboard/get-dashboard-settings",
                 'dashboard-settings-get-settings' => $requestUri."dashboard/settings/get-settings",
+                'dashboard-settings-get-stylesheet' => $requestUri."dashboard/stylesheets/get-stylesheet?id={id}",
             ]);
         }
         return $this->json([

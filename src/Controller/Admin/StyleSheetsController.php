@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\StyleSheets;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -64,6 +66,9 @@ class StyleSheetsController extends AbstractController
                 $newStylesheet->setName($stylesheetsRepo->namelessName .  " ($namelessStylesheetsNumber)");
                 $newStylesheet->setAddedBy($currentUser);
                 $newStylesheet->setActive(false);
+                $newStylesheet->setValue('{"time":0,"blocks":[],"version":"2.28.0"}');
+                $newStylesheet->setStartBeingActive(DateTimeImmutable::createFromFormat('Y-m-d\TH:i', '2000-10-10T00:00'));
+                $newStylesheet->setStopBeingActive(DateTimeImmutable::createFromFormat('Y-m-d\TH:i', '2000-10-10T00:00'));
 
                 $em->persist($newStylesheet);
                 $em->flush();
@@ -107,133 +112,107 @@ class StyleSheetsController extends AbstractController
         return $this->render('stylesheets/edit.html.twig', ["id" => $id]);
     }
 
+    #[Route('/dashboard/stylesheets/get-stylesheet', name: 'dashboard_stylesheets_get_stylesheet', methods: ["GET"])]
+    public function getStylesheet(EntityManagerInterface $em, LoggerInterface $logger, Request $request): JsonResponse
+    {
+        $id = $request->get('id');
 
-//    #[Route('/admin-api/dashboard/settings/set-value', name: 'admin_api_dashboard_settings_set_value', methods: ["POST", "GET"])]
-//    public function setValue(Security $security, Request $request, EntityManagerInterface $em, Filesystem $filesystem): JsonResponse
-//    {
-//        $stylesheetsRepo = $em->getRepository(StyleSheets::class);
-//        $requestedId = $request->get('id');
-//        $requestedEntity = $settingsRepo->findOneBy(["id" => $requestedId?:null]);
-//
-//        if ( null != $requestedEntity )
-//        {
-//
-//            if ( $requestedEntity->getType() == "file" )
-//            {
-//                // ustawienie jest typem pliku
-//                $uploadedFile = $request->files->get('file');
-//
-//                if (filesize($uploadedFile) > 5000000 )
-//                {
-//                    return new JsonResponse([
-//                        'status' => 'error',
-//                        'response' => [
-//                            'message' => 'Przesłany plik jest za duży.'
-//                        ],
-//                    ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-//                }
-//                if (null != $uploadedFile)
-//                {
-//                    try {
-//                        $filesystem->remove($this->getParameter('settings_directory')."/".$requestedEntity->getValue());
-//
-//                        $extension = $uploadedFile->guessExtension();
-//                        $safeFileName = md5(uniqid()) . '.' . $extension;
-//                        $validFileTypes = [
-//                            "gif", "jpg", "png", "svg"
-//                        ];
-//
-//                        $uploadedFile->move(
-//                            $this->getParameter('settings_directory'), // Ścieżka do katalogu, gdzie będą przechowywane przesłane pliki
-//                            $safeFileName
-//                        );
-//
-//                        // dodatkowe warunki sprawdzan przy dodawaniu plików
-//                        if( file_exists($this->getParameter('settings_directory')."/".$safeFileName) && null != $security->getUser() && in_array($extension, $validFileTypes) )
-//                        {
-//                            try {
-//                                // ustawienie odpowiednich wartości
-//                                $requestedEntity->setValue($safeFileName);
-//
-//                                // upload do bazy
-//                                $em->persist($requestedEntity);
-//                                $em->flush();
-//
-//                                return new JsonResponse([
-//                                    'status' => 'success',
-//                                    'response' => [
-//                                        'message' => 'Plik został pomyślnie dodany na serwer.',
-//                                        'filename' => $safeFileName,
-//                                    ],
-//                                ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-//
-//                            } catch (\Exception) {  }
-//                        } else {
-//                            return new JsonResponse([
-//                                'status' => 'error',
-//                                'response' => 'Wystąpił błąd podczas zapisu pliku.',
-//                            ], 500);
-//                        }
-//                    } catch (FileException $e) { }
-//
-//                } else {
-//                    return new JsonResponse([
-//                        'status' => 'error',
-//                        'response' => [
-//                            'message' => 'Nie przesłano żadnego pliku.'
-//                        ],
-//                    ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-//                }
-//
-//
-//
-//            }
-//            else if ( $requestedEntity->getType() == "text" )
-//            {
-//                // ustawienie jest typu tekstowego
-//                $requestedValue = $request->get('value');
-//
-//                // ustawienie odpowiednich wartości
-//                $requestedEntity->setValue($requestedValue);
-//
-//                // upload do bazy
-//                $em->persist($requestedEntity);
-//                $em->flush();
-//
-//                return new JsonResponse([
-//                    'status' => 'success',
-//                    'response' => 'Ustawienie zostało pomyślnie zmienione.',
-//                ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-//            }
-//            else if ( $requestedEntity->getType() == "boolean" )
-//            {
-//                // ustawienie jest typu tekstowego
-//                $requestedValue = $request->get('value');
-//
-//                try{
-//                    // ustawienie odpowiednich wartości, przy upewnieniu się czy zmienna jest typu bool
-//                    $requestedEntity->setValue(filter_var($requestedValue, FILTER_VALIDATE_BOOLEAN)?1:0);
-//
-//                    // upload do bazy
-//                    //dd($requestedEntity);
-//                    $em->persist($requestedEntity);
-//                    $em->flush();
-//                } catch (\Exception $e) {}
-//
-//                return new JsonResponse([
-//                    'status' => 'success',
-//                    'response' => 'Ustawienie zostało pomyślnie zmienione.',
-//                ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-//            }
-//            return new JsonResponse([
-//                'status' => 'error',
-//                'response' => 'Wystąpił błąd krytyczny przy zmianie wartości ustawienia.',
-//            ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-//        }
-//
-//        return new JsonResponse([
-//            'status' => 'error',
-//            'response' => 'Nie znaleziono takiego ustawienia.',
-//        ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-//    }
+        try {
+            $stylesheetsRepo = $em->getRepository(StyleSheets::class);
+
+            $stylesheetEntity = ( null != $id )?$stylesheetsRepo->findOneBy(["id" => $id]):null;
+
+            if ($stylesheetEntity)
+            {
+                $stylesheet = [
+                    "id" => $stylesheetEntity->getId(),
+                    "name" => $stylesheetEntity->getName(),
+                    "active" => $stylesheetEntity->isActive(),
+                    "value" => json_decode($stylesheetEntity->getValue()),// nie wiem jak, ale to działa
+                    "start_being_active" => $stylesheetEntity->getStartBeingActive(),
+                    "stop_being_active" => $stylesheetEntity->getStopBeingActive(),
+                ];
+
+                return new JsonResponse([
+                    'status' => 'success',
+                    'response' => [ "entity" => $stylesheet ],
+                ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+            }
+
+            return new JsonResponse([
+                'status' => 'not_found',
+                'response' => [
+                    'message' => "Nie znaleziono encji o podanym id."
+                ],
+            ], 404, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+        } catch (\Exception $e) {
+            $logger->error('Wystąpił błąd: ' . $e->getMessage());
+
+            return new JsonResponse([
+                'status' => 'error',
+                'response' => [
+                    'message' => "Wsytąpił błąd 500 na serwerze!"
+                ],
+            ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+        }
+    }
+
+    #[Route('/dashboard/stylesheets/edit-stylesheet', name: 'dashboard_stylesheets_edit_stylesheet', methods: ["GET"])]
+    public function editStylesheet(EntityManagerInterface $em, LoggerInterface $logger, Request $request, Security $security): Response
+    {
+        $rawData = [
+            "id" => $request->get('id'),
+            "name" => $request->get('name'),
+            "active" => $request->get('active'),
+            "value" => $request->get('value'),
+            "start_being_active" => $request->get('start_being_active'),
+            "stop_being_active" => $request->get('stop_being_active')
+        ];
+//        dd($rawData);
+
+        try {
+            $stylesheetsRepo = $em->getRepository(StyleSheets::class);
+
+            $stylesheetEntity = ( null != $rawData["id"] )?$stylesheetsRepo->findOneBy(["id" => $rawData["id"]]):null;
+
+            $stylesheetEntity->setName($rawData["name"]);
+            $stylesheetEntity->setActive($rawData["active"] == "true");
+            $stylesheetEntity->setValue($rawData["value"]);
+            $stylesheetEntity->setEditedBy( $security->getUser() );
+
+            $dateTimeStart = DateTime::createFromFormat('Y-m-d\TH:i:s', $rawData["start_being_active"]);
+            $dateTimeEnd = DateTime::createFromFormat('Y-m-d\TH:i:s', $rawData["stop_being_active"]);
+            if ($dateTimeStart !== false && $dateTimeEnd !== false)
+            {
+                $stylesheetEntity->setStartBeingActive(new DateTimeImmutable($dateTimeStart->format('Y-m-d H:i:s')));
+                $stylesheetEntity->setStopBeingActive(new DateTimeImmutable($dateTimeEnd->format('Y-m-d H:i:s')));
+            } else {
+                return new JsonResponse([
+                    'status' => 'error',
+                    'response' => [
+                        'message' => "Wsytąpił przy ustawianiu czasu!"
+                    ],
+                ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+            }
+            $em->persist($stylesheetEntity);
+            $em->flush();
+
+            return new JsonResponse([
+                'status' => 'success',
+                'response' => [
+                    'message' => "Encja została dodana do bazy danych."
+                ],
+            ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+
+        } catch (\Exception $e) {
+            $logger->error('Wystąpił błąd: ' . $e->getMessage());
+
+            return new JsonResponse([
+                'status' => 'error',
+                'response' => [
+                    'message' => "Wystąpił błąd 500 na serwerze!"
+                ],
+            ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+        }
+    }
 }
