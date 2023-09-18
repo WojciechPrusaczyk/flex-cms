@@ -74,7 +74,8 @@ body {
       text-decoration-thickness: .1rem;
       text-underline-offset: 3px;
       &:last-child{
-      text-decoration: none;
+        text-decoration: none;
+        cursor: context-menu;
       }
     }
     &-path, .breadcrumbs-separator {
