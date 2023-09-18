@@ -73,6 +73,9 @@ body {
       text-decoration: underline;
       text-decoration-thickness: .1rem;
       text-underline-offset: 3px;
+      &:last-child{
+      text-decoration: none;
+      }
     }
     &-path, .breadcrumbs-separator {
       font-size: 1.25rem;
