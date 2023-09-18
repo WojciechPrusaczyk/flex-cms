@@ -68,14 +68,25 @@ class Dashboard extends Component
 
     render() {
         let currentPath = null;
-        if ( null != this.state.currentPath )
+
+        if ( null != this.state.currentPath && window.location.href.includes("/edit")){
+            currentPath = <p>
+                <a className="breadcrumbs-path" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } } alt="przejdź do dashboard">dashboard</a>
+                <span className="breadcrumbs-separator">/</span>
+                <a className="breadcrumbs-path" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard/${this.state.currentPath.href}` } } alt={`znajdujesz się właśnie w ${this.state.currentPath.name}`}>{this.state.currentPath.name}</a>
+                <span className="breadcrumbs-separator">/</span>
+                <span className="breadcrumbs-path" alt={`znajdujesz się właśnie w ${this.state.currentPath.name}`}>Edycja</span>
+            </p>;
+        }
+        else if ( null != this.state.currentPath )
         {
             currentPath = <p>
                 <a className="breadcrumbs-path" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } } alt="przejdź do dashboard">dashboard</a>
                 <span className="breadcrumbs-separator">/</span>
                 <a className="breadcrumbs-path" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard/${this.state.currentPath.href}` } } alt={`znajdujesz się właśnie w ${this.state.currentPath.name}`}>{this.state.currentPath.name}</a>
             </p>;
-                } else {
+        }
+        else {
             currentPath = <p>
                 <a className="breadcrumbs-path breadcrumbs-currentPath" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } } alt="przejdź do dashboard">dashboard</a>
             </p>;

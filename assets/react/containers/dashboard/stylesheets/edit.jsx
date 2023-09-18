@@ -98,13 +98,26 @@ class StylesheetsForm extends Component
 
     render() {
 
-        const FormComponent = <div className="editor-form">
-                <input className="editor-form-name" type="text" defaultValue={this.state.name} onChange={ (e) => this.setState({name: e.target.value}) } />
-                <input className="editor-form-active" type="checkbox" defaultChecked={this.state.active} onChange={ (e) => this.setState({active: e.target.checked}) } />
-                <input className="editor-form-start_being_active" type="datetime-local" defaultValue={this.state.start_being_active}
+        const FormComponent =
+            <div className="editor-form">
+                <p>
+                    <label htmlFor="name">Nazwa</label>
+                    <input id="name" className="editor-form-name" type="text" defaultValue={this.state.name} onChange={ (e) => this.setState({name: e.target.value}) } />
+                </p>
+                <p>
+                    <label htmlFor="active">Aktywny</label>
+                    <input id="active" className="editor-form-active" type="checkbox" defaultChecked={this.state.active} onChange={ (e) => this.setState({active: e.target.checked}) } />
+                </p>
+                <p>
+                    <label htmlFor="start-being-active">Aktywny od</label>
+                    <input id="start-being-active" className="editor-form-start_being_active" type="datetime-local" defaultValue={this.state.start_being_active}
                        onChange={ (e) => this.setState({start_being_active: (e.target.value.length<19)?e.target.value+":00":e.target.value}) } />
-                <input className="editor-form-stop_being_active" type="datetime-local" defaultValue={this.state.stop_being_active}
+                </p>
+                <p>
+                    <label htmlFor="stop-being-active">Aktywny do</label>
+                    <input id="stop-being-active" className="editor-form-stop_being_active" type="datetime-local" defaultValue={this.state.stop_being_active}
                        onChange={ (e) => this.setState({stop_being_active: (e.target.value.length<19)?e.target.value+":00":e.target.value}) } />
+                </p>
             </div>;
 
 
@@ -114,13 +127,13 @@ class StylesheetsForm extends Component
             <div className="editor">
                 {this.state.isFormDataReady && FormComponent}
                 {this.state.isFormDataReady && textEditor}
-                <p className="editor-save">
+                {this.state.isFormDataReady && <p className="editor-save">
                     <input className="editor-save-button" type="submit" onClick={ (e) => {
                         e.preventDefault();
                         this.saveData();
                     }
                     } value="Zapisz" />
-                </p>
+                </p>}
             </div>
         );
     }
