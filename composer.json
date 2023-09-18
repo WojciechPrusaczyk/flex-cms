@@ -18,6 +18,7 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
         "symfony/mime": "6.3.*",
+        "symfony/monolog-bundle": "*",
         "symfony/rate-limiter": "6.3.*",
         "symfony/runtime": "6.3.*",
         "symfony/security-bundle": "6.3.*",

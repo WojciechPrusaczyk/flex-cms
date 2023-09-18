@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\StyleSheets;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Filesystem;
@@ -18,16 +19,14 @@ class StyleSheetsController extends AbstractController
     #[Route('/dashboard/stylesheets', name: 'dashboard_stylesheets')]
     public function index(): Response
     {
-        return $this->render('stylesheets/index.html.twig', [
-            'controller_name' => 'StylesheetsController',
-        ]);
+        return $this->render('stylesheets/index.html.twig');
     }
 
     #[Route('/admin-api/dashboard/stylesheets/get-stylesheets', name: 'admin_api_dashboard_stylesheets_get_stylesheets', methods: ["GET"])]
     public function getStylesheets(EntityManagerInterface $entityManager ): JsonResponse
     {
         $stylesheetsRepo = $entityManager->getRepository(StyleSheets::class);
-        $allStylesheets = $stylesheetsRepo->findAll();
+        $allStylesheets = array_reverse($stylesheetsRepo->findAll());
 
         $items = [];
 
@@ -52,11 +51,60 @@ class StyleSheetsController extends AbstractController
     }
 
     #[Route('/dashboard/stylesheets/new', name: 'dashboard_stylesheets_new')]
-    public function new(): Response
+    public function new(EntityManagerInterface $em, LoggerInterface $logger, Security $security): Response
     {
-        return $this->render('stylesheets/new.html.twig', [
-            'controller_name' => 'StylesheetsController',
-        ]);
+        $stylesheetsRepo = $em->getRepository(StyleSheets::class);
+        $namelessStylesheetsNumber = $stylesheetsRepo->countNamelessStylesheets()+1;
+
+        if (null != $security->getUser()) {
+            $currentUser = $security->getUser();
+
+            try {
+                $newStylesheet = new StyleSheets();
+                $newStylesheet->setName($stylesheetsRepo->namelessName .  " ($namelessStylesheetsNumber)");
+                $newStylesheet->setAddedBy($currentUser);
+                $newStylesheet->setActive(false);
+
+                $em->persist($newStylesheet);
+                $em->flush();
+
+                return $this->redirectToRoute( "dashboard_stylesheets_edit", [ "id" => $newStylesheet->getId() ] );
+            } catch (\Exception $e) { $logger->error('Wystąpił błąd: ' . $e->getMessage()); }
+        }
+
+        return $this->redirectToRoute( "dashboard_stylesheets" );
+    }
+
+    #[Route('/dashboard/stylesheets/delete', name: 'dashboard_stylesheets_delete')]
+    public function edit(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
+    {
+        $id = $request->get('id');
+        $stylesheetsRepo = $em->getRepository(StyleSheets::class);
+
+        $stylesheetToDelete = $stylesheetsRepo->findOneBy( ["id" => $id] );
+
+        if (null != $stylesheetToDelete)
+        {
+            try {
+
+                $em->remove($stylesheetToDelete);
+                $em->flush();
+
+                return $this->redirectToRoute( "dashboard_stylesheets" );
+            } catch (\Exception $e) {
+                $logger->error('Wystąpił błąd: ' . $e->getMessage());
+                return $this->redirectToRoute( "dashboard_stylesheets" );
+            }
+        }
+        return $this->redirectToRoute( "dashboard_stylesheets" );
+    }
+
+    #[Route('/dashboard/stylesheets/edit', name: 'dashboard_stylesheets_edit')]
+    public function delete(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
+    {
+        $id = $request->get('id');
+
+        return $this->render('stylesheets/edit.html.twig', ["id" => $id]);
     }
 
 

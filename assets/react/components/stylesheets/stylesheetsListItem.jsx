@@ -19,12 +19,16 @@ const StylesheetsListItem = (props) => {
         <td className="stylesheets-list-table-tbody-item-lastEditedBy"><span>{props.lastEditedBy}</span></td>
         <td className="stylesheets-list-table-tbody-item-active">{isActive}</td>
         <td className="stylesheets-list-table-tbody-item-edit">
-            <a href={`${window.location}/edit/${props.id}`} alt="Edytuj">
+            <a href={`${window.location}/edit?id=${props.id}`} alt="Edytuj">
                 <img className="stylesheets-list-table-tbody-item-edit-icon" src="/build/icons/dashboard/edit.svg" alt="edytuj" />
             </a>
         </td>
         <td className="stylesheets-list-table-tbody-item-delete">
-            <a href={`${window.location}/delete/${props.id}`} alt="Usuń">
+            <a href={`${window.location}/delete/${props.id}`} alt="Usuń"
+               onClick={ (e) =>  {
+                   e.preventDefault();
+                   props.deleteHandler(props.id);
+               } }>
                 <img className="stylesheets-list-table-tbody-item-delete-icon" src="/build/icons/dashboard/trashCan.svg" alt="usuń" />
             </a>
         </td>

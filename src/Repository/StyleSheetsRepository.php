@@ -16,6 +16,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class StyleSheetsRepository extends ServiceEntityRepository
 {
+
+    public $namelessName = "New Stylesheet";
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, StyleSheets::class);
@@ -54,5 +57,13 @@ class StyleSheetsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
+    }
+
+    public function countNamelessStylesheets(): ?int
+    {
+        return count( $this->createQueryBuilder('s')
+            ->where('s.name LIKE :val')
+            ->setParameter('val', "%$this->namelessName%")
+            ->getQuery()->getArrayResult() );
     }
 }

@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
-import "../../editorJS/stylesheetEditor"
+import StylesheetsEditor from "../../editorJS/stylesheetEditor";
 
 class StylesheetsFormNew extends Component
 {
@@ -13,6 +13,7 @@ class StylesheetsFormNew extends Component
     render() {
         return (
             <div>
+                <StylesheetsEditor></StylesheetsEditor>
             </div>
         );
     }

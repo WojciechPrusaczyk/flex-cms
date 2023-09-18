@@ -1,0 +1,52 @@
+#confirmation {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  .confirmation-content{
+    width: 30%;
+    margin: 200px auto;
+    padding: 10px;
+    &-close {
+      background-color: #DFDEFF;
+      text-align: right;
+      &-button {
+        color: #26156A;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 0.36rem;
+        border: 4px solid #26156A;
+        background: #E5E4FF;
+        cursor: pointer;
+        margin: 2px;
+      }
+    }
+    &-text {
+      background-color: #E5E4FF;
+      text-align: center;
+      margin: 0;
+      padding: 25px;
+    }
+    &-buttons{
+      text-align: center;
+      background-color: #E5E4FF;
+      &-action, &-close {
+        margin: 6px 20px;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        background-color: #F3F5FF;
+        border: none;
+        cursor: pointer;
+        &:hover{
+          box-shadow: 4px 6px 9px 2px rgba(58, 58, 58, 0.19);
+        }
+      }
+    }
+  }
+}
