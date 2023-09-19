@@ -60,7 +60,7 @@ class ScriptsController extends AbstractController
             // Handle any exceptions that may occur
             return new JsonResponse([
                 'status' => 'error',
-                'message' => $e->getMessage(),
+                'message' => "An internal server error occurred."
             ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
         }
     }

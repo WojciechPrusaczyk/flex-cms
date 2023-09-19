@@ -48,11 +48,15 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: Scripts::class)]
     private Collection $scripts;
 
+    #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: Sections::class)]
+    private Collection $sections;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
         $this->styleSheets = new ArrayCollection();
         $this->scripts = new ArrayCollection();
+        $this->sections = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -245,6 +249,36 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($script->getAddedBy() === $this) {
                 $script->setAddedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sections>
+     */
+    public function getSections(): Collection
+    {
+        return $this->sections;
+    }
+
+    public function addSection(Sections $section): static
+    {
+        if (!$this->sections->contains($section)) {
+            $this->sections->add($section);
+            $section->setAddedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSection(Sections $section): static
+    {
+        if ($this->sections->removeElement($section)) {
+            // set the owning side to null (unless already changed)
+            if ($section->getAddedBy() === $this) {
+                $section->setAddedBy(null);
             }
         }
 
