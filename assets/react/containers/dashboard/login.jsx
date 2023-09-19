@@ -25,13 +25,20 @@ class LoginForm extends Component{
 
     async loginUser(username, password)
     {
-        const fetchAddress = `${location.protocol}//${window.location.host}/api/login?` + new URLSearchParams({
+        const body = {
             username: username,
             password: password,
-        });
+        }
+        const fetchAddress = `${location.protocol}//${window.location.host}/api/login`;
 
         try {
-            const response = await fetch(fetchAddress);
+            const response = await fetch( fetchAddress, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            });
             const jsonResponse = await response.json();
 
             if ( jsonResponse['status'] === "success")

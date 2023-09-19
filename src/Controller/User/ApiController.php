@@ -27,11 +27,12 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/login', name: 'login', methods: ["POST", "GET"])]
+    #[Route('/login', name: 'login', methods: ["POST"])]
     public function login(Request $request, Security $security, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): JsonResponse
     {
-        $password = $request->get('password');
-        $username = $request->get('username');
+        $requestData = json_decode($request->getContent(), true);
+        $password = $requestData['password'];
+        $username = $requestData['username'];
         $userRepo = $em->getRepository(Admin::class);
 
         $user = $userRepo->findOneByUsername($username);

@@ -80,7 +80,7 @@ class AdminApiController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: '_register', methods: ["POST", "GET"])]
+    #[Route('/register', name: '_register', methods: ["POST"])]
     public function createAdmin(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $em, Security $security): JsonResponse
     {
         if (null == $security->getUser() || [] == $security->getUser())
@@ -92,8 +92,9 @@ class AdminApiController extends AbstractController
         }
 
         // pobieranie odpowednich przesłanych danych do utworzenia admina
-        $requestedPassword = $request->get('password');
-        $requestedUsername = $request->get('username');
+        $requestData = json_decode($request->getContent(), true);
+        $requestedPassword = $requestData['password'];
+        $requestedUsername = $requestData['username'];
         $dateTimeNow = new \DateTime('@'.strtotime('now'));
 
         $errors = [
