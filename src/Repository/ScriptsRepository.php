@@ -16,6 +16,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ScriptsRepository extends ServiceEntityRepository
 {
+    // name provided when creating entity
+    public $namelessName = "New Script";
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Scripts::class);
@@ -45,4 +48,30 @@ class ScriptsRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    // function checking, if stylesheet provided by id is actually active
+    public function isScriptActive(int $id): ?bool
+    {
+        $now = new \DateTime();
+        $nowString = $now->format('Y-m-d G:i:s');
+
+        return null != $this->createQueryBuilder('s')
+                ->andWhere('s.id = :id')
+                ->andWhere('s.active = TRUE')
+                ->andWhere('s.startBeingActive <= :now')
+                ->andWhere('s.stopBeingActive > :now')
+                ->setParameter('id', $id)
+                ->setParameter('now', $nowString)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+    }
+
+    public function countNamelessScripts(): ?int
+    {
+        return count( $this->createQueryBuilder('s')
+            ->where('s.name LIKE :val')
+            ->setParameter('val', "%$this->namelessName%")
+            ->getQuery()->getArrayResult() );
+    }
 }

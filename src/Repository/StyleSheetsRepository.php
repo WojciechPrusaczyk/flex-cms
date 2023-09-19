@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class StyleSheetsRepository extends ServiceEntityRepository
 {
-
+    // name provided when creating entity
     public $namelessName = "New Stylesheet";
 
     public function __construct(ManagerRegistry $registry)
