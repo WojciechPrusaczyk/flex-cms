@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import React, {Component, createRef, useRef, useState} from "react";
+import React, {Component} from "react";
 import StylesheetsEditor from "../../editorJS/stylesheetEditor";
 import moment from 'moment-timezone';
 
@@ -15,50 +15,52 @@ class StylesheetsForm extends Component
             start_being_active: "YYYY-DD-MM HH:MM:SS",
             stop_being_active: "YYYY-DD-MM HH:MM:SS",
             isFormDataReady: false,
-        }
+        };
+
+        // Binding methods to the current instance
         this.handleDataChange = this.handleDataChange.bind(this);
         this.logAllData = this.logAllData.bind(this);
     }
+
     componentDidMount() {
+        // Fetch initial data when the component mounts
         this.syncData();
     }
 
-    // debug method
-    logAllData()
-    {
+    // Debug method to log all state data
+    logAllData() {
         console.log(this.state);
     }
 
-    // method to import data from editorjs component
+    // Method to update the "value" state with new data
     handleDataChange = (newData) => {
         this.setState({ value: newData });
     };
 
-    syncData()
-    {
+    // Synchronize data from the URL parameters
+    syncData() {
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get("id");
-        if( undefined != id && null != id)
-        {
-            this.setState({id: id});
+        if (id !== undefined && id !== null) {
+            this.setState({ id: id });
             this.getInitialData(id);
         }
     }
 
-    async getInitialData(id)
-    {
+    // Fetch initial data from the server
+    async getInitialData(id) {
         const fetchAddress = `${location.protocol}//${window.location.host}/dashboard/stylesheets/get-stylesheet?` + new URLSearchParams({
             id: id,
         });
 
-        // try {
+        try {
             const response = await fetch(fetchAddress);
             const jsonResponse = await response.json();
 
-            if ( jsonResponse['status'] === "success")
-            {
+            if (jsonResponse['status'] === "success") {
                 let returnedObject = jsonResponse["response"]["entity"];
 
+                // Assuming convertToDatetimeLocalValue is defined elsewhere
                 const startDate = convertToDatetimeLocalValue(returnedObject.start_being_active.date);
                 const endDate = convertToDatetimeLocalValue(returnedObject.stop_being_active.date);
 
@@ -69,15 +71,16 @@ class StylesheetsForm extends Component
                     start_being_active: startDate,
                     stop_being_active: endDate,
                     isFormDataReady: true,
-                })
+                });
             }
-        // } catch (error) {
-        // }
-
+        } catch (error) {
+            // Handle any errors that may occur during the fetch
+            console.error("An error occurred while fetching initial data:", error);
+        }
     }
 
-    async saveData()
-    {
+    // Method to save data to the server
+    async saveData() {
         const fetchAddress = `${location.protocol}//${window.location.host}/dashboard/stylesheets/edit-stylesheet?` + new URLSearchParams({
             id: this.state.id,
             name: this.state.name,
@@ -87,66 +90,117 @@ class StylesheetsForm extends Component
             stop_being_active: this.state.stop_being_active,
         });
 
-        const response = await fetch(fetchAddress);
-        const jsonResponse = await response.json();
+        try {
+            const response = await fetch(fetchAddress);
+            const jsonResponse = await response.json();
 
-        if ( jsonResponse['status'] === "success")
-        {
-            window.location.href = `${location.protocol}//${window.location.host}/dashboard/stylesheets`
+            if (jsonResponse['status'] === "success") {
+                window.location.href = `${location.protocol}//${window.location.host}/dashboard/stylesheets`;
+            }
+        } catch (error) {
+            // Handle any errors that may occur during the fetch
+            console.error("An error occurred while saving data:", error);
         }
     }
 
     render() {
-
-        const FormComponent =
+        // Define FormComponent JSX
+        const FormComponent = (
             <div className="editor-form">
                 <p>
                     <label htmlFor="name">Nazwa</label>
-                    <input id="name" className="editor-form-name" type="text" defaultValue={this.state.name} onChange={ (e) => this.setState({name: e.target.value}) } />
+                    <input
+                        id="name"
+                        className="editor-form-name"
+                        type="text"
+                        defaultValue={this.state.name}
+                        onChange={(e) => this.setState({ name: e.target.value })}
+                    />
                 </p>
                 <p>
                     <label htmlFor="active">Aktywny</label>
-                    <input id="active" className="editor-form-active" type="checkbox" defaultChecked={this.state.active} onChange={ (e) => this.setState({active: e.target.checked}) } />
+                    <input
+                        id="active"
+                        className="editor-form-active"
+                        type="checkbox"
+                        defaultChecked={this.state.active}
+                        onChange={(e) => this.setState({ active: e.target.checked })}
+                    />
                 </p>
                 <p>
                     <label htmlFor="start-being-active">Aktywny od</label>
-                    <input id="start-being-active" className="editor-form-start_being_active" type="datetime-local" defaultValue={this.state.start_being_active}
-                       onChange={ (e) => this.setState({start_being_active: (e.target.value.length<19)?e.target.value+":00":e.target.value}) } />
+                    <input
+                        id="start-being-active"
+                        className="editor-form-start_being_active"
+                        type="datetime-local"
+                        defaultValue={this.state.start_being_active}
+                        onChange={(e) =>
+                            this.setState({
+                                start_being_active:
+                                    e.target.value.length < 19
+                                        ? e.target.value + ":00"
+                                        : e.target.value,
+                            })
+                        }
+                    />
                 </p>
                 <p>
                     <label htmlFor="stop-being-active">Aktywny do</label>
-                    <input id="stop-being-active" className="editor-form-stop_being_active" type="datetime-local" defaultValue={this.state.stop_being_active}
-                       onChange={ (e) => this.setState({stop_being_active: (e.target.value.length<19)?e.target.value+":00":e.target.value}) } />
+                    <input
+                        id="stop-being-active"
+                        className="editor-form-stop_being_active"
+                        type="datetime-local"
+                        defaultValue={this.state.stop_being_active}
+                        onChange={(e) =>
+                            this.setState({
+                                stop_being_active:
+                                    e.target.value.length < 19
+                                        ? e.target.value + ":00"
+                                        : e.target.value,
+                            })
+                        }
+                    />
                 </p>
-            </div>;
+            </div>
+        );
 
-
-        const textEditor = <StylesheetsEditor className="editor-field" defaultData={ this.state.value } onDataChange={this.handleDataChange} />
+        // Define textEditor JSX
+        const textEditor = (
+            <StylesheetsEditor
+                className="editor-field"
+                defaultData={this.state.value}
+                onDataChange={this.handleDataChange}
+            />
+        );
 
         return (
             <div className="editor">
                 {this.state.isFormDataReady && FormComponent}
                 {this.state.isFormDataReady && textEditor}
-                {this.state.isFormDataReady && <p className="editor-save">
-                    <input className="editor-save-button" type="submit" onClick={ (e) => {
-                        e.preventDefault();
-                        this.saveData();
-                    }
-                    } value="Zapisz" />
-                </p>}
+                {this.state.isFormDataReady && (
+                    <p className="editor-save">
+                        <input
+                            className="editor-save-button"
+                            type="submit"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                this.saveData();
+                            }}
+                            value="Zapisz"
+                        />
+                    </p>
+                )}
             </div>
         );
     }
 }
 
 function convertToDatetimeLocalValue(dateTimeString) {
-    // Parsuj datę z informacją o strefie czasowej
+    // Parse the date with time zone information (assuming it's in 'Europe/Berlin' time zone)
     const momentDate = moment.tz(dateTimeString, 'Europe/Berlin');
 
-    // Przekształć do formatu ISO 8601 (datetime-local)
-    const isoString = momentDate.format('YYYY-MM-DDTHH:mm:ss');
-
-    return isoString;
+    // Transform it to ISO 8601 format with 'T' character
+    return momentDate.format('YYYY-MM-DDTHH:mm:ss');
 }
 
 const root = ReactDOM.createRoot(document.getElementById("main-root"));
