@@ -58,12 +58,12 @@ class Sections
         return $this;
     }
 
-    public function isIsActive(): ?bool
+    public function isActive(): ?bool
     {
         return $this->isActive;
     }
 
-    public function setIsActive(bool $isActive): static
+    public function setActive(bool $isActive): static
     {
         $this->isActive = $isActive;
 
@@ -142,12 +142,12 @@ class Sections
         return $this;
     }
 
-    public function isIsWide(): ?bool
+    public function isWide(): ?bool
     {
         return $this->isWide;
     }
 
-    public function setIsWide(bool $isWide): static
+    public function setWide(bool $isWide): static
     {
         $this->isWide = $isWide;
 

@@ -50,6 +50,12 @@ class SectionsRepository extends ServiceEntityRepository
             ->getQuery()->getArrayResult() );
     }
 
+    public function findValidPosition(): ?int
+    {
+        return count( $this->createQueryBuilder('s')
+            ->getQuery()->getArrayResult() ) + 1;
+    }
+
 //    /**
 //     * @return Sections[] Returns an array of Sections objects
 //     */

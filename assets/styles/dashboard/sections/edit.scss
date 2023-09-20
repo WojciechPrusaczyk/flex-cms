@@ -1,0 +1,75 @@
+@import "../pageControls";
+@import "../confirmation";
+
+@font-face {
+  font-family: 'Roboto';
+  src: url(../../../fonts/Roboto-Regular.ttf) format("truetype");
+}
+#main-root {
+  background-color: #E5E4FF;
+  margin: 0 150px;
+  font-family: Roboto, serif;
+  .editor {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    &-save{
+      text-align: center;
+      &-button {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        background-color: #6be16b;
+        border: none;
+        cursor: pointer;
+        &:hover{
+          box-shadow: 4px 6px 9px 2px rgba(58, 58, 58, 0.19);
+        }
+      }
+    }
+    &-form{
+      display: flex;
+      flex-direction: column;
+      padding: 10px 60px;
+      p{
+        width: 40%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        label{
+          font-size: 1.1rem;
+          line-height: 2;
+          &:after{
+            content: ":";
+          }
+        }
+        input {
+          font-size: 1.05rem;
+          background-color: #F6F6FF;
+          border: none;
+          padding: 10px 30px;
+          &[type="checkbox"] {
+            cursor: pointer;
+            width: 25px;
+            aspect-ratio: 1 / 1;
+            accent-color: #26156A;
+            border: none;
+          }
+          &::-webkit-calendar-picker-indicator {
+            background: transparent;
+          }
+          &[type="text"] {
+            text-align: center;
+          }
+          &:not([type="checkbox"]){
+            width: 50%
+          }
+        }
+      }
+    }
+    &-field{
+      background-color: #F6F6FF;
+      margin: 20px 60px;
+      padding: 10px 0;
+    }
+  }
+}

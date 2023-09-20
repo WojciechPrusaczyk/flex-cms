@@ -61,8 +61,8 @@ class StylesheetsForm extends Component
                 let returnedObject = jsonResponse["response"]["entity"];
 
                 // Assuming convertToDatetimeLocalValue is defined elsewhere
-                const startDate = convertToDatetimeLocalValue(returnedObject.start_being_active.date);
-                const endDate = convertToDatetimeLocalValue(returnedObject.stop_being_active.date);
+                const startDate = convertToDatetimeLocalValue(returnedObject.start_being_active);
+                const endDate = convertToDatetimeLocalValue(returnedObject.stop_being_active);
 
                 this.setState({
                     name: returnedObject.name,
@@ -195,12 +195,15 @@ class StylesheetsForm extends Component
     }
 }
 
-function convertToDatetimeLocalValue(dateTimeString) {
-    // Parse the date with time zone information (assuming it's in 'Europe/Berlin' time zone)
-    const momentDate = moment.tz(dateTimeString, 'Europe/Berlin');
+function convertToDatetimeLocalValue(dateTime) {
+    if (null != dateTime)
+    {
+        // Parse the date with time zone information (assuming it's in 'Europe/Berlin' time zone)
+        const momentDate = moment.tz(dateTime.date, 'Europe/Berlin');
 
-    // Transform it to ISO 8601 format with 'T' character
-    return momentDate.format('YYYY-MM-DDTHH:mm:ss');
+        // Transform it to ISO 8601 format with 'T' character
+        return momentDate.format('YYYY-MM-DDTHH:mm:ss');
+    } else return null;
 }
 
 const root = ReactDOM.createRoot(document.getElementById("main-root"));

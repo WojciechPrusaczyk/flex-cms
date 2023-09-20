@@ -54,6 +54,11 @@ class SectionsMain extends Component
         });
     }
 
+    // Redirect to the page for adding a new section
+    addNewSection() {
+        window.location.href = `${location.protocol}//${window.location.host}/dashboard/sections/new`;
+    }
+
     render() {
 
         let sectionsList = this.state.sections.map((setting, index) => {
@@ -86,7 +91,7 @@ class SectionsMain extends Component
                         type="button"
                         value="Dodaj"
                         className="stylesheets-head-button"
-                        onClick={console.log(this.state)}
+                        onClick={this.addNewSection}
                     />
                 </div>
                 <table className="sections-list-table">
