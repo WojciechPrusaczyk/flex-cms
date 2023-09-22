@@ -16,6 +16,7 @@ class SectionsMain extends Component
             showConfirmation: false,
             itemToDelete: 0,
             isOrderChanged: false,
+            draggedObject: null
         }
         this.getSections = this.getSections.bind(this);
         this.getSections();
@@ -24,6 +25,7 @@ class SectionsMain extends Component
         this.showConfirmation = this.showConfirmation.bind(this);
         this.hideConfirmation = this.hideConfirmation.bind(this);
         this.saveOrder = this.saveOrder.bind(this);
+        this.onDragStart = this.onDragStart.bind(this);
     }
 
     async getSections()
@@ -80,6 +82,7 @@ class SectionsMain extends Component
     onDragEnd = (result) => {
         if (!result.destination) return;
 
+        this.setState({draggedObject: null});
         this.setState({isOrderChanged: true});
 
         const reorderedSections = [...this.state.sections];
@@ -93,6 +96,11 @@ class SectionsMain extends Component
 
         this.setState({ sections: reorderedSections });
     };
+
+    onDragStart(e)
+    {
+        this.setState({draggedObject: e.draggableId});
+    }
 
     async sendData(data, address)
     {
@@ -151,7 +159,7 @@ class SectionsMain extends Component
                         <th>Edytuj</th>
                         <th>Usuń</th>
                     </tr></thead>
-                    <DragDropContext onDragEnd={this.onDragEnd}>
+                    <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
                         <Droppable droppableId="sections-list">
                             {(provided) => (
                                 <tbody
@@ -170,7 +178,7 @@ class SectionsMain extends Component
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
                                                 ref={provided.innerRef}
-                                                className="sections-list-table-tbody-item"
+                                                className={(this.state.draggedObject == Object.keys(section))? "sections-list-table-tbody-item draggedObject" : "sections-list-table-tbody-item"}
                                             >
                                                 <SectionsListItem
                                                 key={Object.keys(section)}
