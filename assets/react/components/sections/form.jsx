@@ -25,7 +25,7 @@ const Form = (props) => {
 
     return <form
             id="form"
-            className="sections-form"
+            className="editor-form"
             ref={formRef}
             onSubmit={ (e) => { e.preventDefault(); props.submitHandler(); } }>
         <p>
@@ -83,13 +83,14 @@ const Form = (props) => {
         </p>
 
         <SectionsEditor
-            className=""
+            className="editor-form-field"
             onDataChange={ props.handleDataChange }
             defaultData={props.defaultData}
         />
         <p>
             <input
                 id="form-submit"
+                className="editor-form-field-submit"
                 type="submit"
                 value="Zapisz"
             />

@@ -90,7 +90,7 @@ class SectionsMain extends Component
                     <input
                         type="button"
                         value="Dodaj"
-                        className="stylesheets-head-button"
+                        className="sections-head-button"
                         onClick={this.addNewSection}
                     />
                 </div>

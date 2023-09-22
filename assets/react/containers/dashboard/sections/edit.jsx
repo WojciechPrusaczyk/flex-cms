@@ -132,7 +132,6 @@ class SectionsForm extends Component
     render() {
         return (
             <div className="editor">
-                <input type="button" value="test" onClick={this.logAllData}/>
                 {this.state.isFormDataReady &&
                     <Form
                         name={this.state.name}

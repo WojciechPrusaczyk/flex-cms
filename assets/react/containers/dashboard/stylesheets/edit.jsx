@@ -161,35 +161,28 @@ class StylesheetsForm extends Component
                         }
                     />
                 </p>
+                <StylesheetsEditor
+                    className="editor-field"
+                    defaultData={this.state.value}
+                    onDataChange={this.handleDataChange}
+                />
+                <p className="editor-save">
+                    <input
+                        className="editor-form-field-submit"
+                        type="submit"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            this.saveData();
+                        }}
+                        value="Zapisz"
+                    />
+                </p>
             </div>
-        );
-
-        // Define textEditor JSX
-        const textEditor = (
-            <StylesheetsEditor
-                className="editor-field"
-                defaultData={this.state.value}
-                onDataChange={this.handleDataChange}
-            />
         );
 
         return (
             <div className="editor">
                 {this.state.isFormDataReady && FormComponent}
-                {this.state.isFormDataReady && textEditor}
-                {this.state.isFormDataReady && (
-                    <p className="editor-save">
-                        <input
-                            className="editor-save-button"
-                            type="submit"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                this.saveData();
-                            }}
-                            value="Zapisz"
-                        />
-                    </p>
-                )}
             </div>
         );
     }
