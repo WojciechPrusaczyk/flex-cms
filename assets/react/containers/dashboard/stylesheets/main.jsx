@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import React, { Component } from "react";
 import StylesheetsListItem from "../../../components/stylesheets/stylesheetsListItem";
 import Confirmation from "../../../components/confirmation";
+import {Tooltip} from "../../../components/Tooltip";
 
 class StylesheetsMain extends Component {
     constructor(props) {
@@ -83,6 +84,11 @@ class StylesheetsMain extends Component {
         return (
             <div>
                 <div className="stylesheets-head">
+                    <div id="tooltip-root">
+                        <Tooltip
+                            text="Moduł dla średniozaawansowanych użytkowników, którzy z poziomu administratora mogą dowolnie dodawać i zmieniać już dodane style strony internetowej zmieniające cały jej wygląd."
+                        />
+                    </div>
                     <input
                         type="button"
                         value="Dodaj"

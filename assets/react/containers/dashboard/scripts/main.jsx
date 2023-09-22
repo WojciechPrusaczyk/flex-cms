@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import React, { Component } from "react";
 import ScriptsListItem from "../../../components/scripts/scriptsListItem";
 import Confirmation from "../../../components/confirmation";
+import {Tooltip} from "../../../components/Tooltip";
 
 class ScriptsMain extends Component {
     constructor(props) {
@@ -83,6 +84,11 @@ class ScriptsMain extends Component {
         return (
             <div>
                 <div className="scripts-head">
+                    <div id="tooltip-root">
+                        <Tooltip
+                            text="Moduł dla zaawansowanych użytkowników, którzy chcą dodać interaktywności strony, czy zmieniać treści strony głównej."
+                        />
+                    </div>
                     <input
                         type="button"
                         value="Dodaj"

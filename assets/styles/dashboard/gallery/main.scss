@@ -1,15 +1,22 @@
 @import "../pageControls";
+@import "../mixins";
 
 @font-face {
   font-family: 'Roboto';
   src: url(../../../fonts/Roboto-Regular.ttf) format("truetype");
 }
+@include tooltip-style();
 #main-root {
   background-color: #E5E4FF;
   margin: 0 150px;
   font-family: Roboto, serif;
-
-  // form style
+  .main{
+    display: flex;
+    flex-direction: column;
+  }
+  #tooltip-root{
+    margin: 20px;
+  }
   .gallery{
     display: flex;
     flex-direction: column;

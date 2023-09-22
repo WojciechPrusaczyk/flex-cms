@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import SettingsListItem from "../../../components/sections/sectionsListItem";
 import SectionsListItem from "../../../components/sections/sectionsListItem";
 import Confirmation from "../../../components/confirmation";
+import {Tooltip} from "../../../components/Tooltip";
 
 class SectionsMain extends Component
 {
@@ -87,6 +88,11 @@ class SectionsMain extends Component
                     />
                 )}
                 <div className="sections-head">
+                    <div id="tooltip-root">
+                        <Tooltip
+                            text="Sekcje to moduł odpowiadający za zawartość strony głównej. Można tutaj dowolnie zmieniać wybrane treści na stronie głównej."
+                        />
+                    </div>
                     <input
                         type="button"
                         value="Dodaj"

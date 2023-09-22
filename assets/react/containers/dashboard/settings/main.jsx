@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
 import SettingsListItem from "../../../components/settings/settingsListItem";
+import {Tooltip} from "../../../components/Tooltip";
 
 class SettingsMain extends Component
 {
@@ -139,7 +140,12 @@ class SettingsMain extends Component
         });
 
         return (
-            <div>
+            <div className="main">
+                <div id="tooltip-root">
+                    <Tooltip
+                        text="Najważniejszy moduł odpowiadający za kluczowe elementy całej strony internetowej, takie jak tytuły stron, wyświetlane treści, czy ikony."
+                    />
+                </div>
                 <table className="settings-list-table">
                     <thead className="settings-list-table-thead"><tr>
                         <th>Nazwa techniczna</th>
