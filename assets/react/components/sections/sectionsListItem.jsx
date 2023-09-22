@@ -14,10 +14,9 @@ const SectionsListItem = (props) => {
         </span>;
     }
 
-    return <tr id={ id } className="sections-list-table-tbody-item">
+    return <React.Fragment>
         <td className="sections-list-table-tbody-item-name"><h2>{props.name}</h2></td>
         <td className="sections-list-table-tbody-item-lastEditedBy"><span>{props.lastEditedBy}</span></td>
-        <td className="sections-list-table-tbody-item-changeOrder"><img className="sections-list-table-tbody-item-changeOrder-icon" src="/build/icons/dashboard/changeOrder.svg" alt="zmień kolejność" /></td>
         <td className="sections-list-table-tbody-item-active">{isActive}</td>
         <td className="sections-list-table-tbody-item-edit">
             <a href={`${window.location}/edit?id=${props.id}`} alt="Edytuj">
@@ -33,7 +32,7 @@ const SectionsListItem = (props) => {
                 <img className="sections-list-table-tbody-item-delete-icon" src="/build/icons/dashboard/trashCan.svg" alt="usuń" />
             </a>
         </td>
-    </tr>
+    </React.Fragment>
 }
 
 export default SectionsListItem;

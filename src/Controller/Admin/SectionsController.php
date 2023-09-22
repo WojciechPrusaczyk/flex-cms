@@ -277,4 +277,32 @@ class SectionsController extends AbstractController
 
         return $this->redirectToRoute("dashboard_stylesheets");
     }
+
+    #[Route('/dashboard/sections/change-order', name: 'dashboard_sections_change_order', methods: ["POST"])]
+    public function changeOrder(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
+    {
+        $requestData = json_decode($request->getContent(), true);
+
+        $sectionsRepo = $em->getRepository(Sections::class);
+        $allSections = $sectionsRepo->findAll();
+
+        if (null != $requestData && count($allSections) === count($requestData) ) {
+            try {
+                foreach ($requestData as $requestedPosition)
+                {
+                    $entity = $sectionsRepo->findOneBy(["id" => $requestedPosition["id"]]);
+                    $entity->setPosition($requestedPosition["position"]);
+
+                    $em->persist($entity);
+                }
+                $em->flush();
+
+                return $this->redirectToRoute("dashboard_sections");
+            } catch (\Exception $e) {
+                $logger->error('An error occurred: ' . $e->getMessage());
+            }
+        }
+
+        return $this->redirectToRoute("dashboard_sections");
+    }
 }

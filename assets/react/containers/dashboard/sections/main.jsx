@@ -4,6 +4,7 @@ import SettingsListItem from "../../../components/sections/sectionsListItem";
 import SectionsListItem from "../../../components/sections/sectionsListItem";
 import Confirmation from "../../../components/confirmation";
 import {Tooltip} from "../../../components/Tooltip";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 class SectionsMain extends Component
 {
@@ -14,6 +15,7 @@ class SectionsMain extends Component
             sections: [],
             showConfirmation: false,
             itemToDelete: 0,
+            isOrderChanged: false,
         }
         this.getSections = this.getSections.bind(this);
         this.getSections();
@@ -21,6 +23,7 @@ class SectionsMain extends Component
         this.deleteSection = this.deleteSection.bind(this);
         this.showConfirmation = this.showConfirmation.bind(this);
         this.hideConfirmation = this.hideConfirmation.bind(this);
+        this.saveOrder = this.saveOrder.bind(this);
     }
 
     async getSections()
@@ -60,23 +63,55 @@ class SectionsMain extends Component
         window.location.href = `${location.protocol}//${window.location.host}/dashboard/sections/new`;
     }
 
-    render() {
+    saveOrder()
+    {
+        let validOrder = [];
 
-        let sectionsList = this.state.sections.map((setting, index) => {
-            let sectionId = Object.keys(setting);
-            let sectionObject = Object.values(setting)[0];
-
-            return <SectionsListItem
-                        key={sectionId}
-                        id={sectionId}
-                        name={sectionObject.name}
-                        lastEditedBy={sectionObject.lastEditedBy}
-                        description={sectionObject.description}
-                        value={sectionObject.value}
-                        changeValue={ this.changeValue }
-                        type={sectionObject.type}
-                        deleteHandler={this.deleteHandler} />
+        this.state.sections.map((section, index) => {
+            validOrder[index] = {
+                id: Object.keys(section)[0],
+                position: Object.values(section)[0].position,
+            }
         });
+
+        this.sendData(validOrder, `${location.protocol}//${window.location.host}/dashboard/sections/change-order`);
+    }
+
+    onDragEnd = (result) => {
+        if (!result.destination) return;
+
+        this.setState({isOrderChanged: true});
+
+        const reorderedSections = [...this.state.sections];
+        const [reorderedSection] = reorderedSections.splice(result.source.index, 1);
+        reorderedSections.splice(result.destination.index, 0, reorderedSection);
+
+        // Updating sections.position
+        reorderedSections.forEach((section, index) => {
+            Object.values(section)[0].position = index;
+        });
+
+        this.setState({ sections: reorderedSections });
+    };
+
+    async sendData(data, address)
+    {
+        try {
+            const response = await fetch(address, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            window.location.href = `${location.protocol}//${window.location.host}/dashboard/sections`;
+        } catch (error) {
+            // Handle any errors that may occur during the fetch
+            console.error("An error occurred while saving data:", error);
+        }
+    }
+
+    render() {
 
         return (
             <div>
@@ -93,25 +128,69 @@ class SectionsMain extends Component
                             text="Sekcje to moduł odpowiadający za zawartość strony głównej. Można tutaj dowolnie zmieniać wybrane treści na stronie głównej."
                         />
                     </div>
-                    <input
+                    <p>
+                        <input
                         type="button"
                         value="Dodaj"
                         className="sections-head-button"
                         onClick={this.addNewSection}
-                    />
+                        />
+                        {this.state.isOrderChanged && <input
+                            type="button"
+                            value="Zapisz kolejność"
+                            className="sections-head-button"
+                            onClick={this.saveOrder}
+                        />}
+                    </p>
                 </div>
                 <table className="sections-list-table">
                     <thead className="sections-list-table-thead"><tr>
                         <th>Nazwa</th>
                         <th>Ostatnio zmieniał</th>
-                        <th>Kolejność</th>
                         <th>Aktywny</th>
                         <th>Edytuj</th>
                         <th>Usuń</th>
                     </tr></thead>
-                    <tbody className="sections-list-table-tbody">
-                        {sectionsList}
-                    </tbody>
+                    <DragDropContext onDragEnd={this.onDragEnd}>
+                        <Droppable droppableId="sections-list">
+                            {(provided) => (
+                                <tbody
+                                    className="sections-list-table-tbody"
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                >
+                                {this.state.sections.map((section, index) => (
+                                    <Draggable
+                                        key={Object.keys(section)[0]}
+                                        draggableId={Object.keys(section)[0]}
+                                        index={index}
+                                    >
+                                        {(provided) => (
+                                            <tr
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                ref={provided.innerRef}
+                                                className="sections-list-table-tbody-item"
+                                            >
+                                                <SectionsListItem
+                                                key={Object.keys(section)}
+                                                id={Object.keys(section)}
+                                                name={Object.values(section)[0].name}
+                                                lastEditedBy={Object.values(section)[0].lastEditedBy}
+                                                description={Object.values(section)[0].description}
+                                                value={Object.values(section)[0].value}
+                                                changeValue={ this.changeValue }
+                                                type={Object.values(section)[0].type}
+                                                deleteHandler={this.deleteHandler} />
+                                            </tr>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                                </tbody>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
                 </table>
             </div>
         );
