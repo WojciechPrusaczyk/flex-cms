@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Settings;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Filesystem;
@@ -24,16 +25,20 @@ class SettingsController extends AbstractController
     }
 
     #[Route('/admin-api/dashboard/settings/get-settings', name: 'admin_api_dashboard_settings_get_settings', methods: ["GET"])]
-    public function getSettings(EntityManagerInterface $entityManager ): JsonResponse
+    public function getSettings(EntityManagerInterface $entityManager): JsonResponse
     {
+        // Get the repository for settings
         $settingsRepo = $entityManager->getRepository(Settings::class);
-        $allSettings = $settingsRepo->findBy(["isEditable" => true ]);
+
+        // Find all settings that are editable
+        $allSettings = $settingsRepo->findBy(["isEditable" => true]);
 
         $items = [];
 
+        // Loop through each setting and build the response array
         foreach ($allSettings as $item)
         {
-            $items[] = [ $item->getId() => [
+            $items[] = [$item->getId() => [
                 "name" => $item->getName(),
                 "type" => $item->getType(),
                 "value" => $item->getValue(),
@@ -41,43 +46,41 @@ class SettingsController extends AbstractController
             ]];
         }
 
+        // Return a JSON response with the settings data
         return new JsonResponse([
             'status' => 'success',
             'response' => [
                 "items" => $items,
             ],
-        ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+        ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
     }
 
-
     #[Route('/admin-api/dashboard/settings/set-value', name: 'admin_api_dashboard_settings_set_value', methods: ["POST", "GET"])]
-    public function setValue(Security $security, Request $request, EntityManagerInterface $em, Filesystem $filesystem): JsonResponse
+    public function setValue(Security $security, Request $request, EntityManagerInterface $em, Filesystem $filesystem, LoggerInterface $logger): JsonResponse
     {
         $settingsRepo = $em->getRepository(Settings::class);
         $requestedId = $request->get('id');
-        $requestedEntity = $settingsRepo->findOneBy(["id" => $requestedId?:null]);
 
-        if ( null != $requestedEntity )
-        {
+        // Find the requested setting entity by ID
+        $requestedEntity = $settingsRepo->findOneBy(["id" => $requestedId ?: null]);
 
-            if ( $requestedEntity->getType() == "file" )
-            {
-                // ustawienie jest typem pliku
+        if (null != $requestedEntity) {
+            if ($requestedEntity->getType() == "file") {
+                // Setting is of type "file"
                 $uploadedFile = $request->files->get('file');
 
-                if (filesize($uploadedFile) > 5000000 )
-                {
+                if (filesize($uploadedFile) > 5000000) {
                     return new JsonResponse([
                         'status' => 'error',
                         'response' => [
-                            'message' => 'Przesłany plik jest za duży.'
+                            'message' => 'The uploaded file is too large.'
                         ],
                     ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
                 }
-                if (null != $uploadedFile)
-                {
+
+                if (null != $uploadedFile) {
                     try {
-                        $filesystem->remove($this->getParameter('settings_directory')."/".$requestedEntity->getValue());
+                        $filesystem->remove($this->getParameter('settings_directory') . "/" . $requestedEntity->getValue());
 
                         $extension = $uploadedFile->guessExtension();
                         $safeFileName = md5(uniqid()) . '.' . $extension;
@@ -86,96 +89,91 @@ class SettingsController extends AbstractController
                         ];
 
                         $uploadedFile->move(
-                            $this->getParameter('settings_directory'), // Ścieżka do katalogu, gdzie będą przechowywane przesłane pliki
+                            $this->getParameter('settings_directory'), // Path to the directory where files will be stored
                             $safeFileName
                         );
 
-                        // dodatkowe warunki sprawdzan przy dodawaniu plików
-                        if( file_exists($this->getParameter('settings_directory')."/".$safeFileName) && null != $security->getUser() && in_array($extension, $validFileTypes) )
-                        {
+                        if (file_exists($this->getParameter('settings_directory') . "/" . $safeFileName) && null != $security->getUser() && in_array($extension, $validFileTypes)) {
                             try {
-                                // ustawienie odpowiednich wartości
+                                // Set the appropriate value
                                 $requestedEntity->setValue($safeFileName);
 
-                                // upload do bazy
+                                // Upload to the database
                                 $em->persist($requestedEntity);
                                 $em->flush();
 
                                 return new JsonResponse([
                                     'status' => 'success',
                                     'response' => [
-                                        'message' => 'Plik został pomyślnie dodany na serwer.',
+                                        'message' => 'File has been successfully added to the server.',
                                         'filename' => $safeFileName,
                                     ],
                                 ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-
-                            } catch (\Exception) {  }
+                            } catch (\Exception) { }
                         } else {
                             return new JsonResponse([
                                 'status' => 'error',
-                                'response' => 'Wystąpił błąd podczas zapisu pliku.',
+                                'response' => 'An error occurred while saving the file.',
                             ], 500);
                         }
-                    } catch (FileException $e) { }
-
+                    } catch (FileException $e) {
+                        // Log the error
+                        $logger->error('An error occurred: ' . $e->getMessage());
+                    }
                 } else {
                     return new JsonResponse([
                         'status' => 'error',
                         'response' => [
-                            'message' => 'Nie przesłano żadnego pliku.'
+                            'message' => 'No file was uploaded.'
                         ],
                     ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
                 }
-
-
-
-            }
-            else if ( $requestedEntity->getType() == "text" )
-            {
-                // ustawienie jest typu tekstowego
+            } elseif ($requestedEntity->getType() == "text") {
+                // Setting is of type "text"
                 $requestedValue = $request->get('value');
 
-                // ustawienie odpowiednich wartości
+                // Set the appropriate value
                 $requestedEntity->setValue($requestedValue);
 
-                // upload do bazy
+                // Upload to the database
                 $em->persist($requestedEntity);
                 $em->flush();
 
                 return new JsonResponse([
                     'status' => 'success',
-                    'response' => 'Ustawienie zostało pomyślnie zmienione.',
+                    'response' => 'Setting has been successfully changed.',
                 ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
-            }
-            else if ( $requestedEntity->getType() == "boolean" )
-            {
-                // ustawienie jest typu tekstowego
+            } elseif ($requestedEntity->getType() == "boolean") {
+                // Setting is of type "boolean"
                 $requestedValue = $request->get('value');
 
-                try{
-                    // ustawienie odpowiednich wartości, przy upewnieniu się czy zmienna jest typu bool
-                    $requestedEntity->setValue(filter_var($requestedValue, FILTER_VALIDATE_BOOLEAN)?1:0);
+                try {
+                    // Set the appropriate value, ensuring it's a boolean
+                    $requestedEntity->setValue(filter_var($requestedValue, FILTER_VALIDATE_BOOLEAN) ? 1 : 0);
 
-                    // upload do bazy
-                    //dd($requestedEntity);
+                    // Upload to the database
                     $em->persist($requestedEntity);
                     $em->flush();
-                } catch (\Exception $e) {}
+                } catch (\Exception $e) {
+                    // Log the error
+                    $logger->error('An error occurred: ' . $e->getMessage());
+                }
 
                 return new JsonResponse([
                     'status' => 'success',
-                    'response' => 'Ustawienie zostało pomyślnie zmienione.',
+                    'response' => 'Setting has been successfully changed.',
                 ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
             }
+
             return new JsonResponse([
                 'status' => 'error',
-                'response' => 'Wystąpił błąd krytyczny przy zmianie wartości ustawienia.',
+                'response' => 'A critical error occurred while changing the setting value.',
             ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
         }
 
         return new JsonResponse([
             'status' => 'error',
-            'response' => 'Nie znaleziono takiego ustawienia.',
+            'response' => 'The requested setting was not found.',
         ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
     }
 }

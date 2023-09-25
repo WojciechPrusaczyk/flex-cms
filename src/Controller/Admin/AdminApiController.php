@@ -83,23 +83,28 @@ class AdminApiController extends AbstractController
         ]);
     }
 
-    #[Route('/db-connection-scripts', name: '_check_db_connection', methods: ["GET", "HEAD"])]
-    public function checkDbConnection(EntityManagerInterface $em, Security $security): JsonResponse
+    #[Route('/db-connection-scripts', name: '_check_db_connection', methods: ["GET"])]
+    public function checkDbConnection(EntityManagerInterface $em, Security $security, LoggerInterface $logger): JsonResponse
     {
-        if (null != $security->getUser())
-        {
+        // Check if the user is authenticated
+        if (null != $security->getUser()) {
             $connected = false;
             try {
+                // Attempt to connect to the database
                 $em->getConnection()->connect();
                 $connected = $em->getConnection()->isConnected();
-            } catch (Exception) {
-
+            } catch (Exception $e) {
+                // Log critical errors
+                $logger->critical('Critical error: ' . $e->getMessage());
             }
 
+            // Return a JSON response indicating the database connection status
             return $this->json([
-                'message' => ($connected!=null)?"Database is connected":"Error! There is something wrong with database.",
+                'message' => ($connected != null) ? "Database is connected" : "Error! There is something wrong with the database.",
             ]);
         }
+
+        // Return an error JSON response if the user is not authenticated
         return $this->json([
             'status' => 'error',
             'response' => 'Not authenticated',
@@ -107,38 +112,38 @@ class AdminApiController extends AbstractController
     }
 
     #[Route('/register', name: '_register', methods: ["POST"])]
-    public function createAdmin(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $em, Security $security): JsonResponse
+    public function createAdmin(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $em, Security $security, LoggerInterface $logger): JsonResponse
     {
-        if (null == $security->getUser() || [] == $security->getUser())
-        {
-            return $this->json([
+        // Check if the user is authenticated
+        if (null == $security->getUser() || [] == $security->getUser()) {
+            return new JsonResponse([
                 'status' => 'error',
                 'response' => 'Not authenticated',
-            ]);
+            ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
         }
 
-        // pobieranie odpowednich przesłanych danych do utworzenia admina
+        // Get relevant data for creating an admin
         $requestData = json_decode($request->getContent(), true);
         $requestedPassword = $requestData['password'];
         $requestedUsername = $requestData['username'];
-        $dateTimeNow = new \DateTime('@'.strtotime('now'));
+        $dateTimeNow = new \DateTime('@' . strtotime('now'));
 
+        // Validate password and username
         $errors = [
             'password' => $this->validatePassword($requestedPassword),
             'username' => $this->validateUsername($requestedUsername)
         ];
 
-        // walidacja
-        if ( count($errors['password']) > 0 || count($errors['username']) > 0 )
-        {
-            return $this->json([
+        // Validation
+        if (count($errors['password']) > 0 || count($errors['username']) > 0) {
+            return new JsonResponse([
                 'status' => 'error',
-                'response' => 'Wystąpił błąd w podanych danych do rejestracji.',
+                'response' => 'There was an error in the provided registration data.',
                 'errors' => $errors,
-            ]);
+            ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
         } else {
             try {
-                // tworzenie użytkownika
+                // Create a new admin user
                 $admin = new Admin();
 
                 $hashedPassword = $hasher->hashPassword(
@@ -153,26 +158,31 @@ class AdminApiController extends AbstractController
 
                 $em->persist($admin);
                 $em->flush();
-            } catch (\Exception) {
-                return $this->json([
+            } catch (\Exception $e) {
+                // Log critical errors
+                $logger->critical('Critical error: ' . $e->getMessage());
+
+                return new JsonResponse([
                     'status' => 'error',
-                    'response' => 'Błąd 500! Wsytąpił krytyczny błąd po stronie serwera.',
-                ]);
+                    'response' => 'Error 500! A critical server-side error occurred.',
+                ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
             }
         }
 
-        return $this->json([
+        return new JsonResponse([
             'status' => 'success',
-            'response' => 'Administrator został utworzony',
-        ]);
+            'response' => 'Administrator has been created',
+        ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
     }
+
     #[Route('/get-user', name: '_get_user', methods: ["GET"])]
     public function getCurrentUser(Security $security, EntityManagerInterface $em): JsonResponse
     {
-        if (null != $security->getUser())
-        {
+        // Check if the user is authenticated
+        if (null != $security->getUser()) {
             $user = $security->getUser();
-            return $this->json([
+
+            return new JsonResponse([
                 'status' => 'success',
                 'response' => [
                     'user' => [
@@ -182,124 +192,147 @@ class AdminApiController extends AbstractController
                         'active' => $user->isActive(),
                     ]
                 ],
-            ]);
+            ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
         } else {
-            return $this->json([
+            return new JsonResponse([
                 'status' => 'error',
                 'response' => 'Not authenticated',
-            ]);
+            ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
         }
     }
 
-    #[Route('/logout', name: 'logout', methods: ["POST", "GET"])]
+    #[Route('/logout', name: 'logout', methods: ["GET"])]
     public function logout(Security $security): JsonResponse
     {
-        if (null != $security->getUser())
-        {
+        // Check if the user is authenticated
+        if (null != $security->getUser()) {
+            // Logout the user
             $security->logout(false);
 
-            return $this->json([
+            return new JsonResponse([
                 'status' => 'success',
-                'response' => 'Wylogowano użytkownika.',
-            ]);
+                'response' => 'User has been logged out',
+            ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
         } else {
-            return $this->json([
+            return new JsonResponse([
                 'status' => 'error',
-                'response' => 'Wystąpił błąd podczas wylogowania.',
-            ]);
+                'response' => 'Not authenticated',
+            ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
         }
     }
 
     #[Route('/dashboard/get-dashboard-settings', name: 'dashboard_get_dashboard_settings', methods: ["GET"])]
     public function getDashboardSettings(Security $security, Request $request, EntityManagerInterface $em): JsonResponse
     {
+        // Get the base URL from the request
         $requestUri = $request->getBaseUrl();
+
+        // Get the repository for DashboardSettings
         $dashboardSettingsRepo = $em->getRepository(DashboardSettings::class);
+
+        $settingsArray = null;
+
+        // Check if dashboard settings are visible based on app configuration
         if ($this->getParameter('app.are_settings_visible') == 1) {
             $settingsArray = $dashboardSettingsRepo->findAll();
-        }
-        else if ($this->getParameter('app.are_settings_visible') == 0) {
-            $settingsArray = $dashboardSettingsRepo->findBy([ "isActive" => 1]);
+        } else if ($this->getParameter('app.are_settings_visible') == 0) {
+            $settingsArray = $dashboardSettingsRepo->findBy(["isActive" => 1]);
         }
 
+        // Create an array to store dashboard settings
         $settings = [];
-        foreach ($settingsArray as $setting)
-        {
-            $settings[] = [ "name" => $setting->getName(), "href" => $requestUri.$setting->getEnglishName(), "icon" => $setting->getIconFileName(), "isActive" => $setting->isActive()];
+        foreach ($settingsArray as $setting) {
+            $settings[] = [
+                "name" => $setting->getName(),
+                "href" => $requestUri . $setting->getEnglishName(),
+                "icon" => $setting->getIconFileName(),
+                "isActive" => $setting->isActive()
+            ];
         }
 
-            return $this->json([
+        // Return a JSON response with the dashboard settings
+        return new JsonResponse([
             'status' => 'success',
             'response' => [$settings],
-        ]);
+        ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
     }
 
 
-    // function used to validate usernames
+    // Function used to validate usernames
     private function validateUsername(string $providedUsername): array
     {
         /*
-         * Password conditions:
-         * at least 3 characters
-         * unique
+         * Username conditions:
+         * - At least 3 characters
+         * - Unique (not already taken)
          */
 
+        // Get the repository for Admin entities
         $adminsRepo = $this->entityManager->getRepository(Admin::class);
+
+        // Initialize an array to store validation errors
         $errors = [];
 
-        if ( strlen($providedUsername) < 3 )
-        {
-            array_push($errors, "Nazwa użytkownika jest za krótka.");
+        // Check if the provided username is too short
+        if (strlen($providedUsername) < 3) {
+            array_push($errors, "Username is too short.");
         }
 
-        if ( $adminsRepo->findOneBy([ 'username' => $providedUsername ]) != null )
-        {
-            array_push($errors, "Nazwa użytkownika jest już zajęta.");
+        // Check if the provided username is already taken
+        if ($adminsRepo->findOneBy(['username' => $providedUsername]) !== null) {
+            array_push($errors, "Username is already taken.");
         }
 
-        // function returns error array
-        // if there are no errors, function returns empty array
-        if ( count($errors) > 0 )
-        {
+        // Return an array of errors if there are any
+        // If there are no errors, the function returns an empty array
+        if (count($errors) > 0) {
             return $errors;
-        } else return [];
+        } else {
+            return [];
+        }
     }
 
-    // function used to validate passwords
+    // Function used to validate passwords
     private function validatePassword(string $providedPassword): array
     {
         /*
          * Password conditions:
-         * at least 8 characters
-         * at least 1 number
-         * at least 1 special character
-         * at least 1 big letter
+         * - At least 8 characters
+         * - At least 1 uppercase letter
+         * - At least 1 digit
+         * - At least 1 special character
          */
 
+        // Initialize an array to store validation errors
         $errors = [];
 
-        if ( strlen($providedPassword) < 8 )
-        {
-            array_push($errors, "Hasło jest zbyt krótkie.");
-        }
-        if ( !preg_match('/(?=\S*[A-Z])/', $providedPassword) )
-        {
-            array_push($errors, "Hasło musi zawierać co najmniej jedną wielką literę.");
-        }
-        if ( !preg_match('~[0-9]+~', $providedPassword) )
-        {
-            array_push($errors, "Hasło musi zawierać co najmniej jedną cyfrę.");
-        }
-        if ( !preg_match('/[\'^£!%&*()}{@#~?><>,|=_+-]/', $providedPassword) )
-        {
-            array_push($errors, "Hasło musi zawierać co najmniej jeden znak specjalny.");
+        // Check if the provided password is too short
+        if (strlen($providedPassword) < 8) {
+            array_push($errors, "Password is too short.");
         }
 
-        // function returns error array
-        // if there are no errors, function returns empty array
-        if ( count($errors) > 0 )
-        {
+        // Check if the provided password contains at least one uppercase letter
+        if (!preg_match('/(?=\S*[A-Z])/', $providedPassword)) {
+            array_push($errors, "Password must contain at least one uppercase letter.");
+        }
+
+        // Check if the provided password contains at least one digit
+        if (!preg_match('~[0-9]+~', $providedPassword)) {
+            array_push($errors, "Password must contain at least one digit.");
+        }
+
+        // Check if the provided password contains at least one special character
+        if (!preg_match('/[\'^£!%&*()}{@#~?><>,|=_+-]/', $providedPassword)) {
+            array_push($errors, "Password must contain at least one special character.");
+        }
+
+        // Return an array of errors if there are any
+        // If there are no errors, the function returns an empty array
+        if (count($errors) > 0) {
             return $errors;
-        } else return [];
+        } else {
+            return [];
+        }
     }
+
 }

@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Filesystem;
@@ -27,24 +28,24 @@ class GalleryController extends AbstractController
         ]);
     }
     #[Route('/admin-api/dashboard/gallery/upload-photo', name: 'admin_api_dashboard_gallery_upload_photo', methods: ["POST", "GET"])]
-    public function uploadPhoto(Security $security, Request $request, EntityManagerInterface $em): JsonResponse
+    public function uploadPhoto(Security $security, Request $request, EntityManagerInterface $em, LoggerInterface $logger): JsonResponse
     {
-        if ($request->files->has('file')) {
-            $uploadedFile = $request->files->get('file');
-            $filename = $request->get('filename');
-            $requestUsername = $request->get('username');
-            if (filesize($uploadedFile) > 5000000 )
-            {
-                return new JsonResponse([
-                    'status' => 'error',
-                    'response' => 'Przesłany plik jest za duży!',
-                ], 500);
-            }
+        try {
+            if ($request->files->has('file')) {
+                $uploadedFile = $request->files->get('file');
+                $filename = $request->get('filename');
+                $requestUsername = $request->get('username');
 
-            // Możesz teraz wykorzystać $uploadedFile do obsługi przesłanego pliku
+                if (filesize($uploadedFile) > 5000000 ) {
+                    return new JsonResponse([
+                        'status' => 'error',
+                        'response' => 'The uploaded file is too large!',
+                    ], 500);
+                }
 
-            // Przykładowo, możesz go zapisać na serwerze:
-            try {
+                // You can now use $uploadedFile to handle the uploaded file
+
+                // For example, you can save it on the server:
                 $extension = $uploadedFile->guessExtension();
                 $safeFileName = md5(uniqid()) . '.' . $extension;
                 $validFileTypes = [
@@ -55,13 +56,12 @@ class GalleryController extends AbstractController
                 $dateTimeNow->setTimezone(new DateTimeZone('Europe/Warsaw'));
 
                 $uploadedFile->move(
-                    $this->getParameter('photos_upload_directory'), // Ścieżka do katalogu, gdzie będą przechowywane przesłane pliki
+                    $this->getParameter('photos_upload_directory'), // Path to the directory where uploaded files will be stored
                     $safeFileName
                 );
 
-                // dodatkowe warunki sprawdzan przy dodawaniu plików
-                if( file_exists($this->getParameter('photos_upload_directory')."/".$safeFileName) && null != $security->getUser() && $security->getUser()->getUsername() == $requestUsername && in_array($extension, $validFileTypes) )
-                {
+                // Additional conditions for file uploads
+                if (file_exists($this->getParameter('photos_upload_directory') . "/" . $safeFileName) && null != $security->getUser() && $security->getUser()->getUsername() == $requestUsername && in_array($extension, $validFileTypes)) {
                     try {
                         $photoEntity = new Photos();
                         $photoEntity->setSafeFilename($safeFileName);
@@ -72,71 +72,89 @@ class GalleryController extends AbstractController
                         $photoEntity->setAddedDatetime($dateTimeNow);
                         $em->persist($photoEntity);
                         $em->flush();
-                    } catch (\Exception) {  }
+                    } catch (\Exception) { }
 
                     return new JsonResponse([
                         'status' => 'success',
-                        'response' => 'Plik został pomyślnie dodany na serwer.',
+                        'response' => 'The file has been successfully added to the server.',
                         'filename' => $filename,
                         'id' => $photoEntity->getId(),
                     ], 200);
                 } else {
                     return new JsonResponse([
                         'status' => 'error',
-                        'response' => 'Wystąpił błąd podczas zapisu pliku.',
+                        'response' => 'An error occurred while saving the file.',
                     ], 500);
                 }
-            } catch (FileException $e) {
+            } else {
                 return new JsonResponse([
                     'status' => 'error',
-                    'response' => 'Wystąpił błąd podczas zapisu pliku.',
-                ], 500);
+                    'response' => 'No attached file.',
+                ], 400);
             }
-        } else {
+        } catch (\Exception $e) {
+            // Log the error
+            $logger->error('An error occurred: ' . $e->getMessage());
+
+            // Handle the error and return an appropriate JSON response
             return new JsonResponse([
                 'status' => 'error',
-                'response' => 'Brak załączonego pliku.',
-            ], 400);
+                'response' => 'An error occurred while processing the file upload.',
+            ], 500);
         }
     }
 
     #[Route('/admin-api/dashboard/gallery/get-photos', name: 'admin_api_dashboard_gallery_get_photos', methods: ["POST", "GET"])]
-    public function getPhotos(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator): JsonResponse
+    public function getPhotos(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator, LoggerInterface $logger): JsonResponse
     {
-        // wydobycie zapytania do bazy
-        $photosRepo = $em->getRepository(Photos::class);
-        $query = $photosRepo->getPhotosQuery();
+        try {
+            // Get the repository for Photos entities
+            $photosRepo = $em->getRepository(Photos::class);
 
-        // pobranie odpowiednich wartości
-        $requestedQuantity = $request->get('quantity');
-        $requestedPage = $request->get('page');
+            // Get the query for fetching photos
+            $query = $photosRepo->getPhotosQuery();
 
-        $pagination = $paginator->paginate(
-            $query, /* query NOT result */
-            $request->query->getInt('page', $requestedPage), /*page number*/
-            $requestedQuantity /*limit per page*/
-        );
+            // Get the requested quantity and page from the request
+            $requestedQuantity = $request->get('quantity');
+            $requestedPage = $request->get('page');
 
-        // ważne informacje paginacji
-        $totalItems = $pagination->getTotalItemCount();
-        $currentPage = $pagination->getCurrentPageNumber();
-        $pagesCount = ceil($totalItems / $pagination->getItemNumberPerPage());
+            // Use the paginator to paginate the results
+            $pagination = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', $requestedPage), /* page number */
+                $requestedQuantity /* limit per page */
+            );
 
-        return new JsonResponse([
-            'status' => 'success',
-            'response' => [
-                "items" => $this->paginationToFriendlyJson($pagination),
-                "totalItems" => $totalItems,
-                "currentPage" => $currentPage,
-                "pagesCount" => $pagesCount,
-            ],
-        ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+            // Get important pagination information
+            $totalItems = $pagination->getTotalItemCount();
+            $currentPage = $pagination->getCurrentPageNumber();
+            $pagesCount = ceil($totalItems / $pagination->getItemNumberPerPage());
+
+            return new JsonResponse([
+                'status' => 'success',
+                'response' => [
+                    "items" => $this->paginationToFriendlyJson($pagination),
+                    "totalItems" => $totalItems,
+                    "currentPage" => $currentPage,
+                    "pagesCount" => $pagesCount,
+                ],
+            ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
+        } catch (\Exception $e) {
+            // Log the error
+            $logger->error('An error occurred: ' . $e->getMessage());
+
+            // Handle the error and return an appropriate JSON response
+            return new JsonResponse([
+                'status' => 'error',
+                'response' => 'An error occurred while fetching photos.',
+            ], 500);
+        }
     }
 
     private function paginationToFriendlyJson(PaginationInterface $pagination)
     {
+        // Changing pagination object to JSON which is easy to handle in Frontend
         $paginationItems = $pagination->getItems();
-//        dd($paginationItems);
         $items = [];
 
         foreach ($paginationItems as $paginationItem)
@@ -155,46 +173,63 @@ class GalleryController extends AbstractController
     }
 
     #[Route('/admin-api/dashboard/gallery/delete-photo', name: 'admin_api_dashboard_gallery_delete_photo', methods: ["GET"])]
-    public function deletePhoto(Request $request, EntityManagerInterface $em, Filesystem $filesystem)
+    public function deletePhoto(Request $request, EntityManagerInterface $em, Filesystem $filesystem, LoggerInterface $logger)
     {
+        // Get the photo ID from the request
         $photoId = $request->get('id');
 
-        if( !is_nan($photoId) && $photoId > 0)
-        {
+        // Check if the provided photoId is a valid positive number
+        if (!is_nan($photoId) && $photoId > 0) {
             try {
+                // Get the repository for Photos entities
                 $photosRepo = $em->getRepository(Photos::class);
-                $photo = $photosRepo->findOneBy( [ "id" => $photoId ] );
 
-                if ( $photo )
-                {
+                // Find the photo entity based on the provided ID
+                $photo = $photosRepo->findOneBy(["id" => $photoId]);
+
+                if ($photo) {
+                    // Get the file name associated with the photo
                     $fileName = $photo->getSafeFileName();
 
+                    // Remove the photo entity from the database
                     $em->remove($photo);
                     $em->flush();
 
-                    if ( file_exists($this->getParameter('photos_upload_directory')."/".$fileName) )
-                    {
-                        $filesystem->remove($this->getParameter('photos_upload_directory')."/".$fileName);
+                    // Check if the physical file exists and delete it
+                    if (file_exists($this->getParameter('photos_upload_directory') . "/" . $fileName)) {
+                        $filesystem->remove($this->getParameter('photos_upload_directory') . "/" . $fileName);
 
+                        // Return a success JSON response
                         return new JsonResponse([
                             'status' => 'success',
-                            'response' => 'Zdjęcie zostało usunięte!',
+                            'response' => 'The photo has been deleted!',
                         ], 200);
                     }
                 } else {
+                    // Return an error JSON response if the photo entity was not found
                     return new JsonResponse([
                         'status' => 'error',
-                        'response' => 'Nie znaleziono podanego zdjęcia.',
+                        'response' => 'The specified photo was not found.',
                     ], 400);
                 }
+            } catch (EntityNotFoundException $e) {
+                // Log the error
+                $logger->error('An error occurred: ' . $e->getMessage());
 
-
-            } catch (EntityNotFoundException $e)
-            {
+                // Return an error JSON response if the photo entity was not found
                 return new JsonResponse([
                     'status' => 'error',
-                    'response' => 'Nie znaleziono podanego zdjęcia.',
+                    'response' => 'The specified photo was not found.',
                 ], 400);
+            } catch (\Exception $e) {
+                // Log the error
+                $logger->error('An error occurred: ' . $e->getMessage());
+
+                // Handle any other exceptions here, and return an appropriate JSON response
+                return new JsonResponse([
+                    'status' => 'error',
+                    'response' => 'An error occurred while deleting the photo.',
+                ], 500);
             }
         }
     }

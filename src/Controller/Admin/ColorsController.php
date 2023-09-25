@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Colors;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Filesystem;
@@ -24,16 +25,20 @@ class ColorsController extends AbstractController
     }
 
     #[Route('/admin-api/dashboard/colors/get-colors', name: 'admin_api_dashboard_colors_get_colors', methods: ["GET"])]
-    public function getColors(EntityManagerInterface $entityManager ): JsonResponse
+    public function getColors(EntityManagerInterface $entityManager): JsonResponse
     {
+        // Get the repository for Colors entities
         $colorsRepo = $entityManager->getRepository(Colors::class);
+
+        // Retrieve all colors from the database
         $allColors = $colorsRepo->findAll();
 
+        // Initialize an array to store color items
         $items = [];
 
-        foreach ($allColors as $item)
-        {
-            $items[] = [ $item->getId() => [
+        // Iterate through all retrieved colors and create an array for each color
+        foreach ($allColors as $item) {
+            $items[] = [$item->getId() => [
                 "name" => $item->getName(),
                 "description" => $item->getDescription(),
                 "value" => $item->getValue(),
@@ -41,43 +46,55 @@ class ColorsController extends AbstractController
             ]];
         }
 
+        // Return a JSON response with the color items
         return new JsonResponse([
             'status' => 'success',
             'response' => [
                 "items" => $items,
             ],
-        ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+        ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
     }
 
     #[Route('/admin-api/dashboard/colors/set-value', name: 'admin_api_dashboard_colors_set_value', methods: ["GET"])]
-    public function setValue(Security $security, Request $request, EntityManagerInterface $em, Filesystem $filesystem): JsonResponse
+    public function setValue(Security $security, Request $request, EntityManagerInterface $em, LoggerInterface $logger): JsonResponse
     {
+        // Get the repository for Colors entities
         $settingsRepo = $em->getRepository(Colors::class);
-        $requestedId = $request->get('id');
-        $requestedEntity = $settingsRepo->findOneBy(["id" => $requestedId?:null]);
 
-        if ( null != $requestedEntity )
-        {
+        // Get the requested color ID from the request
+        $requestedId = $request->get('id');
+
+        // Find the color entity based on the requested ID (or null if not found)
+        $requestedEntity = $settingsRepo->findOneBy(["id" => $requestedId ?: null]);
+
+        if (null != $requestedEntity) {
+            // Get the requested color value from the request
             $requestedValue = $request->get('value');
 
-            try{
-                // ustawienie odpowiednich wartości, przy upewnieniu się czy zmienna jest typu bool
+            try {
+                // Set the requested color value, ensuring it's of type bool
                 $requestedEntity->setValue($requestedValue);
 
-                // upload do bazy
+                // Persist the changes to the database
                 $em->persist($requestedEntity);
                 $em->flush();
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+                // Log and return an error response in case of an exception
+                $logger->error('An error occurred: ' . $e->getMessage());
+            }
 
+            // Return a success JSON response
             return new JsonResponse([
                 'status' => 'success',
-                'response' => 'Kolor został pomyślnie zmieniony.',
-            ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+                'response' => 'Color has been successfully updated.',
+            ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
         }
 
+        // Return an error JSON response if the requested color entity was not found
         return new JsonResponse([
             'status' => 'error',
-            'response' => 'Nie znaleziono takiego ustawienia.',
-        ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
+            'response' => 'Color setting not found.',
+        ], 400, ['Content-Type' => 'application/json;charset=UTF-8']);
     }
+
 }
