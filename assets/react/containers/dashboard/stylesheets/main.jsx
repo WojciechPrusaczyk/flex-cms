@@ -59,7 +59,7 @@ class StylesheetsMain extends Component {
     }
 
     deleteStylesheet() {
-        window.location.href = `${location.protocol}//${window.location.host}/dashboard/stylesheets/delete?` + new URLSearchParams({
+        window.location.href = `${location.protocol}//${window.location.host}/admin-api/dashboard/stylesheets/delete?` + new URLSearchParams({
             id: this.state.itemToDelete,
         });
     }

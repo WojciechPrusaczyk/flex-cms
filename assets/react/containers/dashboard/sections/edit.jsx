@@ -64,7 +64,7 @@ class SectionsForm extends Component
 
     // Fetch initial data from the server
     async getInitialData(id) {
-        const fetchAddress = `${location.protocol}//${window.location.host}/dashboard/sections/get-section?` + new URLSearchParams({
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/sections/get-section?` + new URLSearchParams({
             id: id,
         });
 
@@ -96,7 +96,7 @@ class SectionsForm extends Component
 
     // Method to save data to the server
     saveData() {
-        const fetchAddress = `${location.protocol}//${window.location.host}/dashboard/sections/edit-section`;
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/sections/edit-section`;
         const data = {
             id: this.state.id,
             name: this.state.name,

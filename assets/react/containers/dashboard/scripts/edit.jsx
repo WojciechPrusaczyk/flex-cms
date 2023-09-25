@@ -49,7 +49,7 @@ class ScriptsForm extends Component
 
     // Fetch initial data from the server
     async getInitialData(id) {
-        const fetchAddress = `${location.protocol}//${window.location.host}/dashboard/scripts/get-script?` + new URLSearchParams({
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/scripts/get-script?` + new URLSearchParams({
             id: id,
         });
 
@@ -81,7 +81,7 @@ class ScriptsForm extends Component
 
     // Method to save data to the server
     async saveData() {
-        const fetchAddress = `${location.protocol}//${window.location.host}/dashboard/scripts/edit-script?` + new URLSearchParams({
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/scripts/edit-script?` + new URLSearchParams({
             id: this.state.id,
             name: this.state.name,
             active: this.state.active,

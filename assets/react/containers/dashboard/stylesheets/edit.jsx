@@ -49,7 +49,7 @@ class StylesheetsForm extends Component
 
     // Fetch initial data from the server
     async getInitialData(id) {
-        const fetchAddress = `${location.protocol}//${window.location.host}/dashboard/stylesheets/get-stylesheet?` + new URLSearchParams({
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/stylesheets/get-stylesheet?` + new URLSearchParams({
             id: id,
         });
 
@@ -81,7 +81,7 @@ class StylesheetsForm extends Component
 
     // Method to save data to the server
     async saveData() {
-        const fetchAddress = `${location.protocol}//${window.location.host}/dashboard/stylesheets/edit-stylesheet?` + new URLSearchParams({
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/stylesheets/edit-stylesheet?` + new URLSearchParams({
             id: this.state.id,
             name: this.state.name,
             active: this.state.active,

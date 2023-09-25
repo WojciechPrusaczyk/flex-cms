@@ -23,7 +23,7 @@ class ColorsController extends AbstractController
         ]);
     }
 
-    #[Route('/admin-api/dashboard/settings/get-colors', name: 'admin_api_dashboard_settings_get_colors', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/colors/get-colors', name: 'admin_api_dashboard_colors_get_colors', methods: ["GET"])]
     public function getColors(EntityManagerInterface $entityManager ): JsonResponse
     {
         $colorsRepo = $entityManager->getRepository(Colors::class);
@@ -49,7 +49,7 @@ class ColorsController extends AbstractController
         ], 200, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
     }
 
-    #[Route('/admin-api/dashboard/colors/set-value', name: 'admin_api_dashboard_colors_set_value', methods: ["POST", "GET"])]
+    #[Route('/admin-api/dashboard/colors/set-value', name: 'admin_api_dashboard_colors_set_value', methods: ["GET"])]
     public function setValue(Security $security, Request $request, EntityManagerInterface $em, Filesystem $filesystem): JsonResponse
     {
         $settingsRepo = $em->getRepository(Colors::class);

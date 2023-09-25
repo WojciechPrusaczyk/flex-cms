@@ -101,7 +101,7 @@ class ScriptsController extends AbstractController
     }
 
 
-    #[Route('/dashboard/scripts/delete', name: 'dashboard_scripts_delete', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/scripts/delete', name: 'admin_api_dashboard_scripts_delete', methods: ["GET"])]
     public function delete(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
     {
         $id = $request->get('id');
@@ -132,7 +132,7 @@ class ScriptsController extends AbstractController
         return $this->render('scripts/edit.html.twig', ["id" => $id]);
     }
 
-    #[Route('/dashboard/scripts/get-script', name: 'dashboard_scripts_get_script', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/scripts/get-script', name: 'admin_api_dashboard_scripts_get_script', methods: ["GET"])]
     public function getScript(EntityManagerInterface $em, LoggerInterface $logger, Request $request): JsonResponse
     {
         // Get the 'id' parameter from the request
@@ -183,7 +183,7 @@ class ScriptsController extends AbstractController
         }
     }
 
-    #[Route('/dashboard/scripts/edit-script', name: 'dashboard_scripts_edit_script', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/scripts/edit-script', name: 'admin_api_dashboard_scripts_edit_script', methods: ["GET"])]
     public function editScript(EntityManagerInterface $em, LoggerInterface $logger, Request $request, Security $security): Response
     {
         // Extract raw data from the request

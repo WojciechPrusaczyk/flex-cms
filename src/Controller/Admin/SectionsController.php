@@ -24,7 +24,7 @@ class SectionsController extends AbstractController
         return $this->render('sections/index.html.twig');
     }
 
-    #[Route('/admin-api/dashboard/sections/get-sections', name: 'admin_api_dashboard_sections_get_stylesheets', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/sections/get-sections', name: 'admin_api_dashboard_sections_get_sections', methods: ["GET"])]
     public function getSections(EntityManagerInterface $entityManager, LoggerInterface $logger ): JsonResponse
     {
         try {
@@ -115,7 +115,7 @@ class SectionsController extends AbstractController
         return $this->render('sections/edit.html.twig', ["id" => $id]);
     }
 
-    #[Route('/dashboard/sections/get-section', name: 'dashboard_sections_get_section', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/sections/get-section', name: 'admin_api_dashboard_sections_get_section', methods: ["GET"])]
     public function getStylesheet(EntityManagerInterface $em, LoggerInterface $logger, Request $request): JsonResponse
     {
         // Get the 'id' parameter from the request
@@ -167,7 +167,7 @@ class SectionsController extends AbstractController
         }
     }
 
-    #[Route('/dashboard/sections/edit-section', name: 'dashboard_section_edit_section', methods: ["POST"])]
+    #[Route('/admin-api/dashboard/sections/edit-section', name: 'admin_api_dashboard_section_edit_section', methods: ["POST"])]
     public function editStylesheet(EntityManagerInterface $em, LoggerInterface $logger, Request $request, Security $security): Response
     {
         $requestData = json_decode($request->getContent(), true);
@@ -256,7 +256,7 @@ class SectionsController extends AbstractController
         }
     }
 
-    #[Route('/dashboard/sections/delete', name: 'dashboard_sections_delete', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/sections/delete', name: 'admin_api_dashboard_sections_delete', methods: ["GET"])]
     public function delete(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
     {
         $id = $request->get('id');
@@ -278,7 +278,7 @@ class SectionsController extends AbstractController
         return $this->redirectToRoute("dashboard_stylesheets");
     }
 
-    #[Route('/dashboard/sections/change-order', name: 'dashboard_sections_change_order', methods: ["POST"])]
+    #[Route('/admin-api/dashboard/sections/change-order', name: 'admin_api_dashboard_sections_change_order', methods: ["POST"])]
     public function changeOrder(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
     {
         $requestData = json_decode($request->getContent(), true);

@@ -42,14 +42,40 @@ class AdminApiController extends AbstractController
                 'register' => $requestUri."register?password={password}&username={username}",
                 'get-user' => $requestUri."get-user",
                 'logout' => $requestUri."logout",
-                'dashboard-get-settings' => $requestUri."dashboard/get-settings",
-                'dashboard-gallery-upload-photo' => $requestUri."dashboard/gallery/upload-photo",
-                'dashboard-gallery-get-photos' => $requestUri."dashboard/gallery/get-photos?page={page}&quantity={quantity}",
-                'dashboard-gallery-delete-photo' => $requestUri."dashboard/gallery/delete-photo?id={id}",
                 'dashboard-settings-get-dashboard-settings' => $requestUri."dashboard/get-dashboard-settings",
-                'dashboard-settings-get-settings' => $requestUri."dashboard/settings/get-settings",
-                'dashboard-settings-get-stylesheet' => $requestUri."dashboard/stylesheets/get-stylesheet?id={id}",
-            ]);
+                'admin-api-dashboard-colors'=> [
+                    '-get-scripts' => $requestUri."dashboard/colors/get-colors",
+                    '-set-value' => $requestUri."dashboard/colors/set-value?id={id}&value={value}",
+                ],
+                'admin-api-dashboard-gallery'=> [
+                    '-upload-photo' => $requestUri."dashboard/gallery/upload-photo",
+                    '-get-photos' => $requestUri."dashboard/gallery/get-photos?page={page}&quantity={quantity}",
+                    '-delete-photo' => $requestUri."dashboard/gallery/delete-photo?id={id}",
+                ],
+                'admin-api-dashboard-scripts'=> [
+                    '-get-scripts' => $requestUri."dashboard/scripts/get-scripts",
+                    '-get-script' => $requestUri."dashboard/scripts/get-script?id={id}",
+                    '-edit-script' => $requestUri."dashboard/scripts/edit-script?id={id}&name={name}&active={active}&value={value}&start_being_active={start_being_active}&stop_being_active={stop_being_active}",
+                    '-delete' => $requestUri."dashboard/scripts/delete?id={id}",
+                ],
+                'admin-api-dashboard-sections'=> [
+                    '-get-sections' => $requestUri."dashboard/sections/get-sections",
+                    '-get-section' => $requestUri."dashboard/sections/get-section?id={id}",
+                    '-edit-section' => $requestUri."dashboard/sections/edit-section",
+                    '-delete' => $requestUri."dashboard/sections/delete?id={id}",
+                    '-change-order' => $requestUri."dashboard/sections/change-order",
+                ],
+                'admin-api-dashboard-settings'=> [
+                    '-get-scripts' => $requestUri."dashboard/settings/get-settings",
+                    '-set-value' => $requestUri."dashboard/settings/set-value?id={id}&value={value}",
+                ],
+                'admin-api-dashboard-stylesheets'=> [
+                    '-get-stylesheets' => $requestUri."dashboard/stylesheets/get-stylesheets",
+                    '-get-stylesheet' => $requestUri."dashboard/stylesheets/get-stylesheet?id={id}",
+                    '-edit-stylesheet' => $requestUri."dashboard/stylesheets/edit-stylesheet?id={id}&name={name}&active={active}&value={value}&start_being_active={start_being_active}&stop_being_active={stop_being_active}",
+                    '-delete' => $requestUri."dashboard/stylesheets/delete?id={id}",
+                ],
+                ]);
         }
         return $this->json([
             'status' => 'error',

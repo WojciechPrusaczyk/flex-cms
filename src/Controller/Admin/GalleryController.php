@@ -154,7 +154,7 @@ class GalleryController extends AbstractController
         return $items;
     }
 
-    #[Route('/admin-api/dashboard/gallery/delete-photo', name: 'admin_api_dashboard_gallery_delete_photo', methods: ["POST", "GET"])]
+    #[Route('/admin-api/dashboard/gallery/delete-photo', name: 'admin_api_dashboard_gallery_delete_photo', methods: ["GET"])]
     public function deletePhoto(Request $request, EntityManagerInterface $em, Filesystem $filesystem)
     {
         $photoId = $request->get('id');

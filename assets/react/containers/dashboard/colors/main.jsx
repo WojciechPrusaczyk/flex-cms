@@ -16,12 +16,12 @@ class SettingsMain extends Component
 
     async getSettings()
     {
-        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/settings/get-colors?`;
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/colors/get-colors?`;
         try {
             const response = await fetch(fetchAddress)
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    this.setState({settings: responseJson.response.items})
+                    this.setState({settings: responseJson.response.items});
                 })
         } catch (error) {
         }

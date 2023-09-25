@@ -55,7 +55,7 @@ class SectionsMain extends Component
     hideConfirmation() { this.setState({showConfirmation: false}) }
 
     deleteSection() {
-        window.location.href = `${location.protocol}//${window.location.host}/dashboard/sections/delete?` + new URLSearchParams({
+        window.location.href = `${location.protocol}//${window.location.host}/admin-api/dashboard/sections/delete?` + new URLSearchParams({
             id: this.state.itemToDelete,
         });
     }
@@ -76,7 +76,7 @@ class SectionsMain extends Component
             }
         });
 
-        this.sendData(validOrder, `${location.protocol}//${window.location.host}/dashboard/sections/change-order`);
+        this.sendData(validOrder, `${location.protocol}//${window.location.host}/admin-api/dashboard/sections/change-order`);
     }
 
     onDragEnd = (result) => {

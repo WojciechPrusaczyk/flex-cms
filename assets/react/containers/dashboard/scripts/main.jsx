@@ -59,7 +59,7 @@ class ScriptsMain extends Component {
     }
 
     deleteScript() {
-        window.location.href = `${location.protocol}//${window.location.host}/dashboard/scripts/delete?` + new URLSearchParams({
+        window.location.href = `${location.protocol}//${window.location.host}/admin-api/dashboard/scripts/delete?` + new URLSearchParams({
             id: this.state.itemToDelete,
         });
     }

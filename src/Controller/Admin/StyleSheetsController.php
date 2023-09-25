@@ -76,7 +76,6 @@ class StyleSheetsController extends AbstractController
             $currentUser = $security->getUser();
 
             try {
-
                 // Creating basic entity with masic data included
                 $newStylesheet = new StyleSheets();
                 $newStylesheet->setName($stylesheetsRepo->namelessName . " ($namelessStylesheetsNumber)");
@@ -100,7 +99,7 @@ class StyleSheetsController extends AbstractController
     }
 
 
-    #[Route('/dashboard/stylesheets/delete', name: 'dashboard_stylesheets_delete', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/stylesheets/delete', name: 'admin_api_dashboard_stylesheets_delete', methods: ["GET"])]
     public function delete(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
     {
         $id = $request->get('id');
@@ -131,7 +130,7 @@ class StyleSheetsController extends AbstractController
         return $this->render('stylesheets/edit.html.twig', ["id" => $id]);
     }
 
-    #[Route('/dashboard/stylesheets/get-stylesheet', name: 'dashboard_stylesheets_get_stylesheet', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/stylesheets/get-stylesheet', name: 'admin_api_dashboard_stylesheets_get_stylesheet', methods: ["GET"])]
     public function getStylesheet(EntityManagerInterface $em, LoggerInterface $logger, Request $request): JsonResponse
     {
         // Get the 'id' parameter from the request
@@ -182,7 +181,7 @@ class StyleSheetsController extends AbstractController
         }
     }
 
-    #[Route('/dashboard/stylesheets/edit-stylesheet', name: 'dashboard_stylesheets_edit_stylesheet', methods: ["GET"])]
+    #[Route('/admin-api/dashboard/stylesheets/edit-stylesheet', name: 'admin_api_dashboard_stylesheets_edit_stylesheet', methods: ["GET"])]
     public function editStylesheet(EntityManagerInterface $em, LoggerInterface $logger, Request $request, Security $security): Response
     {
         // Extract raw data from the request
