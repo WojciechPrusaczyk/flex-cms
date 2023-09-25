@@ -5,6 +5,12 @@
 #main-root{
   background-color: #E5E4FF;
   margin: 0 150px;
+  @media (max-width: 1000px) {
+    margin: 0 100px;
+  }
+  @media (max-width: 600px) {
+    margin: 0 60px;
+  }
   .settings {
     padding: 50px 0;
     display: flex;
@@ -14,6 +20,9 @@
       flex-wrap: wrap;
       justify-content: center;
       width: 60%;
+      @media (max-width: 1200px) {
+        width: 80%;
+      }
     }
     .tile{
       &.disabled {
