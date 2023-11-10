@@ -2,44 +2,45 @@
 
 namespace App\Repository;
 
-use App\Entity\StyleSheets;
+use App\Entity\Stylesheets;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<StyleSheets>
+ * @extends ServiceEntityRepository<Stylesheets>
  *
- * @method StyleSheets|null find($id, $lockMode = null, $lockVersion = null)
- * @method StyleSheets|null findOneBy(array $criteria, array $orderBy = null)
- * @method StyleSheets[]    findAll()
- * @method StyleSheets[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Stylesheets|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Stylesheets|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Stylesheets[]    findAll()
+ * @method Stylesheets[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class StyleSheetsRepository extends ServiceEntityRepository
+class StylesheetsRepository extends ServiceEntityRepository
 {
     // name provided when creating entity
     public $namelessName = "New Stylesheet";
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, StyleSheets::class);
+        parent::__construct($registry, Stylesheets::class);
     }
 
     /**
-     * @return StyleSheets[] Returns an array of StyleSheets objects
+     * @return Stylesheets[] Returns an array of Stylesheets objects
      */
-//    public function findAllAvilableStylesheets(): array
-//    {
-//        $now = new \DateTime();
-//
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.active = TRUE')
-//            ->andWhere('s.start_being_active > '.$now->format())
-//            ->andWhere('s.stop_being_active = :val')
-//            ->orderBy('s.id', 'ASC')
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findAllAvilableStylesheets(): array
+    {
+        $now = new \DateTime();
+        $nowString = $now->format('Y-m-d G:i:s');
+
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.active = TRUE')
+            ->andWhere('s.startBeingActive <= :now')
+            ->andWhere('s.stopBeingActive > :now')
+            ->setParameter('now', $nowString)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 // function checking, if stylesheet provided by id is actually active
     public function isStylesheetActive(int $id): ?bool

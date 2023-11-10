@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\StyleSheetsRepository;
+use App\Repository\StylesheetsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: StyleSheetsRepository::class)]
-class StyleSheets
+#[ORM\Entity(repositoryClass: StylesheetsRepository::class)]
+class Stylesheets
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,8 +20,8 @@ class StyleSheets
     #[ORM\Column]
     private ?bool $active = null;
 
-    #[ORM\ManyToOne(inversedBy: 'styleSheets')]
-    private ?admin $addedBy = null;
+    #[ORM\ManyToOne(inversedBy: 'stylesheets')]
+    private ?Admin $addedBy = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
@@ -64,12 +64,12 @@ class StyleSheets
         return $this;
     }
 
-    public function getAddedBy(): ?admin
+    public function getAddedBy(): ?Admin
     {
         return $this->addedBy;
     }
 
-    public function setAddedBy(?admin $addedBy): static
+    public function setAddedBy(?Admin $addedBy): static
     {
         $this->addedBy = $addedBy;
 

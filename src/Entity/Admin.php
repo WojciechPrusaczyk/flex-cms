@@ -42,8 +42,8 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'addedBY', targetEntity: Photos::class)]
     private Collection $photos;
 
-    #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: StyleSheets::class)]
-    private Collection $styleSheets;
+    #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: Stylesheets::class)]
+    private Collection $stylesheets;
 
     #[ORM\OneToMany(mappedBy: 'addedBy', targetEntity: Scripts::class)]
     private Collection $scripts;
@@ -196,29 +196,29 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, StyleSheets>
+     * @return Collection<int, Stylesheets>
      */
-    public function getStyleSheets(): Collection
+    public function getStylesheets(): Collection
     {
-        return $this->styleSheets;
+        return $this->stylesheet;
     }
 
-    public function addStyleSheet(StyleSheets $styleSheet): static
+    public function addStyleSheet(Stylesheets $stylesheet): static
     {
-        if (!$this->styleSheets->contains($styleSheet)) {
-            $this->styleSheets->add($styleSheet);
-            $styleSheet->setAddedBy($this);
+        if (!$this->stylesheets->contains($stylesheet)) {
+            $this->stylesheets->add($stylesheet);
+            $stylesheet->setAddedBy($this);
         }
 
         return $this;
     }
 
-    public function removeStyleSheet(StyleSheets $styleSheet): static
+    public function removeStyleSheet(Stylesheets $stylesheet): static
     {
-        if ($this->styleSheets->removeElement($styleSheet)) {
+        if ($this->styleSheets->removeElement($stylesheet)) {
             // set the owning side to null (unless already changed)
-            if ($styleSheet->getAddedBy() === $this) {
-                $styleSheet->setAddedBy(null);
+            if ($stylesheet->getAddedBy() === $this) {
+                $stylesheet->setAddedBy(null);
             }
         }
 

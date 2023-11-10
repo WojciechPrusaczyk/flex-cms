@@ -21,10 +21,10 @@ class Scripts
     private ?bool $active = null;
 
     #[ORM\ManyToOne(inversedBy: 'scripts')]
-    private ?admin $addedBy = null;
+    private ?Admin $addedBy = null;
 
     #[ORM\ManyToOne(inversedBy: 'scripts')]
-    private ?admin $editedBy = null;
+    private ?Admin $editedBy = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
@@ -64,24 +64,24 @@ class Scripts
         return $this;
     }
 
-    public function getAddedBy(): ?admin
+    public function getAddedBy(): ?Admin
     {
         return $this->addedBy;
     }
 
-    public function setAddedBy(?admin $addedBy): static
+    public function setAddedBy(?Admin $addedBy): static
     {
         $this->addedBy = $addedBy;
 
         return $this;
     }
 
-    public function getEditedBy(): ?admin
+    public function getEditedBy(): ?Admin
     {
         return $this->editedBy;
     }
 
-    public function setEditedBy(?admin $editedBy): static
+    public function setEditedBy(?Admin $editedBy): static
     {
         $this->editedBy = $editedBy;
 

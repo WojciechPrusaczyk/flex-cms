@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\StyleSheets;
+use App\Entity\Stylesheets;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class StyleSheetsController extends AbstractController
+class StylesheetsController extends AbstractController
 {
     #[Route('/dashboard/stylesheets', name: 'dashboard_stylesheets')]
     public function index(): Response
@@ -27,7 +27,7 @@ class StyleSheetsController extends AbstractController
     public function getStylesheets(EntityManagerInterface $entityManager, LoggerInterface $logger ): JsonResponse
     {
         try {
-            $stylesheetsRepo = $entityManager->getRepository(StyleSheets::class);
+            $stylesheetsRepo = $entityManager->getRepository(Stylesheets::class);
             $allStylesheets = array_reverse($stylesheetsRepo->findAll());
 
             $items = [];
@@ -67,7 +67,7 @@ class StyleSheetsController extends AbstractController
     #[Route('/dashboard/stylesheets/new', name: 'dashboard_stylesheets_new', methods: ["GET"])]
     public function new(EntityManagerInterface $em, LoggerInterface $logger, Security $security): Response
     {
-        $stylesheetsRepo = $em->getRepository(StyleSheets::class);
+        $stylesheetsRepo = $em->getRepository(Stylesheets::class);
 
         // Creating numeration for new entries
         $namelessStylesheetsNumber = $stylesheetsRepo->countNamelessStylesheets() + 1;
@@ -77,7 +77,7 @@ class StyleSheetsController extends AbstractController
 
             try {
                 // Creating basic entity with masic data included
-                $newStylesheet = new StyleSheets();
+                $newStylesheet = new Stylesheets();
                 $newStylesheet->setName($stylesheetsRepo->namelessName . " ($namelessStylesheetsNumber)");
                 $newStylesheet->setAddedBy($currentUser);
                 $newStylesheet->setActive(false);
@@ -103,7 +103,7 @@ class StyleSheetsController extends AbstractController
     public function delete(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
     {
         $id = $request->get('id');
-        $stylesheetsRepo = $em->getRepository(StyleSheets::class);
+        $stylesheetsRepo = $em->getRepository(Stylesheets::class);
 
         $stylesheetToDelete = $stylesheetsRepo->findOneBy(["id" => $id]);
 
@@ -137,8 +137,8 @@ class StyleSheetsController extends AbstractController
         $id = $request->get('id');
 
         try {
-            // Get the repository for StyleSheets
-            $stylesheetsRepo = $em->getRepository(StyleSheets::class);
+            // Get the repository for Stylesheets
+            $stylesheetsRepo = $em->getRepository(Stylesheets::class);
 
             // Find the stylesheet entity by 'id' if provided
             $stylesheetEntity = (null != $id) ? $stylesheetsRepo->findOneBy(["id" => $id]) : null;
@@ -195,8 +195,8 @@ class StyleSheetsController extends AbstractController
         ];
 
         try {
-            // Get the repository for StyleSheets
-            $stylesheetsRepo = $em->getRepository(StyleSheets::class);
+            // Get the repository for Stylesheets
+            $stylesheetsRepo = $em->getRepository(Stylesheets::class);
 
             // Find the stylesheet entity by 'id' if provided
             $stylesheetEntity = (null != $rawData["id"]) ? $stylesheetsRepo->findOneBy(["id" => $rawData["id"]]) : null;

@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Scripts;
-use App\Entity\StyleSheets;
+use App\Entity\Stylesheets;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -139,7 +139,7 @@ class ScriptsController extends AbstractController
         $id = $request->get('id');
 
         try {
-            // Get the repository for StyleSheets
+            // Get the repository for Stylesheets
             $scriptsRepo = $em->getRepository(Scripts::class);
 
             // Find the script entity by 'id' if provided
@@ -197,7 +197,7 @@ class ScriptsController extends AbstractController
         ];
 
         try {
-            // Get the repository for StyleSheets
+            // Get the repository for Stylesheets
             $scriptsRepo = $em->getRepository(Scripts::class);
 
             // Find the script entity by 'id' if provided

@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Sections;
-use App\Entity\StyleSheets;
+use App\Entity\Stylesheets;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;

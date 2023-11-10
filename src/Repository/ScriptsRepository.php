@@ -24,20 +24,23 @@ class ScriptsRepository extends ServiceEntityRepository
         parent::__construct($registry, Scripts::class);
     }
 
-//    /**
-//     * @return Scripts[] Returns an array of Scripts objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Scripts[] Returns an array of Scripts objects
+     */
+    public function findAllAvilableScripts(): array
+    {
+        $now = new \DateTime();
+        $nowString = $now->format('Y-m-d G:i:s');
+
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.active = TRUE')
+            ->andWhere('s.startBeingActive <= :now')
+            ->andWhere('s.stopBeingActive > :now')
+            ->setParameter('now', $nowString)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 
 //    public function findOneBySomeField($value): ?Scripts
 //    {
