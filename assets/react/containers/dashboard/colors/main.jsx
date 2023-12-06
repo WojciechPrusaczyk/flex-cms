@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
 import ColorsListItem from "../../../components/colors/colorsListItem";
 import {Tooltip} from "../../../components/Tooltip";
+import ColorPicker from "../../../components/colors/colorPicker";
 
 class SettingsMain extends Component
 {
@@ -88,6 +89,7 @@ class SettingsMain extends Component
                         text="Tutaj można dowolnie zmieniać kolory całej strony i dopasować ją do swoich upodobań."
                     />
                 </div>
+                {/*<ColorPicker />*/}
                 <table className="colors-list-table">
                     <thead className="colors-list-table-thead"><tr>
                         <th>Nazwa techniczna</th>
