@@ -46,27 +46,21 @@
             max-width: 90%;
           }
           &-value {
-            input[type="color"] {
+            span {
               -webkit-appearance: none;
               -moz-appearance: none;
               appearance: none;
               background-color: transparent;
               width: 60px;
               height: 60px;
-              border: none;
               cursor: pointer;
-              &::-webkit-color-swatch{
-                border-radius: 50%;
-                border: 2px solid #000000;
-              }
-              &::-moz-color-swatch{
-                border-radius: 50%;
-                border: 2px solid #000000;
-              }
+              display: block;
+              border-radius: 50%;
+              border: 2px solid #000000;
+              margin: auto;
             }
             &-fileInput {
               display: none;
-
               &Label{
                 width: 500px;
                 height: 200px;
@@ -81,6 +75,81 @@
           }
         }
       }
+    }
+  }
+  .colors-picker{
+    border-radius: 80px;
+    border: 4px solid #26156A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 60px auto;
+    box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.19);
+    padding: 17px 0;
+    width: 70%;
+    &:hover{
+      box-shadow: 4px 6px 9px 4px rgba(60, 60, 60, 0.19);
+      transition: box-shadow .1s;
+    }
+    p {
+      display: flex;
+      justify-content: center;
+      width: 90%;
+      margin: 10px auto;
+    }
+    &-color {
+      padding: 10px;
+      border-radius: 80px;
+      background-color: #EEF;
+      display: block!important;
+      &-value {
+        display: block;
+        padding: 6px;
+        text-align: center;
+      }
+    }
+    &-close {
+      justify-content: end!important;
+      &-button {
+        color: #26156A;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 0.36rem;
+        border: 4px solid #26156A;
+        background: #E5E4FF;
+        cursor: pointer;
+        margin: 2px;
+      }
+    }
+    &-submit {
+      display: flex;
+      justify-content: center;
+      &-button{
+        color: #26156A;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 5px 25px;
+        border-radius: 0.36rem;
+        border: 4px solid #26156A;
+        background: #E5E4FF;
+        cursor: pointer;
+      }
+    }
+    #picked-color {
+      color: transparent;
+      text-shadow: none;
+    }
+    input[type="range"]{
+      width: 60%;
+      height: 10px;
+      background-color: #ddd;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+      margin: 10px 0;
     }
   }
 }
