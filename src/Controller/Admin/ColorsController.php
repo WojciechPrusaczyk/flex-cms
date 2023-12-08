@@ -97,4 +97,52 @@ class ColorsController extends AbstractController
         ], 400, ['Content-Type' => 'application/json;charset=UTF-8']);
     }
 
+    #[Route('/admin-api/dashboard/colors/add-color', name: 'admin_api_dashboard_colors_add_color', methods: ["GET"])]
+    public function addColor(Security $security, Request $request, EntityManagerInterface $em, LoggerInterface $logger): JsonResponse
+    {
+        // Get the repository for Colors entities
+        $colorsRepo = $em->getRepository(Colors::class);
+
+        // Get the requested values from the request
+        $requestedName = $request->get('name');
+        $requestedValue = $request->get('value');
+        $requestedDescription = $request->get('description');
+        $requestedType = $request->get('type');
+
+        // Check if all data is requested correctly
+        if (
+            null != $requestedName &&
+            null != $requestedDescription &&
+            null != $requestedValue &&
+            null != $requestedType
+        ) {
+            try {
+                // Create new entity
+                $newColorEntity = new Colors();
+                $newColorEntity->setName($requestedName);
+                $newColorEntity->setDescription($requestedDescription);
+                $newColorEntity->setValue($requestedValue);
+                $newColorEntity->setType($requestedType);
+
+                // Persist the changes to the database
+                $em->persist($newColorEntity);
+                $em->flush();
+            } catch (\Exception $e) {
+                // Log and return an error response in case of an exception
+                $logger->error('An error occurred: ' . $e->getMessage());
+            }
+
+            // Return a success JSON response
+            return new JsonResponse([
+                'status' => 'success',
+                'response' => 'Color has been successfully created.',
+            ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
+        }
+
+        // Return an error JSON response if the requested color entity was not found
+        return new JsonResponse([
+            'status' => 'error',
+            'response' => 'Data is not provided correctly.',
+        ], 400, ['Content-Type' => 'application/json;charset=UTF-8']);
+    }
 }

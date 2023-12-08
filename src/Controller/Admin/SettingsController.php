@@ -176,4 +176,59 @@ class SettingsController extends AbstractController
             'response' => 'The requested setting was not found.',
         ], 400, headers: ['Content-Type' => 'application/json;charset=UTF-8']);
     }
+
+    #[Route('/admin-api/dashboard/settings/add-setting', name: 'admin_api_dashboard_settings_add_setting', methods: ["GET"])]
+    public function addColor(Security $security, Request $request, EntityManagerInterface $em, LoggerInterface $logger): JsonResponse
+    {
+        // Get the repository for Settings entities
+        $settingsRepo = $em->getRepository(Settings::class);
+
+        // Get the requested values from the request
+        $requestedName = $request->get('name');
+        $requestedType = $request->get('type');
+        $requestedDescription = $request->get('description');
+        $requestedValue = $request->get('value');
+        $requestedIsEditable = $request->get('isEditable');
+        $requestedIsPublic = $request->get('isPublic');
+
+        // Check if all data is requested correctly
+        if (
+            null != $requestedName &&
+            null != $requestedType &&
+            null != $requestedDescription &&
+            null != $requestedValue &&
+            null != $requestedIsEditable &&
+            null != $requestedIsPublic
+        ) {
+            /*try {*/
+                // Create new entity
+                $newSettingEntity = new Settings();
+                $newSettingEntity->setName($requestedName);
+                $newSettingEntity->setType($requestedType);
+                $newSettingEntity->setDescription($requestedDescription);
+                $newSettingEntity->setValue($requestedValue);
+                $newSettingEntity->setEditable($requestedIsEditable);
+                $newSettingEntity->setPublic($requestedIsPublic);
+
+                // Persist the changes to the database
+                $em->persist($newSettingEntity);
+                $em->flush();
+            /*} catch (\Exception $e) {
+                // Log and return an error response in case of an exception
+                $logger->error('An error occurred: ' . $e->getMessage());
+            }*/
+
+            // Return a success JSON response
+            return new JsonResponse([
+                'status' => 'success',
+                'response' => 'Setting has been successfully created.',
+            ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
+        }
+
+        // Return an error JSON response if the requested color entity was not found
+        return new JsonResponse([
+            'status' => 'error',
+            'response' => 'Data is not provided correctly.',
+        ], 400, ['Content-Type' => 'application/json;charset=UTF-8']);
+    }
 }

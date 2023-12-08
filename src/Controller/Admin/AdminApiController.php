@@ -46,6 +46,7 @@ class AdminApiController extends AbstractController
                 'admin-api-dashboard-colors'=> [
                     '-get-scripts' => $requestUri."dashboard/colors/get-colors",
                     '-set-value' => $requestUri."dashboard/colors/set-value?id={id}&value={value}",
+                    '-add-color' => $requestUri."dashboard/colors/add-color?name={name}&description={description}&value={value}&type={type}",
                 ],
                 'admin-api-dashboard-gallery'=> [
                     '-upload-photo' => $requestUri."dashboard/gallery/upload-photo",
@@ -68,6 +69,7 @@ class AdminApiController extends AbstractController
                 'admin-api-dashboard-settings'=> [
                     '-get-scripts' => $requestUri."dashboard/settings/get-settings",
                     '-set-value' => $requestUri."dashboard/settings/set-value?id={id}&value={value}",
+                    '-add-setting' => $requestUri."dashboard/settings/add-setting?name={name}&type={type}&value={value}&description={description}&isEditable={isEditable}&isPublic={isPublic}",
                 ],
                 'admin-api-dashboard-stylesheets'=> [
                     '-get-stylesheets' => $requestUri."dashboard/stylesheets/get-stylesheets",
