@@ -24,6 +24,24 @@ class SectionsRepository extends ServiceEntityRepository
         parent::__construct($registry, Sections::class);
     }
 
+    /**
+     * @return Sections[] Returns an array of Stylesheets objects
+     */
+    public function findAllAvilableSections(): array
+    {
+        $now = new \DateTime();
+        $nowString = $now->format('Y-m-d G:i:s');
+
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.isActive = TRUE')
+            ->andWhere('s.startBeingActive <= :now')
+            ->andWhere('s.stopBeingActive > :now')
+            ->setParameter('now', $nowString)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // function checking, if section provided by id is actually active
     public function isSectionActive(int $id): ?bool
     {

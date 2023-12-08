@@ -1,0 +1,69 @@
+{
+  "tools": {
+    "paragraph": {
+      "text": {
+        "type": "string",
+        "allowedTags": "i,b,u,a[href]"
+      }
+    },
+    "list": {
+      "items": {
+        "type": "array",
+        "data": {
+          "-": {
+            "type": "string",
+            "allowedTags": "i,b,u"
+          }
+        }
+      },
+      "style": {
+        "type": "string",
+        "data": {
+          "background-color": {
+            "type": "string",
+            "canBeOnly": ["red", "blue", "green"],
+            "required": false
+          },
+          "font-color": {
+            "type": "string",
+            "canBeOnly": ["black", "white"],
+            "required": false
+          }
+        }
+      }
+    },
+    "table": {
+      "content": {
+        "type": "array",
+        "data": {
+          "-": {
+            "type": "array",
+            "data": {
+              "-": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "image": {
+      "url": {
+        "type": "string"
+      },
+      "caption": {
+        "type": "string",
+        "allowedTags": "i,b,u"
+      },
+      "withBorder": {
+        "type": "boolean"
+      },
+      "withBackground": {
+        "type": "boolean"
+      },
+      "stretched": {
+        "type": "boolean"
+      }
+    }
+  }
+}

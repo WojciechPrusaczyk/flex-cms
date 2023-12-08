@@ -7,6 +7,7 @@ parameters:
     app.are_settings_visible: '%env(SETTINGS_VISIBLE)%'
     photos_upload_directory: '%kernel.project_dir%/public/uploads/photos'
     settings_directory: '%kernel.project_dir%/public/uploads/settings'
+    editor_js_sections_config_path: '%kernel.project_dir%/assets/editorJsConfig.json'
 
 services:
     # default configuration for services in *this* file

@@ -1,5 +1,9 @@
 import { default as React, useEffect, useRef } from 'react';
 import EditorJS from '@editorjs/editorjs';
+import Title from "title-editorjs";
+import Paragraph from '@editorjs/paragraph';
+import SimpleImage from "@editorjs/simple-image";
+import List from "@editorjs/list";
 
 const DEFAULT_INITIAL_DATA = () => {
     return {
@@ -12,7 +16,7 @@ const EDITOR_HOLDER_ID = 'editorjs';
 const ScriptsEditor = (props) => {
     const ejInstance = useRef();
     const [editorData, setEditorData] = React.useState(DEFAULT_INITIAL_DATA);
-
+    const Table = require('editorjs-table');
 
     // This will run only once
     useEffect(() => {
@@ -40,6 +44,24 @@ const ScriptsEditor = (props) => {
                 handleChange(content);
             },
             autofocus: true,
+            tools: {
+                title: Title,
+                paragraph: {
+                    class: Paragraph,
+                    inlineToolbar: true,
+                },
+                table: {
+                    class: Table,
+                },
+                image: SimpleImage,
+                list: {
+                    class: List,
+                    inlineToolbar: true,
+                    config: {
+                        defaultStyle: 'unordered'
+                    }
+                },
+            }
         });
     };
 

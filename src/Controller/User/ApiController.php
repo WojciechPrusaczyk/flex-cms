@@ -4,14 +4,19 @@ namespace App\Controller\User;
 
 use App\Entity\Admin;
 use App\Entity\Colors;
+use App\Entity\Photos;
 use App\Entity\Scripts;
+use App\Entity\Sections;
 use App\Entity\Settings;
 use App\Entity\Stylesheets;
+use App\Repository\StylesheetsRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use EditorJS\EditorJS;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -22,9 +27,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ApiController extends AbstractController
 {
     private $em;
+    private $configPath;
 
-    public function __construct(EntityManagerInterface $entityManager){
+    public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $parameterBag){
         $this->em = $entityManager;
+        $this->configPath = $parameterBag->get('editor_js_sections_config_path');
     }
 
     #[Route("/", name: "index", methods: ["GET", "HEAD"])]
@@ -162,7 +169,7 @@ class ApiController extends AbstractController
     #[Route('/get-stylesheets', name:'get_stylesheets', methods: ["GET"])]
     public function getStylesheets(): JsonResponse
     {
-        $stylesheetsRepo = $this->em->getRepository(Stylesheets::class);
+        $stylesheetsRepo = $this->em->getRepository(\App\Entity\Stylesheets::class);
         $stylesheets = $stylesheetsRepo->findAllAvilableStylesheets();
         $data  = [];
 
@@ -179,14 +186,17 @@ class ApiController extends AbstractController
                     $rewrittenValue .= $row["data"]["text"];
                 }
 
+                // wycinanie linków
+                $rewrittenValue = preg_replace('/<a\s.*?>(.*?)<\/a>/', '$1', $rewrittenValue);
+
                 $valuesToCut = [
-                    "<br>", "&nbsp;", " "
+                    "<br>", "&nbsp;", " ", "<b>", "</b>", "<i>", "</i>"
                 ];
+
                 foreach ($valuesToCut as $valueToCut)
                 {
                     $rewrittenValue = str_replace($valueToCut, "", $rewrittenValue);
                 }
-
 
                 $data[ $stylesheetId ] = [
                     "name" => $stylesheet->getName(),
@@ -219,6 +229,17 @@ class ApiController extends AbstractController
                 foreach ($value as $row)
                 {
                     $rewrittenValue .= $row["data"]["text"];
+                }
+
+                // wycinanie linków
+                $rewrittenValue = preg_replace('/<a\s.*?>(.*?)<\/a>/', '$1', $rewrittenValue);
+
+                $valuesToCut = [
+                    "<br>", "&nbsp;", " ", "<b>", "</b>", "<i>", "</i>"
+                ];
+                foreach ($valuesToCut as $valueToCut)
+                {
+                    $rewrittenValue = str_replace($valueToCut, "", $rewrittenValue);
                 }
 
                 $data[ $scriptId ] = [
@@ -261,7 +282,56 @@ class ApiController extends AbstractController
     #[Route('/get-sections', name:'get_sections', methods: ["GET"])]
     public function getSections(): JsonResponse
     {
+        $sectionsRepoRepo = $this->em->getRepository(Sections::class);
+        $sections = $sectionsRepoRepo->findAllAvilableSections();
         $data  = [];
+
+        foreach( $sections as $section ) {
+
+            $sectionId = $section->getId();
+
+            if ( $sectionsRepoRepo->isSectionActive($sectionId) )
+            {
+                try {
+                    // Initialize Editor backend and validate structure
+
+                    $jsonValue = json_encode( $section->getValue(), true );
+                    $editor = new EditorJS( $jsonValue, file_get_contents($this->configPath));
+                    $blocks = $editor->getBlocks();
+
+                    $html = "";
+
+                    foreach ($blocks as $block) {
+                        switch ($block['type']) {
+                            case 'paragraph':
+                                $html .= '<p>' . $block['data']['text'] . '</p>';
+                                break;
+                            case 'list':
+                                $items = implode('</li><li>', $block['data']['items']);
+                                $html .= '<ul><li>' . $items . '</li></ul>';
+                                break;
+                            case 'table':
+                                $html .= '<table>';
+                                foreach ($block['data']['content'] as $row) {
+                                    $html .= '<tr><td>' . implode('</td><td>', $row) . '</td></tr>';
+                                }
+                                $html .= '</table>';
+                                break;
+                            case 'image':
+                                $html .= '<img src="' . $block['data']['url'] . '" alt="' . $block['data']['caption'] . '">';
+                                break;
+                        }
+                    }
+
+                    $data[ $section->getId() ] = [
+                        "name" => $section->getName(),
+                        "value" => $html ,
+                    ];
+
+                } catch (\EditorJSException  $e) {
+                }
+            }
+        }
 
         return new JsonResponse([
             'status' => 'success',
@@ -272,7 +342,17 @@ class ApiController extends AbstractController
     #[Route('/get-photos', name:'get_photos', methods: ["GET"])]
     public function getPhotos(): JsonResponse
     {
+        $photosRepo = $this->em->getRepository(Photos::class);
+        $photos = $photosRepo->findAll();
+
         $data  = [];
+
+        foreach( $photos as $photo ) {
+            $data[ $photo->getId() ] = [
+                "name" => $photo->getName(),
+                "fileName" => $photo->getSafeFileName(),
+            ];
+        }
 
         return new JsonResponse([
             'status' => 'success',
