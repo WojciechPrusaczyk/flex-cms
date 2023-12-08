@@ -328,7 +328,7 @@ class ApiController extends AbstractController
                         "value" => $html ,
                     ];
 
-                } catch (\EditorJSException  $e) {
+                } catch (\Exception  $e) {
                 }
             }
         }
