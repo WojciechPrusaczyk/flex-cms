@@ -145,4 +145,25 @@ class ColorsController extends AbstractController
             'response' => 'Data is not provided correctly.',
         ], 400, ['Content-Type' => 'application/json;charset=UTF-8']);
     }
+
+    #[Route('/admin-api/dashboard/colors/delete', name: 'admin_api_dashboard_colors_delete', methods: ["GET"])]
+    public function delete(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
+    {
+        $id = $request->get('id');
+        $colorsRepo = $em->getRepository(Colors::class);
+
+        $colorToDelete = $colorsRepo->findOneBy(["id" => $id]);
+
+        if (null != $colorToDelete) {
+            try {
+                $em->remove($colorToDelete);
+                $em->flush();
+
+            } catch (\Exception $e) {
+                $logger->error('An error occurred: ' . $e->getMessage());
+            }
+        }
+
+        return $this->redirectToRoute("dashboard_colors");
+    }
 }

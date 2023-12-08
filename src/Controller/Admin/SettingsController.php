@@ -200,7 +200,7 @@ class SettingsController extends AbstractController
             null != $requestedIsEditable &&
             null != $requestedIsPublic
         ) {
-            /*try {*/
+            try {
                 // Create new entity
                 $newSettingEntity = new Settings();
                 $newSettingEntity->setName($requestedName);
@@ -213,10 +213,10 @@ class SettingsController extends AbstractController
                 // Persist the changes to the database
                 $em->persist($newSettingEntity);
                 $em->flush();
-            /*} catch (\Exception $e) {
+            } catch (\Exception $e) {
                 // Log and return an error response in case of an exception
                 $logger->error('An error occurred: ' . $e->getMessage());
-            }*/
+            }
 
             // Return a success JSON response
             return new JsonResponse([
@@ -230,5 +230,26 @@ class SettingsController extends AbstractController
             'status' => 'error',
             'response' => 'Data is not provided correctly.',
         ], 400, ['Content-Type' => 'application/json;charset=UTF-8']);
+    }
+
+    #[Route('/admin-api/dashboard/settings/delete', name: 'admin_api_dashboard_settings_delete', methods: ["GET"])]
+    public function delete(EntityManagerInterface $em, LoggerInterface $logger, Request $request): Response
+    {
+        $id = $request->get('id');
+        $settingsRepo = $em->getRepository(Settings::class);
+
+        $settingToDelete = $settingsRepo->findOneBy(["id" => $id]);
+
+        if (null != $settingToDelete) {
+            try {
+                $em->remove($settingToDelete);
+                $em->flush();
+
+            } catch (\Exception $e) {
+                $logger->error('An error occurred: ' . $e->getMessage());
+            }
+        }
+
+        return $this->redirectToRoute("dashboard_settings");
     }
 }
