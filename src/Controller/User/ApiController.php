@@ -293,8 +293,6 @@ class ApiController extends AbstractController
             if ( $sectionsRepoRepo->isSectionActive($sectionId) )
             {
                 try {
-                    // Initialize Editor backend and validate structure
-
                     $jsonValue = json_encode( $section->getValue(), true );
                     $editor = new EditorJS( $jsonValue, file_get_contents($this->configPath));
                     $blocks = $editor->getBlocks();
@@ -326,6 +324,7 @@ class ApiController extends AbstractController
                     $data[ $section->getId() ] = [
                         "name" => $section->getName(),
                         "value" => $html ,
+                        "isWide" => $section->isWide() ,
                     ];
 
                 } catch (\Exception  $e) {

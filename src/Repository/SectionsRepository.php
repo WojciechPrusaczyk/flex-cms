@@ -36,6 +36,7 @@ class SectionsRepository extends ServiceEntityRepository
             ->andWhere('s.isActive = TRUE')
             ->andWhere('s.startBeingActive <= :now')
             ->andWhere('s.stopBeingActive > :now')
+            ->orderBy('s.position', 'ASC')
             ->setParameter('now', $nowString)
             ->getQuery()
             ->getResult()
