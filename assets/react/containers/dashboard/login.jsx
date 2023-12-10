@@ -69,21 +69,27 @@ class LoginForm extends Component{
     render() {
         return (
             <form id="form" className="login-form">
-                <label htmlFor="form-username">Nazwa użytkownika</label>
-                <input id="form-username" className="login-form-text" type="text"/>
+                <p>
+                    <label htmlFor="form-username">Nazwa użytkownika</label>
+                    <input id="form-username" className="login-form-text" type="text"/>
+                </p>
+                <p>
+                    <label htmlFor="form-password">Hasło</label>
+                    <input id="form-password" className="login-form-text" type="password"/>
+                </p>
+                <p>
+                    <input id="form-submit" className="login-form-submit" type="button" value="Zaloguj" onClick={ () => {
+                        this.submitHandler();
 
-                <label htmlFor="form-password">Hasło</label>
-                <input id="form-password" className="login-form-text" type="password"/>
+                        // showing loading and disabling further calling form api
+                        document.getElementById("loader").style.visibility = "initial";
+                        document.getElementById("form-submit").setAttribute('disabled', 'true');
+                    }}/>
+                </p>
+                <p>
+                    <div id="loader" className="loader"></div>
+                </p>
 
-                <input id="form-submit" className="login-form-submit" type="button" value="Zaloguj" onClick={ () => {
-                    this.submitHandler();
-
-                    // showing loading and disabling further calling form api
-                    document.getElementById("loader").style.visibility = "initial";
-                    document.getElementById("form-submit").setAttribute('disabled', 'true');
-                }}/>
-
-                <div id="loader" className="loader"></div>
             </form>
         );
     }
