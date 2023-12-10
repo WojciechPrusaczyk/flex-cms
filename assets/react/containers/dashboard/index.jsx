@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
 import userLogo from '../../../icons/dashboard/user.svg'
 import menuLogo from '../../../icons/dashboard/list.svg'
+import Tile from "../../components/tile";
 
 class Dashboard extends Component
 {
@@ -11,10 +12,31 @@ class Dashboard extends Component
             username: "Loading",
             settingsPaths: [],
             currentPath: null,
+            isMenuShown: false,
+            settings: []
         }
         this.updateUsername();
         this.getSettingsPaths();
+        this.getSettings();
+        this.toggleMenu = this.toggleMenu.bind(this);
     }
+
+    async getSettings()
+    {
+        const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/dashboard/get-dashboard-settings`;
+
+        try {
+            const response = await fetch(fetchAddress);
+            const jsonResponse = await response.json();
+
+            if ( jsonResponse['status'] === "success")
+            {
+                this.setState({settings: jsonResponse["response"][0]})
+            }
+        } catch (error) {
+        }
+    }
+
     async updateUsername()
     {
         const fetchAddress = `${location.protocol}//${window.location.host}/admin-api/get-user`;
@@ -65,10 +87,16 @@ class Dashboard extends Component
         } );
     }
 
-
+    toggleMenu()
+    {
+        this.setState({ isMenuShown: !this.state.isMenuShown });
+    }
 
     render() {
         let currentPath = null;
+        let settings = this.state.settings.map(tile => {
+            return <Tile key={tile.name} name={tile.name} icon={tile.icon} href={tile.href} isActive={tile.isActive}></Tile>
+        });
 
         if ( null != this.state.currentPath && window.location.href.includes("/edit")){
             currentPath = <p>
@@ -92,13 +120,24 @@ class Dashboard extends Component
                 <a className="breadcrumbs-path breadcrumbs-currentPath" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } } alt="przejdź do dashboard">dashboard</a>
             </p>;
         }
-
         return (
             <div>
                 <div className="header">
-                    <button className="header-menu-button">
-                        <img className="header-menu-button-logo" src={menuLogo} alt="*" />
-                    </button>
+                    {
+                        (this.state.isMenuShown && !(window.location.pathname == "/dashboard/") ) &&
+                        <div id="menu">
+                            <button id="menu-button" className="header-menu-button" onClick={ this.toggleMenu }>
+                                <img className="header-menu-button-logo" src={menuLogo} alt="*" />
+                            </button>
+                            {settings}
+                        </div>
+                    }
+                    {
+                        (!this.state.isMenuShown && !(window.location.pathname == "/dashboard/") ) &&
+                        <button id="menu-button" className="header-menu-button" onClick={ this.toggleMenu }>
+                            <img className="header-menu-button-logo" src={menuLogo} alt="*" />
+                        </button>
+                    }
                     <h1 className="header-title" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } }>Dashboard</h1>
                     <div className="header-user">
                         <img className="header-user-logo" src={userLogo} alt="*" />
