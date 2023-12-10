@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
 import userLogo from '../../../icons/dashboard/user.svg'
+import menuLogo from '../../../icons/dashboard/list.svg'
 
 class Dashboard extends Component
 {
@@ -95,6 +96,9 @@ class Dashboard extends Component
         return (
             <div>
                 <div className="header">
+                    <button className="header-menu-button">
+                        <img className="header-menu-button-logo" src={menuLogo} alt="*" />
+                    </button>
                     <h1 className="header-title" onClick={ () => { window.location.href = `${location.protocol}//${window.location.host}/dashboard`; } }>Dashboard</h1>
                     <div className="header-user">
                         <img className="header-user-logo" src={userLogo} alt="*" />

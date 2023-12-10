@@ -1,3 +1,4 @@
+@import 'variables.scss';
 @font-face {
   font-family: 'Roboto';
   src: url(../../fonts/Roboto-Regular.ttf) format("truetype");
@@ -11,11 +12,36 @@ body {
     color: #E5E4FF;
     display: flex;
     flex-direction: row;
-    height: 80px;
     width: 100%;
+    align-items: center;
     font-family: Roboto, serif;
-    @media only screen and (max-width: 700px) {
+    @media screen and (max-width: $small-breakpoint)
+    {
+      flex-direction: column;
       font-size: 2rem;
+    }
+    &-menu-button{
+      font-size: 2rem;
+      font-style: normal;
+      line-height: normal;
+      text-align: center;
+      margin: 0 0 0 20px;
+      padding: 10px;
+      color: #26156A;
+      font-weight: 600;
+      border-radius: 0.36rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      width: 70px;
+      height: 70px;
+      &-logo{
+        width: 50px;
+        height: 50px;
+        &:hover{
+          filter: drop-shadow(0 0 2px #7e7e7e) drop-shadow(0 0 2px #7e7e7e);
+        }
+      }
     }
     &-title{
       color: #E5E4FF;
@@ -27,14 +53,19 @@ body {
       padding: 10px;
       width: 20%;
       cursor: pointer;
-      @media (max-width: 1000px) {
-        width: 30%;
+      @media screen and (max-width: $small-breakpoint)
+      {
+        width: 100%;
       }
     }
     &-user {
       width: 70%;
-      @media (max-width: 1000px) {
-        width: 40%;
+      @media screen and (max-width: $small-breakpoint)
+      {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
       }
       display: flex;
       justify-content: end;
@@ -62,7 +93,11 @@ body {
         width: 20%;
       }
       @media (max-width: 1000px) {
-        width: 30%;
+        margin: 15px;
+      }
+      @media screen and (max-width: $small-breakpoint)
+      {
+        margin: 15px;
       }
       &-button {
         color: #26156A;
