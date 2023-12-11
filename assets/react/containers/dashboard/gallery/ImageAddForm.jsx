@@ -187,7 +187,7 @@ class ImageAddForm extends Component{
 					onDrop={() => this.dropHandler(event)}
 					onDragOver={() => this.dragOverHandler(event)}
 					onDragLeave={() => this.dragLeaveHandler()}
-					onClick={() => fileHandle.click()} // Dodaj to
+					onClick={() => fileHandle.click()}
 				>
 					<img
 						id="gallery-form-icon"
