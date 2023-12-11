@@ -14,6 +14,14 @@
   .stylesheets-head {
     display: flex;
     flex-direction: row;
+    @media screen and (max-width: $medium-breakpoint) {
+      flex-direction: column;
+    }
+    #tooltip-text{
+      @media screen and (max-width: $medium-breakpoint) {
+        margin: 20px;
+      }
+    }
     padding: 30px;
     justify-content: space-between;
     align-items: center;

@@ -21,3 +21,12 @@ Dashboard focused to allow administrator to dynamically manage website contents.
 **Used libraries**
 - https://editorjs.io/
 ### 
+
+TODO
+1. [x] przycisk sekcji po przeniesieniu
+2. [ ] status sekcji nie działa
+3. [x] strona na mobilce ma mały margines z boku
+4. [x] edycja / usuwanie działa TYLKO po kliknięciu w ikonę, a nie cały przycisk
+5. [x] rozwijanie podpowiedzi w stylach psuje layout
+6. [x] inputy w ustawieniach są przesunięte na urządzeniu mobilnym
+7. [x] breadcrumbs źle wygląda na mobilkach

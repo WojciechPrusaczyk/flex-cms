@@ -52,7 +52,6 @@ body {
       line-height: normal;
       text-align: center;
       margin: 0;
-      padding: 10px;
       width: 20%;
       cursor: pointer;
       @media screen and (max-width: $small-breakpoint)
@@ -226,6 +225,7 @@ body {
     font-family: Roboto, serif;
     padding: 10px 30px;
     &-path {
+      padding: 5px;
       cursor: pointer;
       text-decoration: underline;
       text-decoration-thickness: .1rem;

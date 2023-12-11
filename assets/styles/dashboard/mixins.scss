@@ -142,8 +142,7 @@
             text-align: center;
             width: 75px;
             & > a{
-              width: 75px;
-              aspect-ratio: 1/1;
+              width: 100%;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -246,7 +245,7 @@
             cursor: pointer;
             text-align: center;
             & > a{
-              aspect-ratio: 1/1;
+              width: 100%;
               display: flex;
               align-items: center;
               justify-content: center;

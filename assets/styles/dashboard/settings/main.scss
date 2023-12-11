@@ -109,8 +109,8 @@
             }
             &-value {
               input[type="text"] {
-                width: 400px;
-                height: 42px;
+                width: 85%;
+                padding: 10px;
                 text-align: center;
                 font-size: 1.1rem;
                 background-color: #F8F8FF;
@@ -119,7 +119,7 @@
                 display: none;
 
                 &Label{
-                  width: 500px;
+                  width: 85%;
                   height: 200px;
                   display: inline-block;
                   text-align: center;
