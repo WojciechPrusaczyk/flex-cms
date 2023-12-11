@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import AddedFile from "../../../components/gallery/addedFile";
 
-
 let fileHandle;
 
 class ImageAddForm extends Component{
@@ -24,27 +23,32 @@ class ImageAddForm extends Component{
 		this.setState({photos: currentPhotos});
 	}
 
-	async dropHandler (event) {
+	async dropHandler(event) {
 		event.preventDefault();
 		this.showError("");
 
 		// dopuszczalne typy plików
-		const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/svg'];
+		const validImageTypes = [
+			"image/gif",
+			"image/jpeg",
+			"image/png",
+			"image/svg",
+		];
 
 		if (event.dataTransfer.items) {
 			[...event.dataTransfer.items].forEach((item, i) => {
 				// odrzucamy obiekty niebędące plikami
-				if (item.kind === "file" ) {
+				if (item.kind === "file") {
 					const file = item.getAsFile();
 
 					if (file.size > 5000000) {
-						this.showError("Plik przekracza limit 5MB.")
-					} else if ( !validImageTypes.includes(file.type) ) {
-						this.showError("Typ pliku jest nieodpowiedni. Dopuszczalne formaty to: jpg, svg,  png, gif")
-					}
-					else {
+						this.showError("Plik przekracza limit 5MB.");
+					} else if (!validImageTypes.includes(file.type)) {
+						this.showError(
+							"Typ pliku jest nieodpowiedni. Dopuszczalne formaty to: jpg, svg,  png, gif"
+						);
+					} else {
 						// plik jest odpowedni
-
 						let reader = new FileReader();
 						reader.readAsDataURL(file);
 
@@ -57,30 +61,30 @@ class ImageAddForm extends Component{
 		}
 	}
 
-	async addFile(file, src)
-	{
+	async addFile(file, src) {
+		console.log(file);
 		let currentPhotos = this.state.photos;
 		currentPhotos.push({
 			src: src,
-			file: file
+			file: file,
 		});
 
-		this.setState({photos: currentPhotos});
+		this.setState({ photos: currentPhotos });
 		this.dragLeaveHandler();
 	}
 
-	dragOverHandler (event) {
+	dragOverHandler(event) {
 		event.preventDefault();
-		this.setState({formImage: "/build/icons/dashboard/download.svg"});
-	}
-	dragLeaveHandler () {
-		this.setState({formImage: "/build/icons/dashboard/add.svg"});
+		this.setState({ formImage: "/build/icons/dashboard/download.svg" });
 	}
 
-	showError(errorString)
-	{
+	dragLeaveHandler() {
+		this.setState({ formImage: "/build/icons/dashboard/add.svg" });
+	}
+
+	showError(errorString) {
 		this.dragLeaveHandler();
-		this.setState({error: errorString});
+		this.setState({ error: errorString });
 	}
 
 	async uploadPhotosHandler()
@@ -128,6 +132,23 @@ class ImageAddForm extends Component{
 		}
 	}
 
+	handleFileInput = (event) => {
+		const files = event.target.files;
+
+		[...files].forEach((file) => {
+			if (file.size > 5000000) {
+				this.showError("Plik przekracza limit 5MB.");
+			} else {
+				let reader = new FileReader();
+				reader.readAsDataURL(file);
+
+				reader.onload = () => {
+					this.addFile(file, reader.result);
+				};
+			}
+		});
+	};
+
 	clearSuccessfulUploads()
 	{
 		this.setState({successfulUploads: []});
@@ -161,17 +182,39 @@ class ImageAddForm extends Component{
 
 		return (
 			<div className="gallery">
-				<div className="gallery-form" onDrop={ () => this.dropHandler(event)} onDragOver={ () => this.dragOverHandler(event)} onDragLeave={ () => this.dragLeaveHandler() }>
-					<img id="gallery-form-icon" className="gallery-form-icon" src={this.state.formImage} alt="ikona dodawania zdjęcia"/>
+				<div
+					className="gallery-form"
+					onDrop={() => this.dropHandler(event)}
+					onDragOver={() => this.dragOverHandler(event)}
+					onDragLeave={() => this.dragLeaveHandler()}
+					onClick={() => fileHandle.click()} // Dodaj to
+				>
+					<img
+						id="gallery-form-icon"
+						className="gallery-form-icon"
+						src={this.state.formImage}
+						alt="ikona dodawania zdjęcia"
+					/>
 					<span className="gallery-form-note">{this.state.note}</span>
-					<span id="gallery-form-errors" className="gallery-form-errors">{this.state.error}</span>
+					<span id="gallery-form-errors" className="gallery-form-errors">
+            {this.state.error}
+          </span>
+					<input
+						type="file"
+						ref={(input) => {
+							fileHandle = input;
+						}}
+						style={{ display: "none" }}
+						multiple
+						onChange={this.handleFileInput}
+					/>
 				</div>
 				{ ( addedPhotos.length > 0 )? addedPhotosDiv:null}
 				{ ( addedPhotos.length > 0 )? button:null}
 				{ ( successfulUploads.length > 0 )? successfulUploadsDiv:null}
 
 			</div>
-		)
+		);
 	}
 }
 
