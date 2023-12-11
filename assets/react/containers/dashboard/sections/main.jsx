@@ -187,6 +187,7 @@ class SectionsMain extends Component
                                                 lastEditedBy={Object.values(section)[0].lastEditedBy}
                                                 description={Object.values(section)[0].description}
                                                 value={Object.values(section)[0].value}
+                                                active={Object.values(section)[0].active}
                                                 changeValue={ this.changeValue }
                                                 type={Object.values(section)[0].type}
                                                 deleteHandler={this.deleteHandler} />
