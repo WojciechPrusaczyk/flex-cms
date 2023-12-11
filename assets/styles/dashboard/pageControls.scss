@@ -1,8 +1,16 @@
+@import "variables.scss";
 .page-controls {
   background-color: #86A1FF;
   color: #E5E4FF;
   display: flex;
   flex-direction: row;
+  @media screen and (max-width: $small-breakpoint) {
+    flex-direction: initial;
+    flex-wrap: wrap;
+  }
+  label:after{
+    content: ":";
+  }
   padding: 25px 40px;
   align-items: center;
   justify-content: center;
@@ -19,6 +27,9 @@
     padding: 0 10px;
     font-weight: bold;
     font-size: 1.3rem;
+    @media screen and (max-width: $small-breakpoint) {
+      margin: 10px auto;
+    }
   }
   &-pageNumber, &-elementsPerPage {
     width: 40px;
@@ -30,6 +41,9 @@
     &-label {
       font-size: 1.1rem;
       padding: 0 10px 0 10px;
+    }
+    @media screen and (max-width: $small-breakpoint) {
+      margin: 10px auto;
     }
   }
   &-prevPage, &-nextPage {
@@ -46,6 +60,9 @@
     &:hover {
       box-shadow: 4px 6px 16px 4px rgba(35, 35, 35, 0.11);
       transition: box-shadow 0.1s;
+    }
+    @media screen and (max-width: $small-breakpoint) {
+      margin: 10px 20px;
     }
   }
 }

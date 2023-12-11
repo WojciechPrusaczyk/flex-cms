@@ -1,3 +1,4 @@
+@import "variables";
 #confirmation {
   position: fixed;
   z-index: 1;
@@ -11,6 +12,14 @@
   .confirmation-content{
     width: 30%;
     margin: 200px auto;
+    @media screen and (max-width: $medium-breakpoint) {
+      width: 55%;
+      margin: 200px auto;
+    }
+    @media screen and (max-width: $small-breakpoint) {
+      width: 80%;
+      margin: 200px auto;
+    }
     padding: 10px;
     &-close {
       background-color: #DFDEFF;
@@ -37,7 +46,7 @@
       text-align: center;
       background-color: #E5E4FF;
       &-action, &-close {
-        margin: 6px 20px;
+        margin: 25px;
         padding: 12px 30px;
         font-size: 1.1rem;
         background-color: #F3F5FF;

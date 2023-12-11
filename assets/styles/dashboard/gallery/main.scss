@@ -1,5 +1,6 @@
 @import "../pageControls";
 @import "../mixins";
+@import "../variables.scss";
 
 @font-face {
   font-family: 'Roboto';
@@ -8,7 +9,7 @@
 @include tooltip-style();
 #main-root {
   background-color: #E5E4FF;
-  margin: 0 150px;
+  @include page-width;
   font-family: Roboto, serif;
   .main{
     display: flex;
@@ -24,7 +25,14 @@
     &-form {
       border-radius: 0.36rem;
       border: 4px solid #26156A;
-      width: 500px;
+      background-color: #E5E4FF;
+      width: 30%;
+      @media screen and (max-width: $medium-breakpoint) {
+        width: 55%;
+      }
+      @media screen and (max-width: $small-breakpoint) {
+        width: 85%;
+      }
       height: 200px;
       display: flex;
       flex-direction: column;
@@ -33,7 +41,7 @@
       margin: 60px 0;
       cursor: pointer;
       box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.19);
-      padding-top: 15px;
+      padding: 15px;
       &:hover{
         box-shadow: 4px 6px 9px 4px rgba(0, 0, 0, 0.19);
         transition: box-shadow .1s;
@@ -144,45 +152,97 @@
     &-table {
       width: 100%;
       border-collapse: collapse;
-      &-thead {
-        tr {
-          th {
-            text-align: start;
-            padding: 8px;
+      @media screen and (min-width: $medium-breakpoint) {
+        &-thead {
+          tr {
+            th {
+              text-align: start;
+              padding: 8px;
+            }
+          }
+        }
+        &-tbody {
+          &-item {
+            background-color: #DFDEFF;
+            & > td {
+              padding: 30px 10px;
+              border-top: 2px solid #26156A;
+              border-collapse: collapse;
+              text-align: center;
+              &:nth-of-type(2n+1)
+              {
+                background-color: #E5E4FF;
+              }
+            }
+            &-image > img{
+              height: 250px;
+              max-width: 90%;
+            }
+            &-delete {
+              cursor: pointer;
+              text-align: center;
+              &:hover{
+                background-color: #26156A!important;
+                transition: background-color .1s;
+                & > a > .image-list-table-tbody-item-delete-icon {
+                  transition: filter .1s;
+                  filter: brightness(0) invert(1);
+                }
+              }
+              &-icon {
+                width: 50px;
+                height: 50px;
+              }
+            }
           }
         }
       }
-      &-tbody {
-        &-item {
-          background-color: #DFDEFF;
-          & > td {
-            padding: 30px 10px;
-            border-top: 2px solid #26156A;
-            border-collapse: collapse;
-            text-align: center;
-            &:nth-of-type(2n+1)
-            {
-              background-color: #E5E4FF;
-            }
-          }
-          &-image > img{
-            height: 250px;
-            max-width: 90%;
-          }
-          &-delete {
-            cursor: pointer;
-            text-align: center;
-            &:hover{
-              background-color: #26156A!important;
-              transition: background-color .1s;
-              & > a > .image-list-table-tbody-item-delete-icon {
-                transition: filter .1s;
-                filter: brightness(0) invert(1);
+      @media screen and (max-width: $medium-breakpoint) {
+        display: block;
+        &-thead {
+          visibility: hidden;
+        }
+        &-tbody {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          &-item {
+            width: 100%;
+            margin-bottom: 40px;
+            background-color: #DFDEFF;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 6px 9px 4px rgba(0, 0, 0, 0.19);
+            & > td {
+              padding: 30px 10px;
+              border-collapse: collapse;
+              text-align: center;
+              &:nth-of-type(2n+1)
+              {
+                background-color: #E5E4FF;
               }
             }
-            &-icon {
-              width: 50px;
-              height: 50px;
+            &-image {
+              padding: 0!important;
+              & > img {
+                width: 100%;
+              }
+            }
+            &-delete {
+              cursor: pointer;
+              text-align: center;
+              &:hover{
+                background-color: #26156A!important;
+                transition: background-color .1s;
+                & > a > .image-list-table-tbody-item-delete-icon {
+                  transition: filter .1s;
+                  filter: brightness(0) invert(1);
+                }
+              }
+              &-icon {
+                width: 50px;
+                height: 50px;
+              }
             }
           }
         }

@@ -6,11 +6,11 @@
 #main-root{
   background-color: #E5E4FF;
   margin: 0 150px;
-  @media (max-width: 1000px) {
-    margin: 0 100px;
+  @media screen and (max-width: $medium-breakpoint) {
+    margin: 0 50px;
   }
-  @media (max-width: 600px) {
-    margin: 0 60px;
+  @media screen and (max-width: $small-breakpoint) {
+    margin: 0 20px;
   }
   .settings {
     padding: 50px 0;

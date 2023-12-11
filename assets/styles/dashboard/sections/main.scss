@@ -9,11 +9,14 @@
 @include tooltip-style();
 #main-root {
   background-color: #E5E4FF;
-  margin: 0 150px;
+  @include page-width;
   font-family: Roboto, serif;
   .sections-head {
     display: flex;
     flex-direction: row;
+    @media screen and (max-width: $medium-breakpoint) {
+      flex-direction: column;
+    }
     padding: 30px;
     justify-content: space-between;
     align-items: center;
@@ -33,14 +36,15 @@
     display: flex;
     justify-content: end;
     td {
-      &:not(:first-of-type){
-        display: none;
-      }
-      &:first-of-type{
-        width: 100%;
-        border: none;
-        text-align: left;
-        padding: 0 40px;
+      @media screen and (min-width: $medium-breakpoint) {
+        &:not(:first-of-type){
+          display: none;
+        }
+        &:first-of-type{
+          width: 100%;
+          border: none;
+          text-align: center;
+        }
       }
     }
   }

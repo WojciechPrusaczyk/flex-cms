@@ -9,7 +9,7 @@
 @include tooltip-style();
 #main-root {
   background-color: #E5E4FF;
-  margin: 0 150px;
+  @include page-width;
   font-family: Roboto, serif;
   .stylesheets-head {
     display: flex;

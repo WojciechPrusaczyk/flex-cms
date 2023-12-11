@@ -8,7 +8,7 @@
 }
 #main-root {
   background-color: #E5E4FF;
-  margin: 0 150px;
+  @include page-width;
   font-family: Roboto, serif;
   .editor {
     display: flex;
@@ -26,7 +26,16 @@
     &-field{
       background-color: #F6F6FF;
       margin: 20px 60px;
-      padding: 10px 0;
+      padding: 10px 5px;
+
+      @media screen and (max-width: $medium-breakpoint) {
+        margin: 20px 30px;
+        padding: 10px 10px;
+      }
+      @media screen and (max-width: $small-breakpoint) {
+        margin: 20px 10px;
+        padding: 10px 10px;
+      }
     }
   }
 }

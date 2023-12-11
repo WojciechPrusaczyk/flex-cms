@@ -9,15 +9,19 @@
 @include tooltip-style();
 #main-root {
   background-color: #E5E4FF;
-  margin: 0 150px;
+  @include page-width;
   font-family: Roboto, serif;
   .scripts-head {
     display: flex;
     flex-direction: row;
+    @media screen and (max-width: $medium-breakpoint) {
+      flex-direction: column;
+    }
     padding: 30px;
     justify-content: space-between;
     align-items: center;
     &-button {
+      margin-top: 10px;
       @include action-button-style();
     }
   }
