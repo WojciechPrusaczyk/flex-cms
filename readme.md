@@ -1,8 +1,8 @@
 # artek.com.pl
-First webpage designed on my own CMS (not yet named).  
+First webpage designed on FlexCMS
 ## [Graphical project](https://www.figma.com/file/9MOAWdrk5MHid1iPrzpsZG/artek.com.pl)
 
-## CMS documentation
+## [CMS documentation](https://github.com/WojciechPrusaczyk/flex-cms/tree/main)
 
 CMS is divided into 2 sections.
 Front, including main landing page, contact form, gallery.  
