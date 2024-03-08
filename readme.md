@@ -22,14 +22,14 @@ Dashboard focused to allow administrator to dynamically manage website contents.
 - https://github.com/atlassian/react-beautiful-dnd
 
 **Potential recruiters points of interest**
-[ReactJS](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/assets/react)
-[Twig](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/templates)
-[Symfony controllers](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/src/Controller)
-[Symfony entities](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/src/Entity)
-[Styles](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/assets/styles)
-[Graphical project: MainPage](https://www.figma.com/file/9MOAWdrk5MHid1iPrzpsZG/artek.com.pl)
-[Graphical project: Dashboard](https://www.figma.com/file/9MOAWdrk5MHid1iPrzpsZG/artek.com.pl?type=design&node-id=31-2&mode=design)
-
+[ReactJS](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/assets/react)  
+[Twig](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/templates)  
+[Symfony controllers](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/src/Controller)  
+[Symfony entities](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/src/Entity)  
+[Styles](https://github.com/WojciechPrusaczyk/flex-cms/tree/main/assets/styles)  
+[Graphical project: MainPage](https://www.figma.com/file/9MOAWdrk5MHid1iPrzpsZG/artek.com.pl)  
+[Graphical project: Dashboard](https://www.figma.com/file/9MOAWdrk5MHid1iPrzpsZG/artek.com.pl?type=design&node-id=31-2&mode=design)  
+  
 I can present system behaviour if needed and explain crucial features implementation.
 
 **Used technologies and solutions**
