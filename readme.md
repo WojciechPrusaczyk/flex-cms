@@ -1,6 +1,4 @@
 # artek.com.pl
-First webpage that will be designed based on flexCMS.  
-
 
 CMS is divided into 2 sections.
 Front, including main landing page, contact form, gallery.  

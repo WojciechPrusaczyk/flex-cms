@@ -59,7 +59,7 @@ const Form = (props) => {
             />
         </p>
         <p>
-            <span>Szeroka sekcja będzie zajmowała całą szerokość. Jeśli natomiast po sobie nastąpią 2 sekcje które nie są szerokie, ułożą się one obok siebie.</span>
+            <span className="warning">Szeroka sekcja będzie zajmowała całą szerokość. Jeśli natomiast po sobie nastąpią 2 sekcje które nie są szerokie, ułożą się one obok siebie.</span>
         </p>
         <p>
             <label htmlFor="form-start-being-active">Aktywny od</label>
@@ -82,11 +82,16 @@ const Form = (props) => {
             />
         </p>
 
+        <p>
+            <span className="information">Pamiętaj, że możesz wkleić odnośnik do zdjęcia z galerii, lub z poza aplikacji!</span>
+        </p>
+
         <SectionsEditor
             className="editor-form-field"
             onDataChange={ props.handleDataChange }
             defaultData={props.defaultData}
         />
+
         <p>
             <input
                 id="form-submit"
