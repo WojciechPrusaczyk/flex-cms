@@ -12,7 +12,6 @@ class IndexController extends AbstractController
     #[Route('/', name: 'app_index')]
     public function index(EntityManagerInterface $em, Security $security): \Symfony\Component\HttpFoundation\Response
     {
-        dd($security->getUser());
-        return $this->render("mainPage.html.twig");
+        return $this->render("webpage/index.html.twig");
     }
 }

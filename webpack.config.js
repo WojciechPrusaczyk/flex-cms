@@ -20,10 +20,7 @@ Encore
     }])
 
     /*
-     * ENTRY CONFIG
-     *
-     * Each entry will result in one JavaScript file (e.g. app.js)
-     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
+     * Dashboard
      */
     .addEntry('app', './assets/app.js')
     .addEntry('dashboard_login', './assets/react/containers/dashboard/login.jsx')
@@ -51,6 +48,12 @@ Encore
     .addStyleEntry('dashboard_scripts_edit_style', './assets/styles/dashboard/scripts/edit.scss')
     .addStyleEntry('dashboard_sections_style', './assets/styles/dashboard/sections/main.scss')
     .addStyleEntry('dashboard_sections_edit_style', './assets/styles/dashboard/sections/edit.scss')
+
+    /*
+     * Strona główna
+     */
+    .addEntry('index', './assets/react/containers/webpage/index/index.jsx')
+    .addStyleEntry('index_style', './assets/styles/webpage/index/index.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
