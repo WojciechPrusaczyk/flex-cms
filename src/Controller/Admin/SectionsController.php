@@ -44,6 +44,7 @@ class SectionsController extends AbstractController
                     "active" => $isItemActive,
                     "value" => $item->getValue(),
                     "position" => $item->getPosition(),
+                    "isTitleVisible" => $item->isTitleVisible(),
                 ]];
             }
 
@@ -88,6 +89,7 @@ class SectionsController extends AbstractController
                 $newSection->setAddedBy($currentUser);
                 $newSection->setActive(false);
                 $newSection->setWide(true);
+                $newSection->setIsTitleVisible(true);
                 $newSection->setPosition($validPosition);
                 $newSection->setValue(json_decode('{"time":0,"blocks":[],"version":"2.28.0"}', true));
                 $newSection->setStartBeingActive(DateTimeImmutable::createFromFormat('Y-m-d\TH:i', '2000-10-10T00:00'));
@@ -125,11 +127,11 @@ class SectionsController extends AbstractController
             // Get the repository for Sections
             $sectionsRepo = $em->getRepository(Sections::class);
 
-            // Find the stylesheet entity by 'id' if provided
+            // Find the section entity by 'id' if provided
             $sectionEntity = (null != $id) ? $sectionsRepo->findOneBy(["id" => $id]) : null;
 
             if ($sectionEntity) {
-                // Prepare the data for the stylesheet
+                // Prepare the data for the section
                 $sectionEntity = [
                     "id" => $sectionEntity->getId(),
                     "name" => $sectionEntity->getName(),
@@ -138,6 +140,7 @@ class SectionsController extends AbstractController
                     "value" => $sectionEntity->getValue(), // Parsing JSON data
                     "start_being_active" => $sectionEntity->getStartBeingActive(),
                     "stop_being_active" => $sectionEntity->getStopBeingActive(),
+                    "isTitleVisible" => $sectionEntity->isTitleVisible(),
                 ];
 
                 // Return success response with the stylesheet data
@@ -181,6 +184,7 @@ class SectionsController extends AbstractController
             "value" => $requestData['value']?:null,
             "start_being_active" =>  $requestData['start_being_active']?:null,
             "stop_being_active" => $requestData['stop_being_active']?:null,
+            "isTitleVisible" => $requestData['isTitleVisible']?:false,
         ];
         try {
             // Get the repository for Sections repository
@@ -194,9 +198,9 @@ class SectionsController extends AbstractController
                 $sectionEntity->setName($rawData["name"]);
                 $sectionEntity->setActive($rawData["active"] == "true");
                 $sectionEntity->setWide($rawData["isWide"] == "true");
+                $sectionEntity->setIsTitleVisible($rawData["isTitleVisible"] == "true");
                 $sectionEntity->setValue(json_decode($rawData["value"], true));
                 $sectionEntity->setEditedBy($security->getUser());
-
 
                 try {
                     // Set the start being active timestamps

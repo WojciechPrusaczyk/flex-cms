@@ -63,7 +63,7 @@ class AdminApiController extends AbstractController
                 'admin-api-dashboard-sections'=> [
                     '-get-sections' => $requestUri."dashboard/sections/get-sections",
                     '-get-section' => $requestUri."dashboard/sections/get-section?id={id}",
-                    '-edit-section' => $requestUri."dashboard/sections/edit-section",
+                    '-edit-section' => $requestUri."dashboard/sections/edit-section?id={id}&name={name}&active={active}&isWide={isWide}&value={value}&start_being_active={start_being_active}&stop_being_active={stop_being_active}&isTitleVisible={isTitleVisible}",
                     '-delete' => $requestUri."dashboard/sections/delete?id={id}",
                     '-change-order' => $requestUri."dashboard/sections/change-order",
                 ],

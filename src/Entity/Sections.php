@@ -41,6 +41,9 @@ class Sections
     #[ORM\Column]
     private ?bool $isWide = null;
 
+    #[ORM\Column]
+    private ?bool $isTitleVisible = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +153,18 @@ class Sections
     public function setWide(bool $isWide): static
     {
         $this->isWide = $isWide;
+
+        return $this;
+    }
+
+    public function isTitleVisible(): ?bool
+    {
+        return $this->isTitleVisible;
+    }
+
+    public function setIsTitleVisible(bool $isTitleVisible): static
+    {
+        $this->isTitleVisible = $isTitleVisible;
 
         return $this;
     }

@@ -19,6 +19,7 @@ const Form = (props) => {
             isWide: form.wide.checked,
             start_being_active: form.startBeingActive.value,
             stop_being_active: form.stopBeingActive.value,
+            isTitleVisible: form.isTitleVisible.checked,
         }
         props.dataHandler(formData);
     };
@@ -79,6 +80,17 @@ const Form = (props) => {
                 type="datetime-local"
                 onChange={handleChange}
                 defaultValue={props.stop_being_active}
+            />
+        </p>
+
+        <p>
+            <label htmlFor="form-isTitleVisible">Czy tytuł jest widoczny?</label>
+            <input
+                id="form-isTitleVisible"
+                name="isTitleVisible"
+                type="checkbox"
+                onChange={handleChange}
+                defaultChecked={props.isTitleVisible}
             />
         </p>
 
