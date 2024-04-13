@@ -325,6 +325,7 @@ class ApiController extends AbstractController
                         "name" => $section->getName(),
                         "value" => $html ,
                         "isWide" => $section->isWide() ,
+                        "isTitleVisible" => $section->isTitleVisible() ,
                     ];
 
                 } catch (\Exception  $e) {

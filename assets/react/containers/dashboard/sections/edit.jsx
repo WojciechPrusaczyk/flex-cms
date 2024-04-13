@@ -15,7 +15,8 @@ class SectionsForm extends Component
             isWide: true,
             value: {},
             start_being_active: "2000-01-01T00:00:00",
-            stop_being_active: "2000-01-01T00:00:00",
+            stop_being_active: "2030-01-01T00:12:00",
+            isTitleVisible: true,
             isFormDataReady: false,
         };
 
@@ -49,6 +50,7 @@ class SectionsForm extends Component
             isWide: data.isWide,
             start_being_active: data.start_being_active,
             stop_being_active: data.stop_being_active,
+            isTitleVisible: data.isTitleVisible,
         })
     }
 
@@ -85,6 +87,7 @@ class SectionsForm extends Component
                     value: returnedObject.value,
                     start_being_active: startDate,
                     stop_being_active: endDate,
+                    isTitleVisible: returnedObject.isTitleVisible,
                     isFormDataReady: true,
                 });
             }
@@ -105,6 +108,7 @@ class SectionsForm extends Component
             value: JSON.stringify(this.state.value),
             start_being_active: this.state.start_being_active,
             stop_being_active: this.state.stop_being_active,
+            isTitleVisible: this.state.isTitleVisible,
         };
         this.sendData(data, fetchAddress);
     }
@@ -139,6 +143,7 @@ class SectionsForm extends Component
                         isWide={this.state.isWide}
                         start_being_active={this.state.start_being_active}
                         stop_being_active={this.state.stop_being_active}
+                        isTitleVisible={this.state.isTitleVisible}
                         handleDataChange={this.getData}
                         dataHandler={this.dataHandler}
                         submitHandler={this.saveData}
