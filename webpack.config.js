@@ -50,10 +50,22 @@ Encore
     .addStyleEntry('dashboard_sections_edit_style', './assets/styles/dashboard/sections/edit.scss')
 
     /*
-     * Strona główna
+     * Main page
      */
     .addEntry('index', './assets/react/containers/webpage/index/index.jsx')
     .addStyleEntry('index_style', './assets/styles/webpage/index/index.scss')
+
+    /*
+     * Gallery
+     */
+    .addEntry('gallery', './assets/react/containers/webpage/gallery/gallery.jsx')
+    .addStyleEntry('gallery_style', './assets/styles/webpage/gallery/gallery.scss')
+
+    /*
+     * Contact form
+     */
+    .addEntry('form', './assets/react/containers/webpage/form/form.jsx')
+    .addStyleEntry('form_style', './assets/styles/webpage/form/form.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
