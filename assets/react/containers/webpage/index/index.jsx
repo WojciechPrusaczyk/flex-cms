@@ -20,14 +20,41 @@ class Index extends Component
 
     async getDataFromApi()
     {
-        //try {
+        try {
 
-            // Scripts
-            const response = await fetch(`${location.protocol}//${window.location.host}/api/get-scripts`);
+            await this.loadScripts().then( () => {
+                if ( null == this.state.scripts ) { console.log("Error occured while fetching scripts data. Try again later.") }
+            })
+
+            await this.loadStylesheets().then( () => {
+                if ( null == this.state.style ) { console.log("Error occured while fetching stylesheets data. Try again later.") }
+            })
+
+            await this.loadColors().then( () => {
+                if ( null == this.state.colors ) { console.log("Error occured while fetching colors data. Try again later.") }
+            })
+
+            await this.loadSettings().then( () => {
+                if ( null == this.state.settings ) { console.log("Error occured while fetching webpage settings data. Try again later.") }
+            })
+
+            await this.loadSections().then( () => {
+                if ( null == this.state.sections ) { console.log("Error occured while fetching webpage data. Try again later.") }
+            })
+        }
+        catch(exception)
+        {
+        }
+    }
+
+    async loadScripts()
+    {
+        // Scripts
+        const response = await fetch(`${location.protocol}//${window.location.host}/api/get-scripts`);
+        if (response.ok){
             const jsonResponse = await response.json();
 
-            if ( jsonResponse['status'] === "success")
-            {
+            if (jsonResponse['status'] === "success") {
                 let javascript = "";
                 Object.values(jsonResponse.response).forEach((element) => {
                     javascript += `/*${element.name}*/${element.value}`
@@ -38,13 +65,21 @@ class Index extends Component
                     helmetKey: prevState.helmetKey + 1
                 }));
             }
+        }
+         else {
+            console.log("Error occured while fetching scripts data. Try again later.")
+            await this.loadScripts();
+        }
+    }
 
-            // Stylesheets
-            const stylesheetsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-stylesheets`);
+    async loadStylesheets()
+    {
+        // Stylesheets
+        const stylesheetsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-stylesheets`);
+        if (stylesheetsResponse.ok) {
             const stylesheetsJsonResponse = await stylesheetsResponse.json();
 
-            if ( stylesheetsJsonResponse['status'] === "success")
-            {
+            if (stylesheetsJsonResponse['status'] === "success") {
                 let stylesheets = null;
                 Object.values(stylesheetsJsonResponse.response).forEach((element) => {
                     stylesheets += `/*${element.name}*/${element.value}`
@@ -56,13 +91,22 @@ class Index extends Component
                 }));
 
             }
+        }
+        else {
+            console.log("Error occured while fetching stylesheets data. Try again later.")
+            await this.loadStylesheets();
+        }
+    }
 
-            // Colors
-            const colorsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-colors`);
+    async loadColors()
+    {
+
+        // Colors
+        const colorsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-colors`);
+        if (colorsResponse.ok) {
             const colorsJsonResponse = await colorsResponse.json();
 
-            if ( colorsJsonResponse['status'] === "success")
-            {
+            if (colorsJsonResponse['status'] === "success") {
 
                 let colors = ":root{"
                 Object.values(colorsJsonResponse.response).forEach((element) => {
@@ -74,28 +118,49 @@ class Index extends Component
                     helmetKey: prevState.helmetKey + 1
                 }));
             }
+        }
+        else {
+            console.log("Error occured while fetching colors data. Try again later.")
+            await this.loadColors();
+        }
+    }
 
-            // Settings
-            const settingsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-settings`);
+    async loadSettings()
+    {
+        // Settings
+        const settingsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-settings`);
+        if (settingsResponse.ok) {
             const settingsJsonResponse = await settingsResponse.json();
 
-            if ( settingsJsonResponse['status'] === "success")
-            {
+            if (settingsJsonResponse['status'] === "success") {
                 this.setState({
                     settings: settingsJsonResponse.response
                 });
             }
+        }
+        else {
+            console.log("Error occured while fetching webpage settings data. Try again later.")
+            await this.loadSettings();
+        }
+    }
 
-            // Sections
-            const sectionsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-sections`);
+    async loadSections()
+    {
+        // Sections
+        const sectionsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-sections`);
+        if (sectionsResponse.ok) {
             const sectionsJsonResponse = await sectionsResponse.json();
 
-            if ( sectionsJsonResponse['status'] === "success")
-            {
+            if (sectionsJsonResponse['status'] === "success") {
                 this.setState({
                     sections: Object.values(sectionsJsonResponse.response)
                 });
             }
+        }
+        else {
+            console.log("Error occured while fetching webpage data. Try again later.")
+            await this.loadSections();
+        }
     }
 
     render() {
