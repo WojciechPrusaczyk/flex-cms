@@ -18,6 +18,7 @@ class SettingsMain extends Component
         this.changeValue = this.changeValue.bind(this);
         this.changeColor = this.changeColor.bind(this);
         this.submitColor = this.submitColor.bind(this);
+        this.closeColorPicker = this.closeColorPicker.bind(this);
     }
 
     async getSettings()
@@ -35,7 +36,6 @@ class SettingsMain extends Component
 
     async changeValue(colorObject)
     {
-        console.log(colorObject);
         const matchingSettings = this.state.settings.filter(setting => {
             return Object.keys(setting)[0] === colorObject.id;
         });
@@ -63,28 +63,28 @@ class SettingsMain extends Component
 
     changeColor(id, event)
     {
-        const initialColor = event.target.style.backgroundColor;
-        this.setState({ isUserChangingColor: true });
+        this.closeColorPicker().then( () => {
+            const initialColor = event.target.style.backgroundColor;
+            this.setState({ isUserChangingColor: true });
 
-        const colorObject = {
-            id: id[0],
-            value: initialColor,
-            finalColor: null
-        };
-
-        this.setState({ color: colorObject})
+            const colorObject = {
+                id: id[0],
+                value: initialColor,
+                finalColor: null
+            };
+            this.setState({ color: colorObject})
+        });
     }
 
     submitColor(color)
     {
-        console.log(color);
         const colorObject = { id: this.state.color.id, value: this.state.color.initialColor, finalColor: color };
         this.setState({color: colorObject})
 
         this.changeValue(colorObject);
     }
 
-    closeColorPicker()
+    async closeColorPicker()
     {
         this.setState({ isUserChangingColor: false });
         this.setState({ color: null })
