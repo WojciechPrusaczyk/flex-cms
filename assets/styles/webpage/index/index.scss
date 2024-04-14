@@ -7,10 +7,88 @@
 
 body{
   margin: 0;
-  background-color: var(--mainBackground);
+  background-color: var(--mainBackgroundMargin);
+  font-family: 'Roboto', serif;
   #root{
     width: 100%;
     height: 100%;
   }
   @include loading-screen();
+  header{
+    @include header();
+  }
+  main {
+    #banner-parent{
+      overflow: hidden;
+      #banner{
+        position: relative;
+        text-align: center;
+        .banner-overlay{
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-attachment: fixed;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          filter: blur(3px);
+          z-index: -1;
+        }
+        h1{
+          margin: 0;
+          width: calc(100% - 40px);
+          text-align: center;
+          font-weight: bold;
+          z-index: 2;
+          padding: 150px 20px;
+          color: var(--bannerTextColor);
+          filter: drop-shadow(0 0 7px #020202) drop-shadow(0 0 16px #020202);
+          font-size: 3rem;
+        }
+      }
+    }
+    #main-content{
+      margin: 0 120px;
+      background-color: var(--mainBackground);
+      display: flex;
+      flex-wrap: wrap;
+      h2{
+        font-size: 2rem;
+        padding-left: 100px;
+      }
+      .section {
+        width: calc(50% - 30px);
+        margin: 50px 0;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        p {
+          font-size: 1.6rem;
+        }
+        img {
+          width: 100%;
+          box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.30);
+        }
+        table td{
+          padding: 0 60px;
+        }
+      }
+      .section.isWide {
+        width: 100%;
+        margin: 50px 0;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        font-size: 1.6rem;
+      }
+
+    }
+  }
+  footer {
+    @include footer();
+  }
 }

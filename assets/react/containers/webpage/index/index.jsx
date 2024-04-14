@@ -80,11 +80,10 @@ class Index extends Component
             const stylesheetsJsonResponse = await stylesheetsResponse.json();
 
             if (stylesheetsJsonResponse['status'] === "success") {
-                let stylesheets = null;
+                let stylesheets = "";
                 Object.values(stylesheetsJsonResponse.response).forEach((element) => {
                     stylesheets += `/*${element.name}*/${element.value}`
                 })
-
                 this.setState((prevState) => ({
                     stylesheets: stylesheets,
                     helmetKey: prevState.helmetKey + 1
@@ -133,8 +132,14 @@ class Index extends Component
             const settingsJsonResponse = await settingsResponse.json();
 
             if (settingsJsonResponse['status'] === "success") {
+
+                let settings = [];
+                for (const [key, value] of Object.entries(settingsJsonResponse.response)) {
+                    settings[value.name] = value.value
+                }
+
                 this.setState({
-                    settings: settingsJsonResponse.response
+                    settings: settings
                 });
             }
         }
@@ -164,7 +169,6 @@ class Index extends Component
     }
 
     render() {
-
         const loadingScreen = <main id="loadingScreen">
             <div>
                 <h1> Loading </h1>
@@ -172,17 +176,66 @@ class Index extends Component
             </div>
         </main>
 
-        const readyToGoWebpage = <div>
-            <header>
+        let sectionsHtml = null;
+        let readyToGoWebpage = null;
+        if ( null != this.state.sections )
+        {
+            sectionsHtml = this.state.sections.map((section, index) => {
 
-            </header>
-            <main>
-                Działa!
-            </main>
-            <footer>
+                if(!section.isTitleVisible)
+                {
+                    return <div className={`section${section.isWide?" isWide":""}`} dangerouslySetInnerHTML={{ __html: section.value }} />
+                } else {
+                    return <div className={`section${section.isWide?" isWide":""}`}><h2>{section.name}</h2><div dangerouslySetInnerHTML={{ __html: section.value }} /></div>
+                }
+            });
 
-            </footer>
-        </div>
+            readyToGoWebpage = <div>
+                <header>
+                    <div>
+                        <img src={`${location.protocol}//${window.location.host}/uploads/settings/${this.state.settings.headerLogo}`} alt="główne logo"/>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><a href={`${location.protocol}//${window.location.host}/form`}><button>Kontakt</button></a></li>
+                            <li><a href={`${location.protocol}//${window.location.host}/gallery`}><button>Galeria</button></a></li>
+                        </ul>
+                    </div>
+                </header>
+                <main>
+                    <div id="banner-parent">
+                        <div id="banner">
+                            <div className="banner-overlay" style={{ backgroundImage: `url(${location.protocol}//${window.location.host}/uploads/settings/${this.state.settings.banner})` }}></div>
+                            <h1>{this.state.settings.bannerText}</h1>
+                        </div>
+                    </div>
+                    <div id="main-content">
+                        {sectionsHtml}
+                    </div>
+                </main>
+                <footer>
+                    <div id="footer-links">
+                        <div>
+                            <ul>
+                                <li>{this.state.settings.companyEmailAddress}</li>
+                                <li>{this.state.settings.companyPhoneNumber}</li>
+                                <li>{this.state.settings.companyAddress}</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul>
+                                <li><a href={`${location.protocol}//${window.location.host}`}>Strona główna</a></li>
+                                <li><a href={`${location.protocol}//${window.location.host}/form`}>Kontakt</a></li>
+                                <li><a href={`${location.protocol}//${window.location.host}/gallery`}>Galeria</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="creator-sign">
+                        <span>Designed & Developed by Wojciech Prusaczyk 2024</span>
+                    </div>
+                </footer>
+            </div>
+        }
 
         if (
             null != this.state.scripts &&
@@ -193,7 +246,9 @@ class Index extends Component
         )
         {
             this.setState( { isDataLoaded: true } )
-        }
+        } /*else {
+            console.log(this.state)
+        }*/
 
         return (
             <div>

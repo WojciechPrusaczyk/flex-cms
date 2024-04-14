@@ -282,15 +282,15 @@ class ApiController extends AbstractController
     #[Route('/get-sections', name:'get_sections', methods: ["GET"])]
     public function getSections(): JsonResponse
     {
-        $sectionsRepoRepo = $this->em->getRepository(Sections::class);
-        $sections = $sectionsRepoRepo->findAllAvilableSections();
+        $sectionsRepo = $this->em->getRepository(Sections::class);
+        $sections = $sectionsRepo->findBy([], ["position" => "ASC"]);
         $data  = [];
 
         foreach( $sections as $section ) {
 
             $sectionId = $section->getId();
 
-            if ( $sectionsRepoRepo->isSectionActive($sectionId) )
+            if ( $sectionsRepo->isSectionActive($sectionId) )
             {
                 try {
                     $jsonValue = json_encode( $section->getValue(), true );
@@ -321,7 +321,7 @@ class ApiController extends AbstractController
                         }
                     }
 
-                    $data[ $section->getId() ] = [
+                    $data[ $section->getPosition() ] = [
                         "name" => $section->getName(),
                         "value" => $html ,
                         "isWide" => $section->isWide() ,
