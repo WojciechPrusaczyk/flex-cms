@@ -19,7 +19,10 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -42,13 +45,13 @@ class ApiController extends AbstractController
         return $this->json([
             'status' => 'success',
             'login' => $requestUri."login?password={password}&username={username}",
-            'register' => $requestUri."register",
             'scripts' => $requestUri."get-scripts",
             'stylesheets' => $requestUri."get-stylesheets",
             'colors' => $requestUri."get-colors",
             'settings' => $requestUri."get-settings",
             'sections' => $requestUri."get-sections",
             'photos' => $requestUri."get-photos",
+            'send-mail' => $requestUri."send-mail?subject={subject}&contactData={contactData}&message={message}",
         ]);
     }
 
@@ -358,6 +361,64 @@ class ApiController extends AbstractController
             'status' => 'success',
             'response' => $data,
         ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
+    }
+
+    #[Route('/send-mail', name:'send_mail', methods: ["GET"])]
+    public function sendMail(MailerInterface $mailer, EntityManagerInterface $em, Request $request, LoggerInterface $logger): JsonResponse
+    {
+        $settingsRepo = $em->getRepository(Settings::class);
+        $emailAddress = $settingsRepo->findOneBy([ "name" => "formAddress" ]);
+        $requestData = json_decode($request->getContent(), true);
+
+        /*$limiter = $anonymousApiLimiter->create($request->getClientIp());
+        if (false === $limiter->consume(1)->isAccepted()) {
+            throw new TooManyRequestsHttpException();
+        }*/
+
+        if ($emailAddress)
+        {
+            /*
+             * Mail preparing
+             */
+            $requestedSubject = $request->query->get('subject');
+            $requestedClientContactData = $request->query->get('contactData');
+            $requestedMessage = $request->query->get('message');
+
+            $email = (new \Symfony\Component\Mime\Email())
+                ->to($emailAddress->getValue())
+                ->from($emailAddress->getValue())
+                ->subject($requestedSubject)
+                ->html(
+                    "<strong>Message from: ".$requestedClientContactData."</strong><br/><p>".$requestedMessage."</p>"
+                );
+
+            /*
+             * Mail sending
+             */
+            try{
+                $mailer->send($email);
+
+                return new JsonResponse([
+                    'status' => 'success',
+                ], 200, ['Content-Type' => 'application/json;charset=UTF-8']);
+
+            } catch (\Exception $exception)
+            {
+                // Log error
+                $logger->error('An error occurred: ' . $exception->getMessage());
+
+                // Handle any exceptions that may occur
+                return new JsonResponse([
+                    'status' => 'error',
+                    'message' => "An internal server error occurred."
+                ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
+            }
+
+
+
+        } else {
+            throw $this->createNotFoundException("There is no formAddress described in database.");
+        }
     }
 
 
