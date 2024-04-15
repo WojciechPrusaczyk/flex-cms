@@ -21,8 +21,97 @@ body{
     @include footer();
   }
   main > #main-content{
+    margin: 0 120px;
+    background-color: var(--mainBackground);
+
     .form-caption {
+      padding-top: 30px;
       @include form-caption();
+    }
+    .photos {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: center;
+      .photo{
+        width: calc(33% - 60px);
+        margin: 30px;
+        height: 300px;
+        background-position: center;
+        background-size: cover;
+        cursor: pointer;
+        box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.3);
+        transition: transform .5s, box-shadow .5s;
+        &:hover {
+          box-shadow: 4px 6px 9px 2px rgba(117, 117, 117, 0.8);
+          transform: scale(1.05);
+          transition: transform .2s, box-shadow .2s;
+        }
+      }
+    }
+  }
+  #photo-inspector {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.82);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    button{
+      width: 70px;
+      font-size: 50px;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid #00000052;
+      border-radius: 3px;
+      background-color: rgba(0, 0, 0, 0.25);
+      color: rgba(255, 255, 255, 0.50 );
+      box-shadow: 4px 6px 9px 2px rgba(0, 0, 0, 0.22);
+      &:hover{
+        box-shadow: 4px 6px 9px 2px rgba(0, 0, 0, 0.46);
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        background-color: rgba(0, 0, 0, 0.25);
+        color: rgba(255, 255, 255, 0.60 );
+      }
+      &:active{
+        transform: translateY(3px);
+      }
+    }
+    .close {
+      padding: 20px;
+      text-align: end;
+      margin: 0;
+      &-button{
+
+      }
+    }
+    .photo-inspector{
+      display: flex;
+      flex-direction: row;
+      height: calc(100% - 120px);
+      &-image{
+        margin: 30px;
+        max-width: calc(100% - 60px);
+        background-position: center;
+        background-size: cover;
+        max-height: calc(100% - 60px);
+      }
+      p{
+        margin: 0;
+      }
+      p:nth-of-type(2n+1)
+      {
+        width: 10%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+      p:nth-of-type(2){
+        width: 80%;
+        text-align: center;
+      }
     }
   }
 }
