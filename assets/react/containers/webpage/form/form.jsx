@@ -16,9 +16,13 @@ class Form extends Component
             colors: null,
             settings: null,
             sections: null,
-            helmetKey: 0
+            helmetKey: 0,
+            isFormSubmitted: false,
+            serverResponse: "",
         }
         this.getDataFromApi();
+        this.formSubmitHandler = this.formSubmitHandler.bind(this);
+        this.saveData = this.saveData.bind(this);
     }
 
     async getDataFromApi()
@@ -102,7 +106,6 @@ class Form extends Component
 
     async loadColors()
     {
-
         // Colors
         const colorsResponse = await fetch(`${location.protocol}//${window.location.host}/api/get-colors`);
         if (colorsResponse.ok) {
@@ -171,6 +174,35 @@ class Form extends Component
         }
     }
 
+    formSubmitHandler()
+    {
+        const form = document.getElementById("form");
+        const formTitle = form["message-title"].value;
+        const formContact = form["message-contact"].value;
+        const formMessage = form["message-message"].value;
+
+        this.saveData(formTitle, formContact, formMessage);
+    }
+
+    // Method to save data to the server
+    async saveData(formTitle, formContact, formMessage) {
+        const fetchAddress = `${location.protocol}//${window.location.host}/api/send-mail?` + new URLSearchParams({
+            subject: formTitle,
+            contactData: formContact,
+            message: formMessage,
+        });
+
+        try {
+            const response = await fetch(fetchAddress);
+            await response.json();
+            this.setState({isFormSubmitted: true, serverResponse: "Wiadomość została pomyślnie wysłana!"})
+        } catch (error) {
+            // Handle any errors that may occur during the fetch
+            console.error("An error occurred while saving data:", error);
+            this.setState({isFormSubmitted: true, serverResponse: "Wystapił błąd serwera (500) przy wysyłaniu wiadomości, spróbuj ponownie później."})
+        }
+    }
+
     render() {
         const loadingScreen = <main id="loadingScreen">
             <div>
@@ -178,6 +210,28 @@ class Form extends Component
                 <div className="loader"></div>
             </div>
         </main>
+
+        const form = <form id="form" className="form">
+            <p className="form-title">
+                <label htmlFor="message-title" className="form-title-label">Tytuł wiadomości</label>
+                <input id="message-title" name="message-title" type="text" className="form-title-input"/>
+            </p>
+            <p className="form-contact">
+                <label htmlFor="message-contact" className="form-contact-label">Twoje dane kontaktowe</label>
+                <input id="message-contact" name="message-contact" type="text" className="form-contact-input"/>
+            </p>
+            <p className="form-message">
+                <label htmlFor="message-message" className="form-message-label">Wiadomość</label>
+                <textarea id="message-message" name="message-message" className="form-message-input" />
+            </p>
+            <p className="form-submit" onClick={(e) => {
+                e.preventDefault();
+                this.formSubmitHandler(e);
+            }}>
+                <input id="message-submit" name="message-submit" type="submit" className="form-submit-input" value="Wyślij" />
+            </p>
+        </form>
+        const serverResponse = <p className="error">{this.state.serverResponse}</p>
 
         let readyToGoWebpage = null;
         if (this.state.isDataLoaded)
@@ -187,20 +241,8 @@ class Form extends Component
                 <main>
                     <div id="main-content">
                         <Caption header={this.state.settings.formHeader} description={this.state.settings.formDescription} />
-                        <form className="form">
-                            <p className="form-title">
-                                <label htmlFor="message-title" className="form-title-label">Tytuł wiadomości</label>
-                                <input id="message-title" name="message-title" type="text" className="form-title-input"/>
-                            </p>
-                            <p className="form-contact">
-                                <label htmlFor="message-contact" className="form-contact-label">Twoje dane kontaktowe</label>
-                                <input id="message-contact" name="message-contact" type="text" className="form-contact-input"/>
-                            </p>
-                            <p className="form-message">
-                                <label htmlFor="message-message" className="form-message-label">Wiadomość</label>
-                                <textarea id="message-message" name="message-message" className="form-message-input" />
-                            </p>
-                        </form>
+                        {!this.state.isFormSubmitted && form}
+                        {this.state.isFormSubmitted && serverResponse}
                     </div>
                 </main>
                 <Footer companyEmailAddress={this.state.settings.companyEmailAddress} companyPhoneNumber={this.state.settings.companyPhoneNumber} companyAddress={this.state.settings.companyAddress} />

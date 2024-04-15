@@ -20,4 +20,9 @@ body{
   footer {
     @include footer();
   }
+  main > #main-content{
+    .form-caption {
+      @include form-caption();
+    }
+  }
 }

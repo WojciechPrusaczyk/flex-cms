@@ -2,7 +2,7 @@ import React, {Component} from "react";
 
 const caption = (props) => {
 
-    if (null != props.header && null != props.description)
+    if ( (null != props.header && "" !== props.header) && (null != props.description && "" !== props.description))
     {
         return <div className="form-caption">
             <h2>{props.header}</h2>
@@ -11,17 +11,19 @@ const caption = (props) => {
             </p>
         </div>;
     }
-    else if (null != props.header)
+    else if (null != props.header && "" !== props.header)
     {
         return <div className="form-caption">
             <h2>{props.header}</h2>
         </div>;
     }
-    else if (null != props.description)
+    else if (null != props.description && "" !== props.description)
     {
         return <div className="form-caption">
             <p>{props.description}</p>
         </div>;
+    } else {
+        return null;
     }
 }
 
