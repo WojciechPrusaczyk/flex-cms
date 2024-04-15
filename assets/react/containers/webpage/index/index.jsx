@@ -1,6 +1,8 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
 import { Helmet } from "react-helmet";
+import Header from "../../../components/webpage/header";
+import Footer from "../../../components/webpage/footer";
 
 class Index extends Component
 {
@@ -191,17 +193,7 @@ class Index extends Component
             });
 
             readyToGoWebpage = <div>
-                <header>
-                    <div>
-                        <img src={`${location.protocol}//${window.location.host}/uploads/settings/${this.state.settings.headerLogo}`} alt="główne logo"/>
-                    </div>
-                    <div>
-                        <ul>
-                            <li><a href={`${location.protocol}//${window.location.host}/form`}><button>Kontakt</button></a></li>
-                            <li><a href={`${location.protocol}//${window.location.host}/gallery`}><button>Galeria</button></a></li>
-                        </ul>
-                    </div>
-                </header>
+                <Header logo={this.state.settings.headerLogo} />
                 <main>
                     <div id="banner-parent">
                         <div id="banner">
@@ -213,27 +205,7 @@ class Index extends Component
                         {sectionsHtml}
                     </div>
                 </main>
-                <footer>
-                    <div id="footer-links">
-                        <div>
-                            <ul>
-                                <li>{this.state.settings.companyEmailAddress}</li>
-                                <li>{this.state.settings.companyPhoneNumber}</li>
-                                <li>{this.state.settings.companyAddress}</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <ul>
-                                <li><a href={`${location.protocol}//${window.location.host}`}>Strona główna</a></li>
-                                <li><a href={`${location.protocol}//${window.location.host}/form`}>Kontakt</a></li>
-                                <li><a href={`${location.protocol}//${window.location.host}/gallery`}>Galeria</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="creator-sign">
-                        <span>Designed & Developed by Wojciech Prusaczyk 2024</span>
-                    </div>
-                </footer>
+                <Footer companyEmailAddress={this.state.settings.companyEmailAddress} companyPhoneNumber={this.state.settings.companyPhoneNumber} companyAddress={this.state.settings.companyAddress} />
             </div>
         }
 
@@ -246,9 +218,7 @@ class Index extends Component
         )
         {
             this.setState( { isDataLoaded: true } )
-        } /*else {
-            console.log(this.state)
-        }*/
+        }
 
         return (
             <div>

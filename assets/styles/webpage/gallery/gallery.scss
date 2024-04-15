@@ -7,10 +7,17 @@
 
 body{
   margin: 0;
-  background-color: var(--mainBackground);
+  background-color: var(--mainBackgroundMargin);
+  font-family: 'Roboto', serif;
   #root{
     width: 100%;
     height: 100%;
   }
+  header {
+    @include header();
+  }
   @include loading-screen();
+  footer {
+    @include footer();
+  }
 }

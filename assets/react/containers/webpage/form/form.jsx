@@ -1,6 +1,9 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
 import { Helmet } from "react-helmet";
+import Header from "../../../components/webpage/header";
+import Footer from "../../../components/webpage/footer";
+import Caption from "../../../components/webpage/caption";
 
 class Form extends Component
 {
@@ -66,7 +69,7 @@ class Form extends Component
                 }));
             }
         }
-         else {
+        else {
             console.log("Error occured while fetching scripts data. Try again later.")
             await this.loadScripts();
         }
@@ -80,11 +83,10 @@ class Form extends Component
             const stylesheetsJsonResponse = await stylesheetsResponse.json();
 
             if (stylesheetsJsonResponse['status'] === "success") {
-                let stylesheets = null;
+                let stylesheets = "";
                 Object.values(stylesheetsJsonResponse.response).forEach((element) => {
                     stylesheets += `/*${element.name}*/${element.value}`
                 })
-
                 this.setState((prevState) => ({
                     stylesheets: stylesheets,
                     helmetKey: prevState.helmetKey + 1
@@ -133,8 +135,14 @@ class Form extends Component
             const settingsJsonResponse = await settingsResponse.json();
 
             if (settingsJsonResponse['status'] === "success") {
+
+                let settings = [];
+                for (const [key, value] of Object.entries(settingsJsonResponse.response)) {
+                    settings[value.name] = value.value
+                }
+
                 this.setState({
-                    settings: settingsJsonResponse.response
+                    settings: settings
                 });
             }
         }
@@ -164,7 +172,6 @@ class Form extends Component
     }
 
     render() {
-
         const loadingScreen = <main id="loadingScreen">
             <div>
                 <h1> Loading </h1>
@@ -172,17 +179,33 @@ class Form extends Component
             </div>
         </main>
 
-        const readyToGoWebpage = <div>
-            <header>
-
-            </header>
-            <main>
-                Działa!
-            </main>
-            <footer>
-
-            </footer>
-        </div>
+        let readyToGoWebpage = null;
+        if (this.state.isDataLoaded)
+        {
+            readyToGoWebpage = <div>
+                <Header logo={this.state.settings.headerLogo} />
+                <main>
+                    <div id="main-content">
+                        <Caption header={this.state.settings.formHeader} description={this.state.settings.formDescription} />
+                        <form className="form">
+                            <p className="form-title">
+                                <label htmlFor="message-title" className="form-title-label">Tytuł wiadomości</label>
+                                <input id="message-title" name="message-title" type="text" className="form-title-input"/>
+                            </p>
+                            <p className="form-contact">
+                                <label htmlFor="message-contact" className="form-contact-label">Twoje dane kontaktowe</label>
+                                <input id="message-contact" name="message-contact" type="text" className="form-contact-input"/>
+                            </p>
+                            <p className="form-message">
+                                <label htmlFor="message-message" className="form-message-label">Wiadomość</label>
+                                <textarea id="message-message" name="message-message" className="form-message-input" />
+                            </p>
+                        </form>
+                    </div>
+                </main>
+                <Footer companyEmailAddress={this.state.settings.companyEmailAddress} companyPhoneNumber={this.state.settings.companyPhoneNumber} companyAddress={this.state.settings.companyAddress} />
+            </div>
+        }
 
         if (
             null != this.state.scripts &&

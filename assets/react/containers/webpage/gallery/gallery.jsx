@@ -1,6 +1,9 @@
 import ReactDOM from "react-dom/client";
 import React, {Component} from "react";
 import { Helmet } from "react-helmet";
+import Header from "../../../components/webpage/header";
+import Footer from "../../../components/webpage/footer";
+import Caption from "../../../components/webpage/caption";
 
 class Gallery extends Component
 {
@@ -66,7 +69,7 @@ class Gallery extends Component
                 }));
             }
         }
-         else {
+        else {
             console.log("Error occured while fetching scripts data. Try again later.")
             await this.loadScripts();
         }
@@ -80,11 +83,10 @@ class Gallery extends Component
             const stylesheetsJsonResponse = await stylesheetsResponse.json();
 
             if (stylesheetsJsonResponse['status'] === "success") {
-                let stylesheets = null;
+                let stylesheets = "";
                 Object.values(stylesheetsJsonResponse.response).forEach((element) => {
                     stylesheets += `/*${element.name}*/${element.value}`
                 })
-
                 this.setState((prevState) => ({
                     stylesheets: stylesheets,
                     helmetKey: prevState.helmetKey + 1
@@ -133,8 +135,14 @@ class Gallery extends Component
             const settingsJsonResponse = await settingsResponse.json();
 
             if (settingsJsonResponse['status'] === "success") {
+
+                let settings = [];
+                for (const [key, value] of Object.entries(settingsJsonResponse.response)) {
+                    settings[value.name] = value.value
+                }
+
                 this.setState({
-                    settings: settingsJsonResponse.response
+                    settings: settings
                 });
             }
         }
@@ -164,7 +172,6 @@ class Gallery extends Component
     }
 
     render() {
-
         const loadingScreen = <main id="loadingScreen">
             <div>
                 <h1> Loading </h1>
@@ -172,17 +179,21 @@ class Gallery extends Component
             </div>
         </main>
 
-        const readyToGoWebpage = <div>
-            <header>
+        let readyToGoWebpage = null;
+        if (this.state.isDataLoaded)
+        {
 
-            </header>
-            <main>
-                Działa!
-            </main>
-            <footer>
-
-            </footer>
-        </div>
+            readyToGoWebpage = <div>
+                <Header logo={this.state.settings.headerLogo} />
+                <main>
+                    <div id="main-content">
+                        <Caption header={this.state.settings.galleryHeader} description={this.state.settings.galleryDescription} />
+                        Galeria
+                    </div>
+                </main>
+                <Footer companyEmailAddress={this.state.settings.companyEmailAddress} companyPhoneNumber={this.state.settings.companyPhoneNumber} companyAddress={this.state.settings.companyAddress} />
+            </div>
+        }
 
         if (
             null != this.state.scripts &&
