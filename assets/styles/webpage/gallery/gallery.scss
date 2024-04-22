@@ -22,6 +22,12 @@ body{
   }
   main > #main-content{
     margin: 0 120px;
+    @media screen and (max-width: $medium-breakpoint) {
+      margin: 0 60px;
+    }
+    @media screen and (max-width: $small-breakpoint) {
+      margin: 0 15px;
+    }
     background-color: var(--mainBackground);
 
     .form-caption {
@@ -35,6 +41,12 @@ body{
       justify-content: center;
       .photo{
         width: calc(33% - 60px);
+        @media screen and (max-width: $medium-breakpoint) {
+          width: calc(50% - 60px);
+        }
+        @media screen and (max-width: $small-breakpoint) {
+          width: calc(100% - 20px);
+        }
         margin: 30px;
         height: 300px;
         background-position: center;
@@ -90,12 +102,21 @@ body{
       display: flex;
       flex-direction: row;
       height: calc(100% - 120px);
+      @media screen and (max-width: $small-breakpoint) {
+        flex-direction: column;
+      }
       &-image{
         margin: 30px;
         max-width: calc(100% - 60px);
         background-position: center;
         background-size: cover;
         max-height: calc(100% - 60px);
+        @media screen and (max-width: $small-breakpoint) {
+          margin: 5px;
+          max-width: none;
+          max-height: none;
+          width: calc(100% - 10px);
+        }
       }
       p{
         margin: 0;
@@ -107,10 +128,17 @@ body{
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
+        @media screen and (max-width: $small-breakpoint) {
+          width: 100%;
+          margin: 10px 0;
+        }
       }
       p:nth-of-type(2){
         width: 80%;
         text-align: center;
+        @media screen and (max-width: $small-breakpoint) {
+          width: 100%;
+        }
       }
     }
   }

@@ -22,6 +22,12 @@ body{
   }
   main > #main-content{
     margin: 0 120px;
+    @media screen and (max-width: $medium-breakpoint) {
+      margin: 0 60px;
+    }
+    @media screen and (max-width: $small-breakpoint) {
+      margin: 0 15px;
+    }
     background-color: var(--mainBackground);
     display: flex;
     flex-wrap: wrap;
@@ -35,10 +41,20 @@ body{
       display: flex;
       flex-wrap: wrap;
       padding: 30px;
+      @media screen and (max-width: $medium-breakpoint) {
+        padding: 10px;
+      }
       p{
         display: flex;
         flex-direction: column;
         padding: 10px 80px;
+        @media screen and (max-width: $medium-breakpoint) {
+          padding: 10px 40px;
+        }
+        @media screen and (max-width: $small-breakpoint) {
+          padding: 10px 10px;
+          width: 100%;
+        }
         label{
           font-size: 1.3rem;
           margin-bottom: 10px;
@@ -49,6 +65,9 @@ body{
       }
       &-title, &-contact{
         width: calc(50% - 160px );
+        @media screen and (max-width: $medium-breakpoint) {
+          width: calc(100% - 80px );
+        }
       }
       &-message{
         width: 100%;
