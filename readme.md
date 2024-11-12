@@ -1,5 +1,3 @@
-# artek.com.pl
-
 CMS is divided into 2 sections.
 Front, including main landing page, contact form, gallery.  
 Dashboard focused to allow administrator to dynamically manage website contents.  
