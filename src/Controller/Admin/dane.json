@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "check_db_connection": "http://artek.com.pl/admin-api/db-connection-scripts",
+  "register": "http://artek.com.pl/admin-api/register?password={password}&username={username}",
+  "get-user": "http://artek.com.pl/admin-api/get-user",
+  "logout": "http://artek.com.pl/admin-api/logout",
+  "dashboard-settings-get-dashboard-settings": "http://artek.com.pl/admin-api/dashboard/get-dashboard-settings",
+  "admin-api-dashboard-colors": {
+    "-get-scripts": "http://artek.com.pl/admin-api/dashboard/colors/get-colors",
+    "-set-value": "http://artek.com.pl/admin-api/dashboard/colors/set-value?id={id}&value={value}",
+    "-add-color": "http://artek.com.pl/admin-api/dashboard/colors/add-color?name={name}&description={description}&value={value}&type={type}",
+    "-delete": "http://artek.com.pl/admin-api/dashboard/colors/delete?id={id}"
+  },
+  "admin-api-dashboard-gallery": {
+    "-upload-photo": "http://artek.com.pl/admin-api/dashboard/gallery/upload-photo",
+    "-get-photos": "http://artek.com.pl/admin-api/dashboard/gallery/get-photos?page={page}&quantity={quantity}",
+    "-delete-photo": "http://artek.com.pl/admin-api/dashboard/gallery/delete-photo?id={id}"
+  },
+  "admin-api-dashboard-scripts": {
+    "-get-scripts": "http://artek.com.pl/admin-api/dashboard/scripts/get-scripts",
+    "-get-script": "http://artek.com.pl/admin-api/dashboard/scripts/get-script?id={id}",
+    "-edit-script": "http://artek.com.pl/admin-api/dashboard/scripts/edit-script?id={id}&name={name}&active={active}&value={value}&start_being_active={start_being_active}&stop_being_active={stop_being_active}",
+    "-delete": "http://artek.com.pl/admin-api/dashboard/scripts/delete?id={id}"
+  },
+  "admin-api-dashboard-sections": {
+    "-get-sections": "http://artek.com.pl/admin-api/dashboard/sections/get-sections",
+    "-get-section": "http://artek.com.pl/admin-api/dashboard/sections/get-section?id={id}",
+    "-edit-section": "http://artek.com.pl/admin-api/dashboard/sections/edit-section?id={id}&name={name}&active={active}&isWide={isWide}&value={value}&start_being_active={start_being_active}&stop_being_active={stop_being_active}&isTitleVisible={isTitleVisible}",
+    "-delete": "http://artek.com.pl/admin-api/dashboard/sections/delete?id={id}",
+    "-change-order": "http://artek.com.pl/admin-api/dashboard/sections/change-order"
+  },
+  "admin-api-dashboard-settings": {
+    "-get-scripts": "http://artek.com.pl/admin-api/dashboard/settings/get-settings",
+    "-set-value": "http://artek.com.pl/admin-api/dashboard/settings/set-value?id={id}&value={value}",
+    "-add-setting": "http://artek.com.pl/admin-api/dashboard/settings/add-setting?name={name}&type={type}&value={value}&description={description}&isEditable={isEditable}&isPublic={isPublic}",
+    "-delete": "http://artek.com.pl/admin-api/dashboard/settings/delete?id={id}"
+  },
+  "admin-api-dashboard-stylesheets": {
+    "-get-stylesheets": "http://artek.com.pl/admin-api/dashboard/stylesheets/get-stylesheets",
+    "-get-stylesheet": "http://artek.com.pl/admin-api/dashboard/stylesheets/get-stylesheet?id={id}",
+    "-edit-stylesheet": "http://artek.com.pl/admin-api/dashboard/stylesheets/edit-stylesheet?id={id}&name={name}&active={active}&value={value}&start_being_active={start_being_active}&stop_being_active={stop_being_active}",
+    "-delete": "http://artek.com.pl/admin-api/dashboard/stylesheets/delete?id={id}"
+  }
+}

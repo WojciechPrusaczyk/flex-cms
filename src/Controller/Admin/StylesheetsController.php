@@ -37,12 +37,12 @@ class StylesheetsController extends AbstractController
                 $isItemActive = $stylesheetsRepo->isStylesheetActive($item->getId());
                 $lastEditedBy = $item->getEditedBy() ? $item->getEditedBy()->getUsername() : $item->getAddedBy()->getUsername();
 
-            $items[] = [ $item->getId() => [
-                "name" => $item->getName(),
-                "lastEditedBy" => $lastEditedBy,
-                "active" => $isItemActive,
-            ]];
-        }
+                $items[] = [ $item->getId() => [
+                    "name" => $item->getName(),
+                    "lastEditedBy" => $lastEditedBy,
+                    "active" => $isItemActive,
+                ]];
+            }
 
             // Return a JSON response with the list of stylesheets
             return new JsonResponse([

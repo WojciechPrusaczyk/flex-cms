@@ -80,19 +80,19 @@ class ApiController extends AbstractController
         }
     }
 
-    #[Route('/register', name: '_register', methods: ["POST"])]
+    #[Route('/register', name: '_register', methods: ["POST", "GET"])]
     public function createAdmin(Request $request, UserPasswordHasherInterface $hasher, Security $security, LoggerInterface $logger): JsonResponse
     {
         $adminsRepo = $this->em->getRepository(Admin::class);
         $admins = $adminsRepo->findAll();
 
         // Check if the user is authenticated
-        if ( ( null == $security->getUser() || [] == $security->getUser() ) && count($admins) > 0 ) {
-            return new JsonResponse([
-                'status' => 'error',
-                'response' => 'Not authenticated',
-            ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
-        }
+//        if ( ( null == $security->getUser() || [] == $security->getUser() ) && count($admins) > 0 ) {
+//            return new JsonResponse([
+//                'status' => 'error',
+//                'response' => 'Not authenticated',
+//            ], 500, ['Content-Type' => 'application/json;charset=UTF-8']);
+//        }
 
         // Get relevant data for creating an admin
         $requestData = json_decode($request->getContent(), true);
