@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block title %}
-    {{ title }}
+    {% if title|default("") %}{{ title }}{% endif %}
 {% endblock %}
 {% block icon %}
     <link rel="icon" href="/uploads/settings/{{ icon }}">
