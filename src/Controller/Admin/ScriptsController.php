@@ -84,8 +84,12 @@ class ScriptsController extends AbstractController
                 $newScript->setAddedBy($currentUser);
                 $newScript->setActive(false);
                 $newScript->setValue('{"time":0,"blocks":[],"version":"2.28.0"}');
-                $newScript->setStartBeingActive(DateTimeImmutable::createFromFormat('Y-m-d\TH:i', '2000-10-10T00:00'));
-                $newScript->setStopBeingActive(DateTimeImmutable::createFromFormat('Y-m-d\TH:i', '2000-10-10T00:00'));
+                $newScript->setStartBeingActive(
+                    DateTimeImmutable::createFromFormat('Y-m-d\TH:i', '2000-10-10T00:00')
+                );
+                $newScript->setStopBeingActive(
+                    DateTimeImmutable::createFromFormat('Y-m-d\TH:i', '2000-10-10T00:00')
+                );
 
                 $em->persist($newScript);
                 $em->flush();

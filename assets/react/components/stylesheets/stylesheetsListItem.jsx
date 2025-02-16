@@ -20,7 +20,8 @@ const StylesheetsListItem = (props) => {
         <td className="stylesheets-list-table-tbody-item-active">{isActive}</td>
         <td className="stylesheets-list-table-tbody-item-edit">
             <a href={`${window.location}/edit?id=${props.id}`} alt="Edytuj">
-                <img className="stylesheets-list-table-tbody-item-edit-icon" src="/build/icons/dashboard/edit.svg" alt="edytuj" />
+                <img className="stylesheets-list-table-tbody-item-edit-icon"
+                     src="/build/icons/dashboard/edit.svg" alt="edytuj" />
             </a>
         </td>
         <td className="stylesheets-list-table-tbody-item-delete">
@@ -29,10 +30,10 @@ const StylesheetsListItem = (props) => {
                    e.preventDefault();
                    props.deleteHandler(props.id);
                } }>
-                <img className="stylesheets-list-table-tbody-item-delete-icon" src="/build/icons/dashboard/trashCan.svg" alt="usuń" />
+                <img className="stylesheets-list-table-tbody-item-delete-icon"
+                     src="/build/icons/dashboard/trashCan.svg" alt="usuń" />
             </a>
         </td>
     </tr>
 }
-
 export default StylesheetsListItem;

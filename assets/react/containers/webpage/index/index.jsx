@@ -20,32 +20,17 @@ class Index extends Component
         this.getDataFromApi();
     }
 
-    async getDataFromApi()
-    {
+    async getDataFromApi() {
         try {
+            await this.loadScripts();
+            await this.loadStylesheets();
+            await this.loadColors();
+            await this.loadSettings();
+            await this.loadSections();
 
-            await this.loadScripts().then( () => {
-                if ( null == this.state.scripts ) { console.log("Error occured while fetching scripts data. Try again later.") }
-            })
-
-            await this.loadStylesheets().then( () => {
-                if ( null == this.state.style ) { console.log("Error occured while fetching stylesheets data. Try again later.") }
-            })
-
-            await this.loadColors().then( () => {
-                if ( null == this.state.colors ) { console.log("Error occured while fetching colors data. Try again later.") }
-            })
-
-            await this.loadSettings().then( () => {
-                if ( null == this.state.settings ) { console.log("Error occured while fetching webpage settings data. Try again later.") }
-            })
-
-            await this.loadSections().then( () => {
-                if ( null == this.state.sections ) { console.log("Error occured while fetching webpage data. Try again later.") }
-            })
-        }
-        catch(exception)
-        {
+            this.setState({ isDataLoaded: true });
+        } catch (exception) {
+            console.error("Error while fetching data: ", exception);
         }
     }
 

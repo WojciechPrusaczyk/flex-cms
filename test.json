@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "check_db_connection": "https://127.0.0.1:8000/admin-api/db-connection-scripts",
+  "register": "https://127.0.0.1:8000/admin-api/register?password={password}&username={username}",
+  "get-user": "https://127.0.0.1:8000/admin-api/get-user",
+  "logout": "https://127.0.0.1:8000/admin-api/logout",
+  "dashboard-settings-get-dashboard-settings": "https://127.0.0.1:8000/admin-api/dashboard/get-dashboard-settings",
+  "admin-api-dashboard-gallery": {
+    "-upload-photo": "https://127.0.0.1:8000/admin-api/dashboard/gallery/upload-photo",
+    "-get-photos": "https://127.0.0.1:8000/admin-api/dashboard/gallery/get-photos?page={page}&quantity={quantity}",
+    "-delete-photo": "https://127.0.0.1:8000/admin-api/dashboard/gallery/delete-photo?id={id}"
+  }
+}
